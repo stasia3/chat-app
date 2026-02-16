@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">Profile</title>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 40px;">
+<h1 th:text="${title}">My Profile</h1>
+<p>This page should be protected (only logged in users).</p>
+
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>

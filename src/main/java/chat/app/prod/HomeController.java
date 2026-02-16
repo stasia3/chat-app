@@ -13,4 +13,10 @@ public class HomeController {
         model.addAttribute("message", "It works! Deployed on Render");
         return "index";
     }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        model.addAttribute("title", "My Profile");
+        return "profile";
+    }
 }

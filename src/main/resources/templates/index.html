@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title th:text="${title}">DevSocial</title>
+        <style>
+            body { font-family: Arial, sans-serif; padding: 40px; }
+            .card { max-width: 720px; padding: 24px; border: 1px solid #ddd; border-radius: 12px; }
+            code { background: #f3f3f3; padding: 2px 6px; border-radius: 6px; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1 th:text="${title}">DevSocial</h1>
+            <p th:text="${message}">It works!</p>
+            <p>Endpoint: <code>/</code></p>
+        </div>
+    </body>
+</html>

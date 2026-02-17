@@ -1,22 +1,470 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title th:text="${title}">DevSocial</title>
-        <style>
-            body { font-family: Arial, sans-serif; padding: 40px; }
-            .card { max-width: 720px; padding: 24px; border: 1px solid #ddd; border-radius: 12px; }
-            code { background: #f3f3f3; padding: 2px 6px; border-radius: 6px; }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <h1 th:text="${title}">DevSocial</h1>
-            <p th:text="${message}">It works!</p>
-            <p>Endpoint: <code>/</code></p>
-            <a th:href="@{/profile}">Profile</a>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">DevPortal</title>
 
+    <style>
+        :root {
+          --bg: #0b0f14;
+          --panel: rgba(255, 255, 255, 0.04);
+          --panel-2: rgba(255, 255, 255, 0.06);
+          --border: rgba(255, 255, 255, 0.10);
+          --text: rgba(255, 255, 255, 0.92);
+          --muted: rgba(255, 255, 255, 0.68);
+          --muted-2: rgba(255, 255, 255, 0.55);
+          --accent: #7c3aed;
+          --accent-2: #22c55e;
+          --danger: #ef4444;
+          --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+          --radius: 16px;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+
+        body {
+          margin: 0;
+          color: var(--text);
+          background:
+            radial-gradient(1200px 600px at 15% 10%, rgba(124, 58, 237, 0.18), transparent 60%),
+            radial-gradient(900px 500px at 90% 0%, rgba(34, 197, 94, 0.12), transparent 55%),
+            radial-gradient(800px 500px at 40% 120%, rgba(59, 130, 246, 0.10), transparent 55%),
+            var(--bg);
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+          line-height: 1.6;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        a:hover { opacity: 0.92; }
+
+        .container {
+          max-width: 1040px;
+          margin: 0 auto;
+          padding: 24px 18px 40px;
+        }
+
+        /* Top nav */
+        .nav {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 14px 16px;
+          border: 1px solid var(--border);
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+          border-radius: var(--radius);
+          box-shadow: var(--shadow);
+          backdrop-filter: blur(10px);
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 700;
+          letter-spacing: 0.4px;
+        }
+
+        /* ===== NEW LOGO: <|> (monochrome, sharp) ===== */
+        .logoMark {
+          width: 36px;
+          height: 36px;
+          display: grid;
+          place-items: center;
+          border-radius: 0; /* keep it sharp */
+          border: 1px solid rgba(255,255,255,0.16);
+          background: rgba(255,255,255,0.02);
+          box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+          position: relative;
+          overflow: hidden;
+          flex: 0 0 auto;
+        }
+
+        /* portal frame hint (monochrome) */
+        .logoMark::before {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          background:
+            radial-gradient(22px 22px at 20% 30%, rgba(255,255,255,0.10), transparent 65%),
+            radial-gradient(18px 18px at 80% 70%, rgba(255,255,255,0.08), transparent 62%);
+          opacity: 0.75;
+          pointer-events: none;
+        }
+
+        .logoText {
+          position: relative;
+          z-index: 1;
+          font-size: 16px;
+          font-weight: 800;
+          letter-spacing: -1px;
+          color: rgba(255,255,255,0.92);
+          display: inline-flex;
+          align-items: center;
+          gap: 0;
+          user-select: none;
+        }
+
+        .logoText .cursor {
+          display: inline-block;
+          width: 0.55ch;
+          text-align: center;
+          animation: blink 1.6s steps(2, end) infinite;
+          opacity: 0.95;
+        }
+
+        @keyframes blink {
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
+
+        .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+        }
+
+        .chip {
+          padding: 8px 10px;
+          border-radius: 999px;
+          border: 1px solid var(--border);
+          background: rgba(255, 255, 255, 0.03);
+          color: var(--muted);
+          font-size: 13px;
+          transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .chip:hover {
+          background: rgba(255, 255, 255, 0.06);
+          transform: translateY(-1px);
+          color: rgba(255, 255, 255, 0.82);
+        }
+
+        .btn {
+          padding: 10px 12px;
+          border-radius: 12px;
+          border: 1px solid var(--border);
+          background: rgba(255, 255, 255, 0.04);
+          font-size: 13px;
+          color: rgba(255,255,255,0.88);
+          transition: transform 0.15s ease, background 0.15s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+
+        .btn-primary {
+          border-color: rgba(124, 58, 237, 0.55);
+          background: rgba(124, 58, 237, 0.18);
+        }
+        .btn-primary:hover { background: rgba(124, 58, 237, 0.25); }
+
+        .btn-green {
+          border-color: rgba(34, 197, 94, 0.55);
+          background: rgba(34, 197, 94, 0.14);
+        }
+        .btn-green:hover { background: rgba(34, 197, 94, 0.22); }
+
+        /* Hero */
+        .hero {
+          margin-top: 18px;
+          padding: 28px;
+          border-radius: calc(var(--radius) + 6px);
+          border: 1px solid var(--border);
+          background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+          box-shadow: var(--shadow);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .hero::before {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          background:
+            radial-gradient(600px 240px at 18% 30%, rgba(124, 58, 237, 0.20), transparent 65%),
+            radial-gradient(520px 220px at 85% 10%, rgba(34, 197, 94, 0.14), transparent 60%);
+          pointer-events: none;
+          opacity: 0.95;
+        }
+
+        .hero-inner {
+          position: relative;
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 18px;
+          align-items: start;
+        }
+
+        @media (max-width: 860px) {
+          .hero-inner { grid-template-columns: 1fr; }
+        }
+
+        .kicker {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 6px 10px;
+          border-radius: 999px;
+          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(0,0,0,0.18);
+          color: rgba(255,255,255,0.80);
+          font-size: 12px;
+          width: fit-content;
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+          background: var(--accent-2);
+          box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+        }
+
+        h1 {
+          margin: 12px 0 10px;
+          font-size: 34px;
+          line-height: 1.15;
+          letter-spacing: -0.6px;
+        }
+
+        .subtitle {
+          color: var(--muted);
+          font-size: 14px;
+          max-width: 64ch;
+          margin-bottom: 16px;
+        }
+
+        .hero-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 14px;
+        }
+
+        /* Console panel */
+        .console {
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: var(--radius);
+          background: rgba(0, 0, 0, 0.28);
+          overflow: hidden;
+        }
+
+        .console-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 10px 12px;
+          border-bottom: 1px solid rgba(255,255,255,0.10);
+          color: rgba(255,255,255,0.72);
+          font-size: 12px;
+        }
+
+        .traffic {
+          display: inline-flex;
+          gap: 6px;
+          align-items: center;
+        }
+        .traffic i {
+          width: 10px;
+          height: 10px;
+          border-radius: 999px;
+          display: inline-block;
+          opacity: 0.9;
+        }
+        .traffic i:nth-child(1) { background: #ff5f57; }
+        .traffic i:nth-child(2) { background: #febc2e; }
+        .traffic i:nth-child(3) { background: #28c840; }
+
+        pre {
+          margin: 0;
+          padding: 14px 14px 16px;
+          color: rgba(255,255,255,0.88);
+          font-size: 12.5px;
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
+
+        .muted { color: var(--muted-2); }
+
+        .tag {
+          display: inline-block;
+          padding: 2px 8px;
+          border-radius: 999px;
+          border: 1px solid rgba(255,255,255,0.14);
+          background: rgba(255,255,255,0.04);
+          color: rgba(255,255,255,0.72);
+          font-size: 12px;
+        }
+
+        .hl-violet { color: #c4b5fd; }
+        .hl-green { color: #86efac; }
+        .hl-blue { color: #93c5fd; }
+        .hl-red { color: #fca5a5; }
+
+        /* Features */
+        .section {
+          margin-top: 18px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 14px;
+        }
+        @media (max-width: 860px) { .section { grid-template-columns: 1fr; } }
+
+        .card {
+          padding: 16px;
+          border-radius: var(--radius);
+          border: 1px solid var(--border);
+          background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+          box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+        }
+        .card h3 {
+          margin: 0 0 6px;
+          font-size: 14px;
+          letter-spacing: -0.2px;
+        }
+        .card p {
+          margin: 0;
+          color: var(--muted);
+          font-size: 13px;
+        }
+
+        /* Footer */
+        footer {
+          margin-top: 18px;
+          padding: 14px 16px;
+          border-radius: var(--radius);
+          border: 1px solid var(--border);
+          background: rgba(255,255,255,0.03);
+          color: rgba(255,255,255,0.62);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .footer-left {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+
+        .footer-right a {
+          color: rgba(255,255,255,0.70);
+          text-decoration: underline;
+          text-underline-offset: 3px;
+          font-size: 12px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .chip, .btn { transition: none; }
+          .logoText .cursor { animation: none; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="brand">
+            <div class="logoMark" aria-label="DevPortal logo">
+              <span class="logoText">
+                &lt;<span class="cursor">|</span>&gt;
+              </span>
+            </div>
+            <span th:text="${title}">DevPortal</span>
         </div>
-    </body>
+
+        <div class="nav-links">
+            <a class="chip" href="#features">Features</a>
+            <a class="chip" href="#about">About</a>
+            <a class="btn btn-primary" th:href="@{/profile}">Go to Profile</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="about">
+        <div class="hero-inner">
+            <div>
+                <div class="kicker">
+                    <span class="dot"></span>
+                    <span>Programming-first social network</span>
+                    <span class="tag">MVP</span>
+                </div>
+
+                <h1>
+                    Share code, request reviews, and complete challenges —
+                    <span class="hl-violet">with real developer workflow</span>.
+                </h1>
+
+                <p class="subtitle" th:text="${message}">
+                    It works! Deployed on Render 🚀
+                </p>
+
+                <div class="hero-actions">
+                    <a class="btn btn-green" th:href="@{/profile}">Open Profile</a>
+                    <a class="btn" href="#features">See Features</a>
+                </div>
+            </div>
+
+            <div class="console" aria-label="Console preview">
+                <div class="console-top">
+                    <span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="muted">devportal@render:~</span>
+                </div>
+                <pre>
+<span class="muted">$</span> curl <span class="hl-blue">/</span>
+<span class="hl-green">200 OK</span>  <span class="muted">·</span> <span class="hl-violet">thymeleaf</span> <span class="muted">·</span> <span class="hl-blue">spring-boot</span>
+
+<span class="muted">$</span> GET <span class="hl-blue">/posts</span>   <span class="muted">→</span> <span class="hl-violet">code posts</span>
+<span class="muted">$</span> GET <span class="hl-blue">/reviews</span> <span class="muted">→</span> <span class="hl-violet">review requests</span>
+<span class="muted">$</span> GET <span class="hl-blue">/challenges</span> <span class="muted">→</span> <span class="hl-violet">streaks</span> &amp; <span class="hl-violet">progress</span>
+
+<span class="hl-red">note:</span> first cold start may take ~30s on free hosting
+          </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+        <div class="card">
+            <h3>Code posts</h3>
+            <p>Post snippets with language tags and clean formatting.</p>
+        </div>
+
+        <div class="card">
+            <h3>Review posts</h3>
+            <p>Ask for feedback with an OPEN/RESOLVED flow.</p>
+        </div>
+
+        <div class="card">
+            <h3>Challenges</h3>
+            <p>Build habits with daily progress and streak tracking.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-left">
+            <span>© <span th:text="${title}">DevPortal</span></span>
+            <span class="muted">·</span>
+            <span class="tag">v0.1.0</span>
+            <span class="tag">Spring Boot</span>
+            <span class="tag">Thymeleaf</span>
+        </div>
+
+        <div class="footer-right">
+            <a href="https://github.com/" target="_blank" rel="noreferrer">Repo</a>
+        </div>
+    </footer>
+</div>
+</body>
 </html>

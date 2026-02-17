@@ -3,12 +3,424 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${title}">Profile</title>
-</head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
-<h1 th:text="${title}">My Profile</h1>
-<p>This page should be protected (only logged in users).</p>
+    <title th:text="${title}">Profile · DevPortal</title>
 
-<p><a href="/">Back to Home</a></p>
+    <style>
+        :root {
+          --bg: #0b0f14;
+          --panel: rgba(255, 255, 255, 0.04);
+          --panel-2: rgba(255, 255, 255, 0.06);
+          --border: rgba(255, 255, 255, 0.10);
+          --text: rgba(255, 255, 255, 0.92);
+          --muted: rgba(255, 255, 255, 0.68);
+          --muted-2: rgba(255, 255, 255, 0.55);
+          --accent: #7c3aed;
+          --accent-2: #22c55e;
+          --blue: #3b82f6;
+          --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+          --radius: 16px;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+
+        body {
+          margin: 0;
+          color: var(--text);
+          background:
+            radial-gradient(1200px 600px at 15% 10%, rgba(124, 58, 237, 0.18), transparent 60%),
+            radial-gradient(900px 500px at 90% 0%, rgba(34, 197, 94, 0.12), transparent 55%),
+            radial-gradient(800px 500px at 40% 120%, rgba(59, 130, 246, 0.10), transparent 55%),
+            var(--bg);
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+          line-height: 1.6;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        a:hover { opacity: 0.92; }
+
+        .container {
+          max-width: 1040px;
+          margin: 0 auto;
+          padding: 24px 18px 40px;
+          min-height: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
+
+        /* Nav */
+        .nav {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 14px 16px;
+          border: 1px solid var(--border);
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+          border-radius: var(--radius);
+          box-shadow: var(--shadow);
+          backdrop-filter: blur(10px);
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 700;
+          letter-spacing: 0.4px;
+        }
+
+        .logo {
+          width: 34px;
+          height: 34px;
+          display: grid;
+          place-items: center;
+          border-radius: 10px;
+          background: rgba(124, 58, 237, 0.18);
+          border: 1px solid rgba(124, 58, 237, 0.35);
+          box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+          flex: 0 0 auto;
+        }
+        .logo span { font-size: 14px; }
+
+        .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+        }
+
+        .chip {
+          padding: 8px 10px;
+          border-radius: 999px;
+          border: 1px solid var(--border);
+          background: rgba(255, 255, 255, 0.03);
+          color: var(--muted);
+          font-size: 13px;
+          transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .chip:hover {
+          background: rgba(255, 255, 255, 0.06);
+          transform: translateY(-1px);
+          color: rgba(255, 255, 255, 0.82);
+        }
+
+        .btn {
+          padding: 10px 12px;
+          border-radius: 12px;
+          border: 1px solid var(--border);
+          background: rgba(255, 255, 255, 0.04);
+          font-size: 13px;
+          color: rgba(255,255,255,0.88);
+          transition: transform 0.15s ease, background 0.15s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+
+        .btn-green {
+          border-color: rgba(34, 197, 94, 0.55);
+          background: rgba(34, 197, 94, 0.14);
+        }
+        .btn-green:hover { background: rgba(34, 197, 94, 0.22); }
+
+        .btn-violet {
+          border-color: rgba(124, 58, 237, 0.55);
+          background: rgba(124, 58, 237, 0.18);
+        }
+        .btn-violet:hover { background: rgba(124, 58, 237, 0.25); }
+
+        /* Layout */
+        .main {
+          display: grid;
+          grid-template-columns: 1.35fr 0.65fr;
+          gap: 14px;
+          flex: 1;
+          align-items: start;
+        }
+        @media (max-width: 900px) {
+          .main { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+          border: 1px solid var(--border);
+          background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+          border-radius: calc(var(--radius) + 6px);
+          box-shadow: var(--shadow);
+          overflow: hidden;
+        }
+
+        .panel-inner { padding: 18px; }
+
+        /* Profile header */
+        .profile-header {
+          display: flex;
+          gap: 14px;
+          align-items: center;
+          padding: 18px;
+          border-bottom: 1px solid rgba(255,255,255,0.10);
+          background: rgba(0,0,0,0.18);
+        }
+
+        .avatar {
+          width: 54px;
+          height: 54px;
+          border-radius: 16px;
+          display: grid;
+          place-items: center;
+          background: rgba(59, 130, 246, 0.12);
+          border: 1px solid rgba(59, 130, 246, 0.30);
+          box-shadow: 0 10px 25px rgba(59, 130, 246, 0.10);
+          flex: 0 0 auto;
+          font-weight: 700;
+        }
+
+        .name {
+          margin: 0;
+          font-size: 18px;
+          letter-spacing: -0.2px;
+        }
+
+        .bio {
+          margin: 4px 0 0;
+          color: var(--muted);
+          font-size: 13px;
+        }
+
+        .badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 10px;
+        }
+
+        .tag {
+          display: inline-block;
+          padding: 2px 8px;
+          border-radius: 999px;
+          border: 1px solid rgba(255,255,255,0.14);
+          background: rgba(255,255,255,0.04);
+          color: rgba(255,255,255,0.72);
+          font-size: 12px;
+        }
+
+        /* Sections */
+        .sections {
+          display: grid;
+          gap: 12px;
+          padding: 16px 18px 18px;
+        }
+
+        .section {
+          border: 1px solid rgba(255,255,255,0.10);
+          background: rgba(255,255,255,0.03);
+          border-radius: var(--radius);
+          padding: 14px;
+        }
+
+        .section h2 {
+          margin: 0 0 6px;
+          font-size: 14px;
+          letter-spacing: -0.2px;
+        }
+
+        .section p {
+          margin: 0 0 10px;
+          color: var(--muted);
+          font-size: 13px;
+        }
+
+        .placeholder {
+          padding: 12px;
+          border-radius: 12px;
+          border: 1px dashed rgba(255,255,255,0.14);
+          background: rgba(0,0,0,0.12);
+          color: rgba(255,255,255,0.70);
+          font-size: 12.5px;
+        }
+
+        .actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-top: 10px;
+        }
+
+        /* Side console */
+        .console-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px 14px;
+          border-bottom: 1px solid rgba(255,255,255,0.10);
+          color: rgba(255,255,255,0.72);
+          font-size: 12px;
+          background: rgba(0,0,0,0.22);
+        }
+
+        .traffic {
+          display: inline-flex;
+          gap: 6px;
+          align-items: center;
+        }
+        .traffic i {
+          width: 10px;
+          height: 10px;
+          border-radius: 999px;
+          display: inline-block;
+          opacity: 0.9;
+        }
+        .traffic i:nth-child(1) { background: #ff5f57; }
+        .traffic i:nth-child(2) { background: #febc2e; }
+        .traffic i:nth-child(3) { background: #28c840; }
+
+        pre {
+          margin: 0;
+          padding: 14px 14px 16px;
+          font-size: 12.5px;
+          white-space: pre-wrap;
+          word-break: break-word;
+          color: rgba(255,255,255,0.88);
+          background: rgba(0,0,0,0.22);
+        }
+
+        .muted { color: var(--muted-2); }
+        .hl-violet { color: #c4b5fd; }
+        .hl-green { color: #86efac; }
+        .hl-blue { color: #93c5fd; }
+
+        /* Footer */
+        footer {
+          padding: 14px 16px;
+          border-radius: var(--radius);
+          border: 1px solid var(--border);
+          background: rgba(255,255,255,0.03);
+          color: rgba(255,255,255,0.62);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .small-link {
+          font-size: 12px;
+          color: rgba(255,255,255,0.70);
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="brand">
+            <div class="logo"><span>&lt;/&gt;</span></div>
+            <span>DevPortal</span>
+        </div>
+
+        <div class="nav-links">
+            <a class="chip" th:href="@{/}">Home</a>
+            <a class="btn btn-violet" th:href="@{/profile}">Profile</a>
+            <a class="btn btn-green" th:href="@{/logout}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="main">
+        <!-- MAIN PROFILE PANEL -->
+        <section class="panel" aria-label="Profile page">
+            <div class="profile-header">
+                <div class="avatar">DS</div>
+                <div>
+                    <h1 class="name">Developer</h1>
+                    <p class="bio">Your profile is ready. Next step: connect real user data (DB) and posts.</p>
+
+                    <div class="badges">
+                        <span class="tag">Java</span>
+                        <span class="tag">Spring Boot</span>
+                        <span class="tag">Thymeleaf</span>
+                        <span class="tag">MVP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sections">
+                <div class="section">
+                    <h2>Code Posts</h2>
+                    <p>Snippets with language tags and clean formatting.</p>
+                    <div class="placeholder">
+                        No code posts yet. Next: create <span class="hl-blue">/posts/new</span> and store them.
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-violet" href="#" onclick="return false;">New code post (soon)</a>
+                        <a class="btn" href="#" onclick="return false;">Browse posts (soon)</a>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Review Requests</h2>
+                    <p>Ask for feedback with an OPEN/RESOLVED flow.</p>
+                    <div class="placeholder">
+                        No review requests yet. Next: add <span class="hl-blue">status</span> and comments.
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-violet" href="#" onclick="return false;">New review request (soon)</a>
+                        <a class="btn" href="#" onclick="return false;">Open reviews (soon)</a>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Challenges</h2>
+                    <p>Build habits with daily progress and streak tracking.</p>
+                    <div class="placeholder">
+                        No active challenges. Next: start a challenge and mark day completion.
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-violet" href="#" onclick="return false;">Start challenge (soon)</a>
+                        <a class="btn" href="#" onclick="return false;">My progress (soon)</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIDE CONSOLE PANEL -->
+        <aside class="panel" aria-label="Developer console plan">
+            <div class="console-top">
+                <span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="muted">profile@devportal:~</span>
+            </div>
+            <pre>
+<span class="muted">$</span> GET <span class="hl-blue">/profile</span>
+<span class="hl-green">200 OK</span>  <span class="muted">·</span> authenticated view
+
+<span class="muted">$</span> next tasks
+<span class="hl-violet">1)</span> real User entity + DB (Postgres)
+<span class="hl-violet">2)</span> Post entity (CODE/REVIEW)
+<span class="hl-violet">3)</span> Challenge entity + progress
+<span class="hl-violet">4)</span> polish: layout template + shared css
+
+<span class="muted">$</span> keep MVP small. finish it.
+        </pre>
+        </aside>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div>
+            <span>© DevPortal</span>
+            <span class="muted">·</span>
+            <span class="tag">v0.1.0</span>
+            <span class="tag">Profile</span>
+        </div>
+        <div>
+            <a class="small-link" th:href="@{/}">Back to Home</a>
+        </div>
+    </footer>
+</div>
 </body>
 </html>

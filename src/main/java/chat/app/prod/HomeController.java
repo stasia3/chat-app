@@ -9,8 +9,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("title", "DevSocial");
-        model.addAttribute("message", "It works! Deployed on Render");
+        model.addAttribute("title", "DevPortal");
+        model.addAttribute("message", "Code is the goal, not money. Create, don’t consume.");
         return "index";
     }
 

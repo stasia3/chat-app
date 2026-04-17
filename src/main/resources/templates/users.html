@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h2>Users</h2>
+<p>You are logged in as: <span th:text="${currentUsername}"></span></p>
+
+<ul>
+    <li th:each="user : ${users}">
+        <a th:href="@{/chat/{username}(username=${user.username})}"
+           th:text="${user.username}"></a>
+    </li>
+</ul>
+
+<a href="/profile">Back to profile</a>
+</body>
+</html>

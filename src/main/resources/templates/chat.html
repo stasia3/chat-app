@@ -13,7 +13,7 @@
 
 <div style="margin-top: 20px; margin-bottom: 20px;">
     <div th:each="message : ${messages}" style="margin-bottom: 10px;">
-        <b th:text="${message.sender}"></b>:
+        <b th:text="${message.sender.username}"></b>:
         <span th:text="${message.content}"></span>
         <small th:text="${message.timestamp}"></small>
     </div>

@@ -11,11 +11,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String sender;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
-    @Column(nullable = false)
-    private String receiver;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
@@ -25,7 +27,7 @@ public class Message {
 
     public Message() {}
 
-    public Message(String sender, String receiver, String content, LocalDateTime timestamp) {
+    public Message(User sender, User receiver, String content, LocalDateTime timestamp) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
@@ -36,19 +38,19 @@ public class Message {
         return id;
     }
 
-    public String getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
-    public String getReceiver() {
+    public User getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(String receiver) {
+    public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
 

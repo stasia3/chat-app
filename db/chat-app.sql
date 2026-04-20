@@ -6,8 +6,8 @@ CREATE TABLE users (
 
 CREATE TABLE messages (
     id BIGSERIAL PRIMARY KEY,
-    sender VARCHAR(255) NOT NULL,
-    receiver VARCHAR(255) NOT NULL,
+    sender_id BIGINT NOT NULL,
+    receiver_id BIGINT NOT NULL,
     content TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL
 );

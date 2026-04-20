@@ -13,10 +13,4 @@ public class HomeController {
         model.addAttribute("message", "Code is the goal, not money. Create, don’t consume.");
         return "index";
     }
-
-    @GetMapping("/profile")
-    public String profile(Model model) {
-        model.addAttribute("title", "My Profile");
-        return "profile";
-    }
 }

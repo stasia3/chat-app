@@ -3,3 +3,11 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE messages (
+    id BIGSERIAL PRIMARY KEY,
+    sender VARCHAR(255) NOT NULL,
+    receiver VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    timestamp TIMESTAMP NOT NULL
+);

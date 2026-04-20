@@ -1,31 +1,26 @@
 package chat.app.prod.service;
 
-import chat.app.prod.model.Message;
+import chat.app.prod.entity.Message;
+import chat.app.prod.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 @Service
 public class ChatService {
-    private final Map<String, List<Message>> conversations = new HashMap<>();
+    private final MessageRepository messageRepository;
 
-    private String buildConversationKey(String user1, String user2) {
-        List<String> users = Arrays.asList(user1, user2);
-        Collections.sort(users);
-        return users.get(0) + "_" + users.get(1);
-    }
-
-    public List<Message> getConversation(String user1, String user2) {
-        String key = buildConversationKey(user1, user2);
-        return conversations.getOrDefault(key, new ArrayList<>());
+    public ChatService(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
     }
 
     public void sendMessage(String sender, String receiver, String content) {
-        String key = buildConversationKey(sender, receiver);
-
         Message message = new Message(sender, receiver, content, LocalDateTime.now());
+        messageRepository.save(message);
+    }
 
-        conversations.computeIfAbsent(key, k-> new ArrayList<>()).add(message);
+    public List<Message> getConversation(String user1, String user2) {
+        return messageRepository.findBySenderAndReceiverOrSenderAndReceiverOrderByTimestampAsc(user1, user2, user2, user1);
     }
 }

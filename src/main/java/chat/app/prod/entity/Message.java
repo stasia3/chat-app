@@ -1,11 +1,26 @@
-package chat.app.prod.model;
+package chat.app.prod.entity;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+
+@Entity
+@Table(name = "messages")
 public class Message {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String sender;
+
+    @Column(nullable = false)
     private String receiver;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    @Column(nullable = false)
     private LocalDateTime timestamp;
 
     public Message() {}
@@ -15,6 +30,10 @@ public class Message {
         this.receiver = receiver;
         this.content = content;
         this.timestamp = timestamp;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getSender() {
@@ -48,6 +67,4 @@ public class Message {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-
-
 }

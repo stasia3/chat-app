@@ -15,7 +15,9 @@
             <a th:href="@{/notifications}">Notifications</a>
             <a href="/users">Open chats</a>
             <a th:href="@{/posts}">Posts</a>
-            <a class="btn btn-green" th:href="@{/logout}">Logout</a>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button class="btn btn-green" type="submit">Logout</button>
+            </form>
         </div>
     </nav>
 

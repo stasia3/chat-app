@@ -7,15 +7,7 @@
 </head>
 <body>
 
-<nav>
-    <a th:href="@{/}">Home</a>
-    <a th:href="@{/profile}">Profile</a>
-    <a th:href="@{/friends}">Friends</a>
-    <a th:href="@{/notifications}">Notifications</a>
-    <a th:href="@{/users}">Open chats</a>
-    <a th:href="@{/posts}">Posts</a>
-    <a th:href="@{/logout}">Logout</a>
-</nav>
+<div th:replace="~{fragments/navbar :: menu}"></div>
 
 <h1>All Posts</h1>
 

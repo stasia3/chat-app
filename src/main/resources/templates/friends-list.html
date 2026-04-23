@@ -7,12 +7,7 @@
 </head>
 <body>
 
-<nav>
-    <a th:href="@{/profile}">Profile</a>
-    <a th:href="@{/friends}">Friends</a>
-    <a th:href="@{/notifications}">Notifications</a>
-    <a th:href="@{/users}">Open chats</a>
-</nav>
+<div th:replace="~{fragments/navbar :: menu}"></div>
 
 <h1>My Friends</h1>
 

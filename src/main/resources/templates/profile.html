@@ -7,19 +7,7 @@
 </head>
 
 <body>
-    <nav>
-        <div class="nav-links">
-            <a class="chip" th:href="@{/}">Home</a>
-            <a class="btn btn-violet" th:href="@{/profile}">Profile</a>
-            <a th:href="@{/friends}">Friends</a>
-            <a th:href="@{/notifications}">Notifications</a>
-            <a href="/users">Open chats</a>
-            <a th:href="@{/posts}">Posts</a>
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button class="btn btn-green" type="submit">Logout</button>
-            </form>
-        </div>
-    </nav>
+    <div th:replace="~{fragments/navbar :: menu}"></div>
 
 
 
@@ -57,14 +45,6 @@
     <br/>
 
 
-    <!-- FOOTER -->
-        <br/>
-    <footer>
-        <div>
-            <span>© DevPortal</span>
-            <span class="muted">·</span>
-            <span class="tag">v0.1.1</span>
-        </div>
-    </footer>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

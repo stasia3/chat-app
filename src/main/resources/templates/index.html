@@ -15,14 +15,6 @@
         <h1 th:text="${title}">Title site</h1>
         <p th:text="${message}">Text</p>
 
-        <!-- FOOTER -->
-        <br/>
-        <footer>
-            <div>
-                <span>© DevPortal</span>
-                <span class="muted">·</span>
-                <span class="tag">v0.1.1</span>
-            </div>
-        </footer>
+        <div th:replace="~{fragments/footer :: footer}"></div>
     </body>
 </html>

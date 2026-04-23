@@ -3,6 +3,7 @@ package chat.app.prod.controller;
 import chat.app.prod.entity.User;
 import chat.app.prod.repository.UserRepository;
 import chat.app.prod.service.ChatService;
+import chat.app.prod.service.FriendService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,11 +13,11 @@ import java.util.List;
 
 @Controller
 public class ChatController {
-    private final UserRepository userRepository;
+    private final FriendService friendService;
     private final ChatService chatService;
 
-    public ChatController(UserRepository userRepository, ChatService chatService) {
-        this.userRepository = userRepository;
+    public ChatController(FriendService friendService, ChatService chatService) {
+        this.friendService = friendService;
         this.chatService = chatService;
     }
 
@@ -24,10 +25,7 @@ public class ChatController {
     public String users(Model model, Authentication authentication) {
         String currentUsername = authentication.getName();
 
-        List<User> users = userRepository.findAll()
-                .stream()
-                .filter(user -> !user.getUsername().equals(currentUsername))
-                .toList();
+        List<User> users = friendService.getFriends(currentUsername);
 
         model.addAttribute("users", users);
         model.addAttribute("currentUsername", currentUsername);

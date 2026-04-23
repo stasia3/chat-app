@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">Friends</title>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/profile}">Profile</a>
+    <a th:href="@{/friends}">Friends</a>
+    <a th:href="@{/notifications}">Notifications</a>
+    <a th:href="@{/users}">Open chats</a>
+</nav>
+
+<h1>Find friends</h1>
+
+<form method="get" th:action="@{/friends}">
+    <input type="text" name="username" placeholder="Search username..." th:value="${search}">
+    <button type="submit">Search</button>
+</form>
+
+<div style="margin-top: 20px;">
+    <div th:if="${users != null}" th:each="user : ${users}" style="margin-bottom: 12px;">
+        <span th:text="${user.username}"></span>
+
+        <form th:action="@{/friends/request/{username}(username=${user.username})}" method="post" style="display:inline;">
+            <button type="submit">Send request</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

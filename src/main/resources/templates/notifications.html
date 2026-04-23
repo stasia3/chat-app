@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">Notifications</title>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/profile}">Profile</a>
+    <a th:href="@{/friends}">Friends</a>
+    <a th:href="@{/notifications}">Notifications</a>
+    <a th:href="@{/users}">Open chats</a>
+</nav>
+
+<h1>Friend requests</h1>
+
+<div th:if="${#lists.isEmpty(requests)}">
+    <p>No new requests.</p>
+</div>
+
+<div th:each="request : ${requests}" style="margin-bottom: 14px;">
+    <span th:text="${request.sender.username}"></span>
+    <span>sent you a friend request</span>
+
+    <form th:action="@{/notifications/accept/{id}(id=${request.id})}" method="post" style="display:inline;">
+        <button type="submit">Accept</button>
+    </form>
+
+    <form th:action="@{/notifications/reject/{id}(id=${request.id})}" method="post" style="display:inline;">
+        <button type="submit">Reject</button>
+    </form>
+</div>
+
+</body>
+</html>

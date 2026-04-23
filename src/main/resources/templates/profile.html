@@ -11,6 +11,8 @@
         <div class="nav-links">
             <a class="chip" th:href="@{/}">Home</a>
             <a class="btn btn-violet" th:href="@{/profile}">Profile</a>
+            <a th:href="@{/friends}">Friends</a>
+            <a th:href="@{/notifications}">Notifications</a>
             <a href="/users">Open chats</a>
             <a class="btn btn-green" th:href="@{/logout}">Logout</a>
         </div>
@@ -20,6 +22,13 @@
 
     <h1>Welcome, <span th:text="${username}"></span></h1>
     <p>You have loged in</p>
+
+    <div>
+        <span>Total friends: <b th:text="${friendCount}"></b></span>
+        <a th:href="@{/friends/list}">View all friends</a>
+    </div>
+
+    <br/>
 
     <!-- FOOTER -->
         <br/>

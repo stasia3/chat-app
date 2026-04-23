@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">My Friends</title>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/profile}">Profile</a>
+    <a th:href="@{/friends}">Friends</a>
+    <a th:href="@{/notifications}">Notifications</a>
+    <a th:href="@{/users}">Open chats</a>
+</nav>
+
+<h1>My Friends</h1>
+
+<div th:if="${#lists.isEmpty(friends)}">
+    <p>You have no friends yet.</p>
+</div>
+
+<ul th:if="${!#lists.isEmpty(friends)}">
+    <li th:each="friend : ${friends}">
+        <span th:text="${friend.username}"></span>
+    </li>
+</ul>
+
+</body>
+</html>

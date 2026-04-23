@@ -1,6 +1,7 @@
 package chat.app.prod.controller;
 
 import chat.app.prod.service.FriendService;
+import chat.app.prod.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +11,11 @@ import org.springframework.security.core.Authentication;
 public class ProfileController {
 
     private final FriendService friendService;
+    private final PostService postService;
 
-    public ProfileController(FriendService friendService) {
+    public ProfileController(FriendService friendService, PostService postService) {
         this.friendService = friendService;
+        this.postService = postService;
     }
 
     @GetMapping("/profile")
@@ -22,6 +25,7 @@ public class ProfileController {
         model.addAttribute("title", "My Profile");
         model.addAttribute("username", username);
         model.addAttribute("friendCount", friendService.countFriends(username));
+        model.addAttribute("posts", postService.getPostsByUsername(username));
         return "profile";
     }
 }

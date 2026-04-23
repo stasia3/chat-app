@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">Posts</title>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/}">Home</a>
+    <a th:href="@{/profile}">Profile</a>
+    <a th:href="@{/friends}">Friends</a>
+    <a th:href="@{/notifications}">Notifications</a>
+    <a th:href="@{/users}">Open chats</a>
+    <a th:href="@{/posts}">Posts</a>
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+<h1>All Posts</h1>
+
+<div th:if="${#lists.isEmpty(posts)}">
+    <p>No posts yet.</p>
+</div>
+
+<div th:each="post : ${posts}" style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
+    <div>
+        <b th:text="${post.user.username}"></b>
+    </div>
+    <div>
+        <span th:text="${post.content}"></span>
+    </div>
+    <div>
+        <small th:text="${post.createdAt}"></small>
+    </div>
+</div>
+
+</body>
+</html>

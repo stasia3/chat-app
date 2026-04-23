@@ -14,6 +14,7 @@
             <a th:href="@{/friends}">Friends</a>
             <a th:href="@{/notifications}">Notifications</a>
             <a href="/users">Open chats</a>
+            <a th:href="@{/posts}">Posts</a>
             <a class="btn btn-green" th:href="@{/logout}">Logout</a>
         </div>
     </nav>
@@ -29,6 +30,30 @@
     </div>
 
     <br/>
+
+    <div>
+        <a th:href="@{/posts/new}">Add a post</a>
+    </div>
+
+    <br/>
+
+    <h2>My posts</h2>
+
+    <div th:if="${#lists.isEmpty(posts)}">
+        <p>You have not published any posts yet.</p>
+    </div>
+
+    <div th:each="post : ${posts}" style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
+        <div>
+            <span th:text="${post.content}"></span>
+        </div>
+        <div>
+            <small th:text="${post.createdAt}"></small>
+        </div>
+    </div>
+
+    <br/>
+
 
     <!-- FOOTER -->
         <br/>

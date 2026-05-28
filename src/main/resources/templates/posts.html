@@ -3,28 +3,86 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${title}">Posts</title>
+    <title th:text="${title}">Posts · DevPortal</title>
+
+    <link rel="stylesheet"
+          href="/css/basics.css"
+          th:href="@{/css/basics.css}">
 </head>
+
 <body>
 
-<div th:replace="~{fragments/navbar :: menu}"></div>
+<div class="page-shell">
 
-<h1>All Posts</h1>
+    <div th:replace="~{fragments/navbar :: menu}"></div>
 
-<div th:if="${#lists.isEmpty(posts)}">
-    <p>No posts yet.</p>
-</div>
+    <main class="posts-card">
 
-<div th:each="post : ${posts}" style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
-    <div>
-        <b th:text="${post.user.username}"></b>
-    </div>
-    <div>
-        <span th:text="${post.content}"></span>
-    </div>
-    <div>
-        <small th:text="${post.createdAt}"></small>
-    </div>
+        <div class="posts-header">
+            <div class="logo-big">&lt;|&gt;</div>
+
+            <h1>All Posts</h1>
+
+            <p class="auth-subtitle">
+                Explore updates, ideas, and progress shared by developers.
+            </p>
+        </div>
+
+        <div class="posts-actions">
+            <a class="cta-btn"
+               th:href="@{/posts/new}">
+                Create post
+            </a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(posts)}"
+             class="empty-box">
+            <p>No posts yet.</p>
+        </div>
+
+        <div class="posts-feed">
+
+            <article th:each="post : ${posts}"
+                     class="feed-post">
+
+                <div class="feed-post-header">
+
+                    <div class="feed-user">
+
+                        <div class="friend-avatar">
+                            <span th:text="${#strings.substring(post.user.username,0,1)}">
+                                U
+                            </span>
+                        </div>
+
+                        <div>
+                            <strong th:text="${post.user.username}">
+                                username
+                            </strong>
+
+                            <small th:text="${post.createdAt}">
+                                date
+                            </small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="feed-content">
+                    <p th:text="${post.content}">
+                        Post content
+                    </p>
+                </div>
+
+            </article>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
 </div>
 
 </body>

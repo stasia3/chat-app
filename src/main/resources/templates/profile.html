@@ -4,47 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${title}">Profile · DevPortal</title>
+    <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
 </head>
 
 <body>
-    <div th:replace="~{fragments/navbar :: menu}"></div>
+    <div class="page-shell">
+        <div th:replace="~{fragments/navbar :: menu}"></div>
 
 
+        <main class="profile-card">
+            <section class="profile-header">
+                <div>
+                    <div class="logo-big">&lt;|&gt;</div>
+                    <h1>Welcome, <span th:text="${username}">User</span></h1>
+                    <p class="auth-subtitle">You are logged in to your DevPortal space.</p>
+                </div>
 
-    <h1>Welcome, <span th:text="${username}"></span></h1>
-    <p>You have loged in</p>
+                <div class="profile-actions">
+                    <a class="cta-btn" th:href="@{/posts/new}">Add a post</a>
+                    <a class="secondary" th:href="@{/friends/list}">View friends</a>
+                </div>
+            </section>
 
-    <div>
-        <span>Total friends: <b th:text="${friendCount}"></b></span>
-        <a th:href="@{/friends/list}">View all friends</a>
+            <section class="profile-stats">
+                <div class="stat-box">
+                    <span>Total frinds</span>
+                    <strong th:text="${friendCount}">0</strong>
+                </div>
+            </section>
+
+            <section class="posts-section">
+                <div class="section-title">
+                    <h2>My posts</h2>
+                </div>
+
+                <div th:if="${#lists.isEmpty(posts)}" class="empty-box">
+                    <p>You have not published any posts yet.</p>
+                </div>
+
+                <div th:each="post : ${posts}" class="post-box">
+                    <p th:text="${post.content}">Post content</p>
+                    <small th:text="${post.createdAt}">Date</small>
+                </div>
+            </section>
+        </main>
+
+        <div th:replace="~{fragments/footer :: footer}"></div>
     </div>
-
-    <br/>
-
-    <div>
-        <a th:href="@{/posts/new}">Add a post</a>
-    </div>
-
-    <br/>
-
-    <h2>My posts</h2>
-
-    <div th:if="${#lists.isEmpty(posts)}">
-        <p>You have not published any posts yet.</p>
-    </div>
-
-    <div th:each="post : ${posts}" style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
-        <div>
-            <span th:text="${post.content}"></span>
-        </div>
-        <div>
-            <small th:text="${post.createdAt}"></small>
-        </div>
-    </div>
-
-    <br/>
-
-
-    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

@@ -1,20 +1,27 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title th:text="${title}">DevPortal</title>
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">DevPortal</title>
+    <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
+</head>
+<body>
 
-    <body>
-        <nav>
-            <div class="nav-links">
-                <a class="btn btn-primary" th:href="@{/profile}">Log in</a>
-            </div>
-        </nav>
-        <h1 th:text="${title}">Title site</h1>
-        <p th:text="${message}">Text</p>
+<div th:replace="~{fragments/navbar_poor :: menu-poor}"></div>
 
-        <div th:replace="~{fragments/footer :: footer}"></div>
-    </body>
+<div class="main-card">
+    <div class="content">
+        <div class="logo-big">&lt;|&gt;</div>
+        <h1 th:text="${title}">DevPortal</h1>
+        <p th:text="${message}">
+            A calm and focused space for programmers to share ideas, build projects, and connect — designed without noise, just clarity.
+        </p>
+        <button class="cta-btn">Try it now</button>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
 </html>

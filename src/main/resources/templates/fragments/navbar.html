@@ -1,21 +1,18 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<body>
+<nav xmlns:th="http://www.thymeleaf.org"
+     th:fragment="menu"
+     class="navbar">
 
-<nav th:fragment="menu">
+    <div class="logo">&lt;|&gt; DevPortal</div>
+
     <div class="nav-links">
-        <a class="chip" th:href="@{/}">Home</a>
-        <a class="btn btn-violet" th:href="@{/profile}">Profile</a>
-        <a th:href="@{/friends}">Friends</a>
-        <a th:href="@{/notifications}">Notifications</a>
-        <a th:href="@{/users}">Open chats</a>
-        <a th:href="@{/posts}">Posts</a>
+        <a class="chip" th:href="@{/profile}">Profile</a>
+        <a class="chip" th:href="@{/friends}">Friends</a>
+        <a class="chip" th:href="@{/notifications}">Notifications</a>
+        <a class="chip" th:href="@{/users}">Open chats</a>
+        <a class="chip" th:href="@{/posts}">Posts</a>
 
-        <form th:action="@{/logout}" method="post" style="display:inline;">
-            <button class="btn btn-green" type="submit">Logout</button>
+        <form th:action="@{/logout}" method="post">
+            <button class="logout-btn" type="submit">Logout</button>
         </form>
     </div>
 </nav>
-
-</body>
-</html>

@@ -3,29 +3,68 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${title}">Notifications</title>
+    <title th:text="${title}">Notifications · DevPortal</title>
+
+    <link rel="stylesheet"
+          href="/css/basics.css"
+          th:href="@{/css/basics.css}">
 </head>
+
 <body>
 
-<div th:replace="~{fragments/navbar :: menu}"></div>
+<div class="page-shell">
 
-<h1>Friend requests</h1>
+    <div th:replace="~{fragments/navbar :: menu}"></div>
 
-<div th:if="${#lists.isEmpty(requests)}">
-    <p>No new requests.</p>
-</div>
+    <main class="notifications-card">
 
-<div th:each="request : ${requests}" style="margin-bottom: 14px;">
-    <span th:text="${request.sender.username}"></span>
-    <span>sent you a friend request</span>
+        <div class="friends-header">
+            <div class="logo-big">&lt;|&gt;</div>
 
-    <form th:action="@{/notifications/accept/{id}(id=${request.id})}" method="post" style="display:inline;">
-        <button type="submit">Accept</button>
-    </form>
+            <h1>Friend requests</h1>
 
-    <form th:action="@{/notifications/reject/{id}(id=${request.id})}" method="post" style="display:inline;">
-        <button type="submit">Reject</button>
-    </form>
+            <p class="auth-subtitle">
+                Review new connection requests from other developers.
+            </p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(requests)}" class="empty-box">
+            <p>No new requests.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(requests)}" class="requests-list">
+
+            <div th:each="request : ${requests}" class="request-card">
+
+                <div class="request-info">
+                    <div class="friend-avatar">
+                        <span th:text="${#strings.substring(request.sender.username,0,1)}">U</span>
+                    </div>
+
+                    <div>
+                        <strong th:text="${request.sender.username}">username</strong>
+                        <span>sent you a friend request</span>
+                    </div>
+                </div>
+
+                <div class="request-actions">
+                    <form th:action="@{/notifications/accept/{id}(id=${request.id})}" method="post">
+                        <button type="submit" class="accept-btn">Accept</button>
+                    </form>
+
+                    <form th:action="@{/notifications/reject/{id}(id=${request.id})}" method="post">
+                        <button type="submit" class="reject-btn">Reject</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
 </div>
 
 </body>

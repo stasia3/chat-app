@@ -1,20 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Users</title>
+    <title>Chats · DevPortal</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
 </head>
+
 <body>
-<h2>Users</h2>
-<p>You are logged in as: <span th:text="${currentUsername}"></span></p>
 
-<ul>
-    <li th:each="user : ${users}">
-        <a th:href="@{/chat/{username}(username=${user.username})}"
-           th:text="${user.username}"></a>
-    </li>
-</ul>
+<div class="page-shell">
 
-<a href="/profile">Back to profile</a>
+    <div th:replace="~{fragments/navbar :: menu}"></div>
+
+    <main class="chat-users-card">
+
+        <div class="friends-header">
+            <div class="logo-big">&lt;|&gt;</div>
+
+            <h1>Open chats</h1>
+
+            <p class="auth-subtitle">
+                You are logged in as
+                <strong th:text="${currentUsername}">username</strong>.
+                Choose a friend to start a conversation.
+            </p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(users)}" class="empty-box">
+            <p>No friends available for chat yet.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(users)}" class="chat-users-list">
+
+            <a th:each="user : ${users}"
+               class="chat-user-item"
+               th:href="@{/chat/{username}(username=${user.username})}">
+
+                <div class="friend-avatar">
+                    <span th:text="${#strings.substring(user.username,0,1)}">U</span>
+                </div>
+
+                <div>
+                    <strong th:text="${user.username}">username</strong>
+                    <span>Open conversation</span>
+                </div>
+
+            </a>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
 </body>
 </html>

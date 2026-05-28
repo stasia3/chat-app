@@ -2,38 +2,44 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register · DevPortal</title>
+    <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
 </head>
 
 <body>
+    <div class="page-shell">
+        <div class="auth-card">
+            <div class="auth-content">
+                <div class="logo-big">&lt;|&gt;</div>
+                <h1>Create account</h1>
 
-<h2>Create account</h2>
+                <p class="auth-subtitle">
+                    Join DevPortal and start sharing your projects, ideas, and progress.
+                </p>
 
-<form method="post" th:action="@{/register}" th:object="${user}">
+                <from method="post" th:action="@{/register}" th:object="${user}" class="auth-form">
+                    <div class="field">
+                        <label for="username">Username</label>
+                        <input id="username" type="text" th:field="*{username}" placehorlder="e.g. stasia" required>
+                    </div>
 
-    <div>
-        <label>Username</label>
-        <input type="text" th:field="*{username}" required>
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" th:field="*{password}" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="actions">
+                        <buutton type="submit" class="cta-btn">Register</buutton>
+                        <a class="secondary" th:href="@{/login}">Log in</a>
+                    </div>
+
+                    <div th:if="${error}" class="message error-box">
+                        <strong class="hl-red">Error:</strong> User already exists.
+                    </div>
+                </from>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label>Password</label>
-        <input type="password" th:field="*{password}" required>
-    </div>
-
-    <br>
-
-    <button type="submit">Register</button>
-
-</form>
-
-<br>
-
-<a th:href="@{/login}">Already have account? Login</a>
-
-<div th:if="${error}">
-    <p style="color:red;">User already exists</p>
-</div>
-
 </body>
 </html>

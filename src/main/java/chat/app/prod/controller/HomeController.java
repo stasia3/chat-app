@@ -10,7 +10,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("title", "DevPortal");
-        model.addAttribute("message", "Code is the goal, not money. Create, don’t consume.");
+        model.addAttribute("message", "A calm and focused space for programmers to share ideas, build projects, and connect — designed without noise, just clarity.");
         return "index";
     }
 }

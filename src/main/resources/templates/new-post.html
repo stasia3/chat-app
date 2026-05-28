@@ -3,22 +3,56 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${title}">Add Post</title>
+    <title th:text="${title}">Add Post · DevPortal</title>
+
+    <link rel="stylesheet"
+          href="/css/basics.css"
+          th:href="@{/css/basics.css}">
 </head>
+
 <body>
 
-<nav>
-    <a th:href="@{/profile}">Profile</a>
-    <a th:href="@{/posts}">Posts</a>
-</nav>
+<div class="page-shell">
 
-<h1>Create Post</h1>
+    <div th:replace="~{fragments/navbar :: menu}"></div>
 
-<form th:action="@{/posts/new}" method="post">
-    <textarea name="content" rows="6" cols="50" placeholder="Write something..." required></textarea>
-    <br/>
-    <button type="submit">Publish</button>
-</form>
+    <main class="post-card">
+
+        <div class="post-header">
+            <div class="logo-big">&lt;|&gt;</div>
+
+            <h1>Create Post</h1>
+
+            <p class="auth-subtitle">
+                Share an idea, progress update, project, or anything from your developer journey.
+            </p>
+        </div>
+
+        <form th:action="@{/posts/new}" method="post" class="post-form">
+
+            <textarea
+                    name="content"
+                    placeholder="Write something..."
+                    required></textarea>
+
+            <div class="post-actions">
+                <button type="submit" class="cta-btn">
+                    Publish
+                </button>
+
+                <a class="secondary"
+                   th:href="@{/profile}">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
 
 </body>
 </html>

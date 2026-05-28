@@ -1,27 +1,83 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Chat</title>
+    <title>Chat · DevPortal</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
 </head>
+
 <body>
-<h2>
-    Chat with <span th:text="${selectedUsername}"></span>
-</h2>
 
-<a href="/users">Back to users</a>
+<div class="page-shell">
 
-<div style="margin-top: 20px; margin-bottom: 20px;">
-    <div th:each="message : ${messages}" style="margin-bottom: 10px;">
-        <b th:text="${message.sender.username}"></b>:
-        <span th:text="${message.content}"></span>
-        <small th:text="${message.timestamp}"></small>
-    </div>
+    <div th:replace="~{fragments/navbar :: menu}"></div>
+
+    <main class="chat-card">
+
+        <div class="chat-header">
+
+            <div>
+                <h1>
+                    Chat with
+                    <span th:text="${selectedUsername}">username</span>
+                </h1>
+
+                <p class="auth-subtitle">
+                    Simple private conversation between DevPortal friends.
+                </p>
+            </div>
+
+            <a class="secondary" th:href="@{/users}">
+                Back to users
+            </a>
+
+        </div>
+
+        <div class="messages-box">
+
+            <div th:if="${#lists.isEmpty(messages)}" class="empty-box">
+                <p>No messages yet. Start the conversation.</p>
+            </div>
+
+            <div th:each="message : ${messages}"
+                 class="message-row"
+                 th:classappend="${message.sender.username == currentUsername} ? ' mine' : ' theirs'">
+
+                <div class="message-bubble">
+
+                    <div class="message-meta">
+                        <strong th:text="${message.sender.username}">username</strong>
+                        <small th:text="${message.timestamp}">time</small>
+                    </div>
+
+                    <p th:text="${message.content}">Message content</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <form th:action="@{/chat/{username}(username=${selectedUsername})}"
+              method="post"
+              class="chat-form">
+
+            <input type="text"
+                   name="content"
+                   placeholder="Write a message..."
+                   required>
+
+            <button type="submit" class="cta-btn">
+                Send
+            </button>
+
+        </form>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
 </div>
 
-<form th:action="@{/chat/{username}(username=${selectedUsername})}" method="post">
-    <input type="text" name="content" placeholder="Write a message..." required>
-    <button type="submit">Send</button>
-</form>
 </body>
 </html>

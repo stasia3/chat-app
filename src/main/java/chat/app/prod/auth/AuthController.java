@@ -1,4 +1,4 @@
-package chat.app.prod.controller;
+package chat.app.prod.auth;
 
 import chat.app.prod.entity.User;
 import chat.app.prod.repository.UserRepository;
@@ -21,13 +21,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "auth/login";
     }
 
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("user", new User());
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
@@ -35,7 +35,7 @@ public class AuthController {
 
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             model.addAttribute("error", true);
-            return "register";
+            return "auth/register";
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

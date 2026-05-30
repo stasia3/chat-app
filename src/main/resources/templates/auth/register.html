@@ -18,10 +18,10 @@
                     Join DevPortal and start sharing your projects, ideas, and progress.
                 </p>
 
-                <from method="post" th:action="@{/register}" th:object="${user}" class="auth-form">
+                <form method="post" th:action="@{/register}" th:object="${user}" class="auth-form">
                     <div class="field">
                         <label for="username">Username</label>
-                        <input id="username" type="text" th:field="*{username}" placehorlder="e.g. stasia" required>
+                        <input id="username" type="text" th:field="*{username}" placeholder="e.g. stasia" required>
                     </div>
 
                     <div class="field">
@@ -30,14 +30,14 @@
                     </div>
 
                     <div class="actions">
-                        <buutton type="submit" class="cta-btn">Register</buutton>
+                        <button type="submit" class="cta-btn">Register</button>
                         <a class="secondary" th:href="@{/login}">Log in</a>
                     </div>
 
                     <div th:if="${error}" class="message error-box">
                         <strong class="hl-red">Error:</strong> User already exists.
                     </div>
-                </from>
+                </form>
             </div>
         </div>
     </div>

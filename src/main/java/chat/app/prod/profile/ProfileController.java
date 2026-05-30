@@ -1,4 +1,4 @@
-package chat.app.prod.controller;
+package chat.app.prod.profile;
 
 import chat.app.prod.service.FriendService;
 import chat.app.prod.service.PostService;
@@ -26,6 +26,6 @@ public class ProfileController {
         model.addAttribute("username", username);
         model.addAttribute("friendCount", friendService.countFriends(username));
         model.addAttribute("posts", postService.getPostsByUsername(username));
-        return "profile";
+        return "profile/profile";
     }
 }

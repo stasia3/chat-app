@@ -1,13 +1,11 @@
 package chat.app.prod.profile;
 
 import chat.app.prod.service.FriendService;
-import chat.app.prod.service.PostService;
+import chat.app.prod.post.PostService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 

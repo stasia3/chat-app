@@ -1,6 +1,5 @@
-package chat.app.prod.controller;
+package chat.app.prod.post;
 
-import chat.app.prod.service.PostService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,13 +18,13 @@ public class PostController {
     public String postsPage(Model model) {
         model.addAttribute("title", "Posts");
         model.addAttribute("posts", postService.getAllPosts());
-        return "posts";
+        return "post/posts";
     }
 
     @GetMapping("/posts/new")
     public String newPostPage(Model model) {
         model.addAttribute("title", "Add Post");
-        return "new-post";
+        return "post/new-post";
     }
 
     @PostMapping("/posts/new")

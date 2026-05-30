@@ -1,6 +1,5 @@
-package chat.app.prod.repository;
+package chat.app.prod.post;
 
-import chat.app.prod.entity.Post;
 import chat.app.prod.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

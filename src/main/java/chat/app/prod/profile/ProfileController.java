@@ -1,7 +1,7 @@
 package chat.app.prod.profile;
 
 import chat.app.prod.service.FriendService;
-import chat.app.prod.service.PostService;
+import chat.app.prod.post.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

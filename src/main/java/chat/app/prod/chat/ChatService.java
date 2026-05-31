@@ -1,8 +1,6 @@
-package chat.app.prod.service;
+package chat.app.prod.chat;
 
-import chat.app.prod.entity.Message;
 import chat.app.prod.entity.User;
-import chat.app.prod.repository.MessageRepository;
 import chat.app.prod.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

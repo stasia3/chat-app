@@ -1,5 +1,6 @@
 package chat.app.prod.entity;
 
+import chat.app.prod.chat.Message;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
-package chat.app.prod.controller;
+package chat.app.prod.chat;
 
 import chat.app.prod.entity.User;
-import chat.app.prod.service.ChatService;
 import chat.app.prod.friend.FriendService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,7 +28,7 @@ public class ChatController {
         model.addAttribute("users", users);
         model.addAttribute("currentUsername", currentUsername);
 
-        return "users";
+        return "friend/users";
     }
 
     @GetMapping("/chat/{username}")
@@ -42,7 +41,7 @@ public class ChatController {
         model.addAttribute("selectedUsername", username);
         model.addAttribute("messages", chatService.getConversation(currentUsername, username));
 
-        return "chat";
+        return "chat/chat";
     }
 
     @PostMapping("/chat/{username}")

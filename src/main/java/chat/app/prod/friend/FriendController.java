@@ -1,8 +1,6 @@
-package chat.app.prod.controller;
+package chat.app.prod.friend;
 
-import chat.app.prod.entity.FriendRequest;
 import chat.app.prod.entity.User;
-import chat.app.prod.service.FriendService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +29,7 @@ public class FriendController {
         model.addAttribute("search", username);
         model.addAttribute("users", users);
 
-        return "friends";
+        return "friend/friends";
     }
 
     @PostMapping("/friends/request/{username}")
@@ -53,7 +51,7 @@ public class FriendController {
         model.addAttribute("title", "Notifications");
         model.addAttribute("requests", requests);
 
-        return "notifications";
+        return "friend/notifications";
     }
 
     @PostMapping("/notifications/accept/{id}")
@@ -75,6 +73,6 @@ public class FriendController {
         model.addAttribute("title", "My Friends");
         model.addAttribute("friends", friendService.getFriends(currentUsername));
 
-        return "friends-list";
+        return "friend/friends-list";
     }
 }

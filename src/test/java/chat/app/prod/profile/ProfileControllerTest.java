@@ -1,6 +1,6 @@
 package chat.app.prod.profile;
 
-import chat.app.prod.service.FriendService;
+import chat.app.prod.friend.FriendService;
 import chat.app.prod.post.PostService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

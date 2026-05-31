@@ -1,7 +1,5 @@
-package chat.app.prod.repository;
+package chat.app.prod.friend;
 
-import chat.app.prod.entity.FriendRequest;
-import chat.app.prod.entity.FriendRequestStatus;
 import chat.app.prod.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

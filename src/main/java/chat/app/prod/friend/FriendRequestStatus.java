@@ -1,4 +1,4 @@
-package chat.app.prod.entity;
+package chat.app.prod.friend;
 
 public enum FriendRequestStatus {
     PENDING,

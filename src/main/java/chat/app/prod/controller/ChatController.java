@@ -1,9 +1,8 @@
 package chat.app.prod.controller;
 
 import chat.app.prod.entity.User;
-import chat.app.prod.repository.UserRepository;
 import chat.app.prod.service.ChatService;
-import chat.app.prod.service.FriendService;
+import chat.app.prod.friend.FriendService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

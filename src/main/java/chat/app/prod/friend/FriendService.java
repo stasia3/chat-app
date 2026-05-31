@@ -1,9 +1,6 @@
-package chat.app.prod.service;
+package chat.app.prod.friend;
 
-import chat.app.prod.entity.FriendRequest;
-import chat.app.prod.entity.FriendRequestStatus;
 import chat.app.prod.entity.User;
-import chat.app.prod.repository.FriendRequestRepository;
 import chat.app.prod.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

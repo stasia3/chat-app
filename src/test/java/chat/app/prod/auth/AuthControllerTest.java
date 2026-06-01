@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,12 +52,18 @@ public class AuthControllerTest {
         Mockito.when(userRepository.findByUsername("eva"))
                 .thenReturn(Optional.empty());
 
+        Mockito.when(userRepository.findByEmail("eva@gmail.com"))
+                .thenReturn(Optional.empty());
+
         Mockito.when(passwordEncoder.encode(anyString()))
-                .thenReturn("encodded-password");
+                .thenReturn("encoded-password");
 
         mockMvc.perform(post("/register")
+                        .with(csrf())
                         .param("username", "eva")
-                        .param("password", "1234"))
+                        .param("email", "eva@gmail.com")
+                        .param("password", "Password123")
+                        .param("passwordCheck", "Password123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
 
@@ -72,8 +79,11 @@ public class AuthControllerTest {
                 .thenReturn(Optional.of(existingUser));
 
         mockMvc.perform(post("/register")
-                    .param("username", "eva")
-                    .param("password", "1234"))
+                        .with(csrf())
+                        .param("username", "eva")
+                        .param("email", "eva@gmail.com")
+                        .param("password", "Password123")
+                        .param("passwordCheck", "Password123"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("auth/register"))
                 .andExpect(model().attributeExists("error"));

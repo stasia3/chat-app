@@ -1,6 +1,6 @@
 package chat.app.prod.friend;
 
-import chat.app.prod.entity.User;
+import chat.app.prod.user.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

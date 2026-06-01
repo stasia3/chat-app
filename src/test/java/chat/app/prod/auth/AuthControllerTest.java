@@ -1,8 +1,8 @@
 package chat.app.prod.auth;
 
 
-import chat.app.prod.entity.User;
-import chat.app.prod.repository.UserRepository;
+import chat.app.prod.user.User;
+import chat.app.prod.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package chat.app.prod.auth;
 
-import chat.app.prod.entity.User;
-import chat.app.prod.repository.UserRepository;
+import chat.app.prod.user.User;
+import chat.app.prod.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

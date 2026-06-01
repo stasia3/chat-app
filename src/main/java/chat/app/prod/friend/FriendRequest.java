@@ -1,6 +1,6 @@
 package chat.app.prod.friend;
 
-import chat.app.prod.entity.User;
+import chat.app.prod.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

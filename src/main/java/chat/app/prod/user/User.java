@@ -1,4 +1,4 @@
-package chat.app.prod.entity;
+package chat.app.prod.user;
 
 import chat.app.prod.chat.Message;
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
 package chat.app.prod.security;
 
-import chat.app.prod.entity.User;
-import chat.app.prod.repository.UserRepository;
+import chat.app.prod.user.User;
+import chat.app.prod.user.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;

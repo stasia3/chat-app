@@ -1,7 +1,7 @@
 package chat.app.prod.chat;
 
-import chat.app.prod.entity.User;
-import chat.app.prod.repository.UserRepository;
+import chat.app.prod.user.User;
+import chat.app.prod.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

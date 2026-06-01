@@ -2,6 +2,7 @@
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
 
@@ -15,7 +16,7 @@ CREATE TABLE messages (
 );
 
 -- FRIEND_REQUESTS table
-CREATE TABLE friend_requests (
+CREATE TABLE friend_request (
     id BIGSERIAL PRIMARY KEY,
 
     sender_id BIGINT NOT NULL,
@@ -35,7 +36,7 @@ CREATE TABLE friend_requests (
         ON DELETE CASCADE
 );
 
-ALTER TABLE friend_requests
+ALTER TABLE friend_request
 ADD CONSTRAINT unique_friend_pair
 UNIQUE (sender_id, receiver_id);
 

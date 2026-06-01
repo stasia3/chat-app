@@ -25,9 +25,20 @@
                     </div>
 
                     <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" th:field="*{email}" placeholder="e.g. stasia@gmail.com" required>
+                    </div>
+
+                    <div class="field">
                         <label for="password">Password</label>
                         <input id="password" type="password" th:field="*{password}" placeholder="••••••••" required>
                     </div>
+
+                    <div class="field">
+                        <label for="password-check">Confirm password</label>
+                        <input id="password-check" type="password" th:field="*{passwordCheck}" placeholder="••••••••" required>
+                    </div>
+
 
                     <div class="actions">
                         <button type="submit" class="cta-btn">Register</button>
@@ -35,7 +46,8 @@
                     </div>
 
                     <div th:if="${error}" class="message error-box">
-                        <strong class="hl-red">Error:</strong> User already exists.
+                        <strong class="hl-red">Error:</strong>
+                        <span th:text="${error}"></span>
                     </div>
                 </form>
             </div>

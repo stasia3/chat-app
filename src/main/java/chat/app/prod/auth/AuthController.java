@@ -33,8 +33,31 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@ModelAttribute User user, Model model) {
 
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            model.addAttribute("error", true);
+            model.addAttribute("error", "Username already exists.");
+            return "auth/register";
+        }
+
+        if (!user.getEmail().matches(emailRegex)) {
+            model.addAttribute("error", "Invalid email format.");
+            return "auth/register";
+        }
+
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            model.addAttribute("error", "Email already exists.");
+            return "auth/register";
+        }
+
+        if (!user.getPassword().matches(passwordRegex)) {
+            model.addAttribute("error", "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one digit.");
+            return "auth/register";
+        }
+
+        if (!user.getPassword().equals(user.getPasswordCheck())) {
+            model.addAttribute("error", "Passwords do not match.");
             return "auth/register";
         }
 

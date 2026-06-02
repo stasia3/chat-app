@@ -6,6 +6,25 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL
 );
 
+-- PROFILES table
+CREATE TABLE profiles (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE,
+
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    headline VARCHAR(150),
+    bio TEXT,
+    programming_languages VARCHAR(255),
+    github_link VARCHAR(255),
+    linkedin_link VARCHAR(255),
+
+    CONSTRAINT fk_profile_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
 -- MESSAGES table
 CREATE TABLE messages (
     id BIGSERIAL PRIMARY KEY,

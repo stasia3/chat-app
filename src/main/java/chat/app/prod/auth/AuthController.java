@@ -1,5 +1,7 @@
 package chat.app.prod.auth;
 
+import chat.app.prod.profile.Profile;
+import chat.app.prod.profile.ProfileRepository;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,12 +13,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
 
     public AuthController(UserRepository userRepository,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder,
+                          ProfileRepository profileRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.profileRepository = profileRepository;
     }
 
     @GetMapping("/login")
@@ -67,7 +72,12 @@ public class AuthController {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        Profile profile = new Profile();
+        profile.setUser(savedUser);
+
+        profileRepository.save(profile);
 
         return "redirect:/login";
     }

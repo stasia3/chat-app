@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title th:text="${title}">Edit Profile · DevPortal</title>
+        <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
+    </head>
+    <body>
+        <div class="page-shell">
+            <div th:replace="~{fragments/navbar :: menu}"></div>
+            <main class="profile-card">
+                <section class="profile-header">
+                    <div>
+                        <div class="logo-big">&lt;|&gt;</div>
+                        <h1>Edit profile</h1>
+                        <p class="auth-subtitle">Update your public developer information.</p>
+                    </div>
+
+                    <div class="profile-actions">
+                        <a class="secondary" th:href="@{/profile}">Back to profile</a>
+                    </div>
+                </section>
+
+                <form class="auth-form" th:action="@{/profile/edit}" th:object="${profile}" method="post">
+
+                    <div class="field">
+                        <label for="firstName">First name</label>
+                        <input id="firstName" type="text" th:field="*{firstName}" placeholder="Your first name">
+                    </div>
+
+                    <div class="field">
+                        <label for="lastName">Last name</label>
+                        <input id="lastName" type="text" th:field="*{lastName}" placeholder="Your last name">
+                    </div>
+
+                    <div class="field">
+                        <label for="headline">Headline</label>
+                        <input id="headline" type="text" th:field="*{headline}" placeholder="Junior Java Developer">
+                    </div>
+
+                    <div class="field">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" th:field="*{bio}" placeholder="Write something about yourself"></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="programmingLanguages">Programming languages</label>
+                        <input id="programmingLanguages" type="text" th:field="*{programmingLanguages}" placeholder="Java, Spring Boot, SQL">
+                    </div>
+
+                    <div class="field">
+                        <label for="githubLink">GitHub link</label>
+                        <input id="githubLink" type="text" th:field="*{githubLink}" placeholder="https://github.com/username">
+                    </div>
+
+                    <div class="field">
+                        <label for="linkedinLink">LinkedIn link</label>
+                        <input id="linkedinLink" type="text" th:field="*{linkedinLink}" placeholder="htpps://linkedin.com/in/username">
+                    </div>
+
+                    <div class="actions">
+                        <button class="cta-btn" type="submit">Save profile</button>
+                        <a class="secondary" th:href="@{/profile}">Cancel</a>
+                    </div>
+                </form>
+            </main>
+
+        <div th:replace="~{fragments/footer :: footer}"></div>
+    </div>
+    </body>
+</html>

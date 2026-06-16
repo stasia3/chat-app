@@ -1066,3 +1066,28 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+.field textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    line-height: 1.6;
+    backdrop-filter: blur(10px);
+    ~webkit-backdrop-filter: blur(10px);
+}
+
+.field textarea:: placeholder {
+    color: rgba(238, 244, 255, 0.45;
+}
+
+.field textarea:focus {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.10);
+}

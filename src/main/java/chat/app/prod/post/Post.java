@@ -19,15 +19,24 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Column(name = "language_tag")
+    private String languageTag;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PostVisibility visibility = PostVisibility.PUBLIC;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     public Post() {
     }
 
-    public Post(User user, String content, LocalDateTime createdAt) {
+    public Post(User user, String content, String languageTag, PostVisibility visibility, LocalDateTime createdAt) {
         this.user = user;
         this.content = content;
+        this.languageTag = languageTag;
+        this.visibility = visibility;
         this.createdAt = createdAt;
     }
 
@@ -49,6 +58,22 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getLanguageTag() {
+        return languageTag;
+    }
+
+    public void setLanguageTag(String languageTag) {
+        this.languageTag = languageTag;
+    }
+
+    public PostVisibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(PostVisibility visibility) {
+        this.visibility = visibility;
     }
 
     public LocalDateTime getCreatedAt() {

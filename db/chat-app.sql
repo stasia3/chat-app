@@ -64,12 +64,17 @@ CREATE TABLE posts (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
     content TEXT NOT NULL,
+    language_tag VARCHAR(255),
+    visibility VARCHAR(20) NOT NULL DEFAULT 'PUBLIC',
     created_at TIMESTAMP NOT NULL,
 
     CONSTRAINT fk_posts_user
         FOREIGN KEY (user_id)
         REFERENCES users(id)
         ON DELETE CASCADE
+
+    CONSTRAINT chk_posts_visibility
+            CHECK (visibility IN ('PUBLIC', 'PRIVATE'))
 );
 
 CREATE INDEX idx_posts_created_at
@@ -77,3 +82,9 @@ ON posts (created_at DESC);
 
 CREATE INDEX idx_posts_user_id
 ON posts (user_id);
+
+CREATE INDEX idx_posts_visibility
+ON posts (visibility);
+
+CREATE INDEX idx_posts_language_tag
+ON posts (language_tag);

@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${title}">Profile · DevPortal</title>
-    <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" th:href="@{/css/posts.css}">
 </head>
 
 <body>
@@ -106,9 +108,10 @@
                     <p>You have not published any posts yet.</p>
                 </div>
 
-                <div th:each="post : ${posts}" class="post-box">
-                    <p th:text="${post.content}">Post content</p>
-                    <small th:text="${post.createdAt}">Date</small>
+                <div class="posts-feed">
+                    <th:block th:each="postItem : ${posts}">
+                        <article th:replace="~{fragments/post-card :: card(postItem=${postItem})}"></article>
+                    </th:block>
                 </div>
             </section>
         </main>

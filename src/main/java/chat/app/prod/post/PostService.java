@@ -18,7 +18,7 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
-    public void createPost(String username, String content) {
+    public void createPost(String username, String content,  String languageTag, PostVisibility visibility) {
         if (content == null || content.trim().isEmpty()) {
             return;
         }
@@ -26,7 +26,12 @@ public class PostService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Post post = new Post(user, content.trim(), LocalDateTime.now());
+        Post post = new Post(
+                user,
+                content.trim(),
+                languageTag,
+                visibility,
+                LocalDateTime.now());
         postRepository.save(post);
     }
 

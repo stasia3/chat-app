@@ -1,0 +1,49 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<article th:fragment="card(postItem)" class="feed-post">
+
+    <div class="feed-post-header">
+
+        <div class="feed-user">
+
+            <div>
+                <strong th:text="${postItem.user.username}">
+                    username
+                </strong>
+
+                <div class="feed-meta">
+
+                    <span th:if="${postItem.languageTag != null and !postItem.languageTag.isEmpty()}"
+                          class="tag-badge"
+                          th:text="${postItem.languageTag}">
+                        Java
+                    </span>
+
+                    <span class="visibility-badge"
+                          th:text="${postItem.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC ? 'Public' : 'Friends'}">
+                        Public
+                    </span>
+
+                </div>
+
+                <small th:text="${postItem.createdAt}">
+                    date
+                </small>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="feed-content">
+        <p th:text="${postItem.content}">
+            Post content
+        </p>
+    </div>
+
+</article>
+
+</body>
+</html>

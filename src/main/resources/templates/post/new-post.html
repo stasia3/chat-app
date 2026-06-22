@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${title}">Add Post · DevPortal</title>
 
-    <link rel="stylesheet"
-          href="/css/basics.css"
-          th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/posts.css}">
 </head>
 
 <body>
@@ -30,10 +29,36 @@
 
         <form th:action="@{/posts/new}" method="post" class="post-form">
 
+            <label for="content">Post content</label>
             <textarea
+                    id="content"
                     name="content"
                     placeholder="Write something..."
                     required></textarea>
+
+            <label for="languageTag">Language or technology</label>
+            <select id="languageTag" name="languageTag">
+                <option value="">No specific language</option>
+                <option value="Java">Java</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Python">Python</option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="customLanguageTag">Custom language / technology</label>
+            <input
+                    id="customLanguageTag"
+                    type="text"
+                    name="customLanguageTag"
+                    placeholder="Example: Kotlin, Docker, Angular, C++">
+
+            <label for="visibility">Visibility</label>
+            <select id="visibility" name="visibility" required>
+                <option value="PUBLIC">Public — everyone can see it</option>
+                <option value="PRIVATE">Private — only friends can see it</option>
+            </select>
 
             <div class="post-actions">
                 <button type="submit" class="cta-btn">

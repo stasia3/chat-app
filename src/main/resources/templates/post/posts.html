@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${title}">Posts · DevPortal</title>
 
-    <link rel="stylesheet"
-          href="/css/basics.css"
-          th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/posts.css}">
 </head>
 
 <body>
@@ -41,42 +40,9 @@
         </div>
 
         <div class="posts-feed">
-
-            <article th:each="post : ${posts}"
-                     class="feed-post">
-
-                <div class="feed-post-header">
-
-                    <div class="feed-user">
-
-                        <div class="friend-avatar">
-                            <span th:text="${#strings.substring(post.user.username,0,1)}">
-                                U
-                            </span>
-                        </div>
-
-                        <div>
-                            <strong th:text="${post.user.username}">
-                                username
-                            </strong>
-
-                            <small th:text="${post.createdAt}">
-                                date
-                            </small>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="feed-content">
-                    <p th:text="${post.content}">
-                        Post content
-                    </p>
-                </div>
-
-            </article>
-
+            <th:block th:each="postItem : ${posts}">
+                <article th:replace="~{fragments/post-card :: card(postItem=${postItem})}"></article>
+            </th:block>
         </div>
 
     </main>

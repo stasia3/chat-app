@@ -28,9 +28,26 @@ public class PostController {
     }
 
     @PostMapping("/posts/new")
-    public String createPost(@RequestParam String content, Authentication authentication) {
+    public String createPost(
+            @RequestParam String content,
+            @RequestParam(required = false) String languageTag,
+            @RequestParam(required = false) String customLanguageTag,
+            @RequestParam PostVisibility visibility,
+            Authentication authentication) {
+
         String username = authentication.getName();
-        postService.createPost(username, content);
+        String finalLanguageTag = languageTag;
+
+        if (customLanguageTag != null && !customLanguageTag.trim().isEmpty()) {
+            finalLanguageTag = customLanguageTag.trim();
+        }
+
+        postService.createPost(
+                username,
+                content,
+                finalLanguageTag,
+                visibility
+        );
         return "redirect:/profile";
     }
 }

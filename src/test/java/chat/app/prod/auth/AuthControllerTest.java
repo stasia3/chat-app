@@ -1,6 +1,8 @@
 package chat.app.prod.auth;
 
 
+import chat.app.prod.profile.Profile;
+import chat.app.prod.profile.ProfileRepository;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,9 @@ public class AuthControllerTest {
 
     @MockitoBean
     private UserRepository userRepository;
+
+    @MockitoBean
+    private ProfileRepository profileRepository;
 
     @MockitoBean
     private PasswordEncoder passwordEncoder;
@@ -58,6 +63,14 @@ public class AuthControllerTest {
         Mockito.when(passwordEncoder.encode(anyString()))
                 .thenReturn("encoded-password");
 
+        User savedUser = new User();
+        savedUser.setUsername("eva");
+        savedUser.setEmail("eva@gmail.com");
+        savedUser.setPassword("encoded-password");
+
+        Mockito.when(userRepository.save(any(User.class)))
+                        .thenReturn(savedUser);
+
         mockMvc.perform(post("/register")
                         .with(csrf())
                         .param("username", "eva")
@@ -68,6 +81,7 @@ public class AuthControllerTest {
                 .andExpect(redirectedUrl("/login"));
 
         Mockito.verify(userRepository).save(any(User.class));
+        Mockito.verify(profileRepository).save(any(Profile.class));
     }
 
     @Test
@@ -89,5 +103,6 @@ public class AuthControllerTest {
                 .andExpect(model().attributeExists("error"));
 
         Mockito.verify(userRepository, Mockito.never()).save(any(User.class));
+        Mockito.verify(profileRepository, Mockito.never()).save(any(Profile.class));
     }
 }

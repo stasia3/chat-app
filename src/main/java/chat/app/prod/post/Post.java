@@ -3,6 +3,8 @@ package chat.app.prod.post;
 import chat.app.prod.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -59,6 +61,9 @@ public class Post {
     public void setContent(String content) {
         this.content = content;
     }
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostLike> likes = new ArrayList<>();
 
     public String getLanguageTag() {
         return languageTag;

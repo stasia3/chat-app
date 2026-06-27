@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class PostController {
 
@@ -15,9 +17,11 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public String postsPage(Model model) {
+    public String postsPage(Model model, Authentication authentication) {
+        String username = authentication.getName();
+
         model.addAttribute("title", "Posts");
-        model.addAttribute("posts", postService.getAllPosts());
+        model.addAttribute("posts", postService.getFeedPostCards(username));
         return "post/posts";
     }
 
@@ -49,5 +53,22 @@ public class PostController {
                 visibility
         );
         return "redirect:/profile";
+    }
+
+    @PostMapping("/posts/{postId}/like")
+    @ResponseBody
+    public LikeResponse toggleLike(@PathVariable Long postId,
+                                   Authentication authentication) {
+        String username = authentication.getName();
+
+        postService.toggleLike(postId, username);
+
+        return postService.getLikeResponse(postId, username);
+    }
+
+    @GetMapping("/posts/{postId}/likes")
+    @ResponseBody
+    public List<LikedUserDto> likedUsers(@PathVariable Long postId) {
+        return postService.getLikedUsers(postId);
     }
 }

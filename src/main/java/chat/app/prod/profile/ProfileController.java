@@ -34,7 +34,7 @@ public class ProfileController {
         model.addAttribute("title", "My Profile");
         model.addAttribute("username", username);
         model.addAttribute("friendCount", friendService.countFriends(username));
-        model.addAttribute("posts", postService.getPostsByUsername(username));
+        model.addAttribute("posts", postService.getMyPostCards(username));
         return "profile/profile";
     }
 

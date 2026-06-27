@@ -2,33 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<article th:fragment="card(postItem)" class="feed-post">
+<article th:fragment="card(postItem)"
+         class="feed-post"
+         th:id="'post-' + ${postItem.post.id}">
 
     <div class="feed-post-header">
 
         <div class="feed-user">
 
             <div>
-                <strong th:text="${postItem.user.username}">
+                <strong th:text="${postItem.post.user.username}">
                     username
                 </strong>
 
                 <div class="feed-meta">
 
-                    <span th:if="${postItem.languageTag != null and !postItem.languageTag.isEmpty()}"
+                    <span th:if="${postItem.post.languageTag != null and !postItem.post.languageTag.isEmpty()}"
                           class="tag-badge"
-                          th:text="${postItem.languageTag}">
+                          th:text="${postItem.post.languageTag}">
                         Java
                     </span>
 
                     <span class="visibility-badge"
-                          th:text="${postItem.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC ? 'Public' : 'Friends'}">
+                          th:text="${postItem.post.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC ? 'Public' : 'Friends'}">
                         Public
                     </span>
 
                 </div>
 
-                <small th:text="${postItem.createdAt}">
+                <small th:text="${postItem.post.createdAt}">
                     date
                 </small>
             </div>
@@ -38,9 +40,31 @@
     </div>
 
     <div class="feed-content">
-        <p th:text="${postItem.content}">
+        <p th:text="${postItem.post.content}">
             Post content
         </p>
+    </div>
+
+    <div class="post-card-actions">
+
+        <form class="like-form"
+              th:action="@{/posts/{postId}/like(postId=${postItem.post.id})}"
+              method="post">
+
+            <button type="submit"
+                    class="like-btn"
+                    th:classappend="${postItem.likedByCurrentUser} ? ' liked' : ''">
+                <span class="like-icon">♡</span>
+            </button>
+        </form>
+
+        <button type="button"
+                class="likes-list-btn"
+                th:data-url="@{/posts/{postId}/likes(postId=${postItem.post.id})}">
+            <span class="like-count" th:text="${postItem.likeCount}">0</span>
+            <span th:text="${postItem.likeCount == 1 ? 'like' : 'likes'}">likes</span>
+        </button>
+
     </div>
 
 </article>

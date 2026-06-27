@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title th:text="${title}">Posts · DevPortal</title>
 
     <link rel="stylesheet" th:href="@{/css/base.css}">
@@ -50,6 +52,20 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 
 </div>
+    <script th:src="@{/js/likes.js}"></script>
 
+    <div id="likesModal" class="likes-modal-overlay hidden">
+        <div class="likes-modal">
+            <div class="likes-modal-header">
+                <h3>Liked by</h3>
+                <button type="button" id="closeLikesModal" class="likes-modal-close">×</button>
+            </div>
+
+            <div id="likesModalBody" class="likes-modal-body">
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/liked-users.js}"></script>
 </body>
 </html>

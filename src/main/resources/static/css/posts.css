@@ -362,3 +362,130 @@
   margin: 0;
   color: var(--muted);
 }
+
+/* Post view */
+.view-post-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: #bfdbfe;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.view-post-link:hover {
+  text-decoration: underline;
+}
+
+.comments-section {
+  margin-top: 28px;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.comment-card {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.comment-card strong {
+  display: block;
+  font-size: 15px;
+}
+
+.comment-card small {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.comment-card p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+}
+/* comments */
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.comment-form textarea::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.comment-form textarea:focus {
+  border-color: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.10);
+}
+
+.comment-form .cta-btn {
+  align-self: flex-start;
+}
+
+/* comment btn */
+
+.comments-count-btn {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  font-family: inherit;
+  font-weight: 600;
+  text-decoration: none;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.comments-count-btn:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* comment- delete */
+.comment-delete-form {
+  margin-top: 10px;
+}
+
+.comment-delete-btn {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(239,68,68,0.35);
+  background: rgba(239,68,68,0.10);
+  color: #fecaca;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comment-delete-btn:hover {
+  background: rgba(239,68,68,0.18);
+}
+

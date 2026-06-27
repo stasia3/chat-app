@@ -71,4 +71,40 @@ public class PostController {
     public List<LikedUserDto> likedUsers(@PathVariable Long postId) {
         return postService.getLikedUsers(postId);
     }
+
+    @GetMapping("/posts/{postId}")
+    public String viewPost(@PathVariable Long postId,
+                           Model model,
+                           Authentication authentication) {
+        String username = authentication.getName();
+
+        model.addAttribute("title", "View Post");
+        model.addAttribute("username", username);
+        model.addAttribute("postItem", postService.getPostCard(postId, username));
+        model.addAttribute("comments", postService.getComments(postId));
+
+        return "post/view-post";
+    }
+
+    @PostMapping("/posts/{postId}/comments")
+    public String addComment(@PathVariable Long postId,
+                             @RequestParam String content,
+                             Authentication authentication) {
+        String username = authentication.getName();
+
+        postService.addComment(postId, username, content);
+
+        return "redirect:/posts/" + postId;
+    }
+
+    @PostMapping("/posts/{postId}/comments/{commentId}/delete")
+    public String deleteComment(@PathVariable Long postId,
+                                @PathVariable Long commentId,
+                                Authentication authentication) {
+        String username = authentication.getName();
+
+        postService.deleteComment(commentId, username);
+
+        return "redirect:/posts/" + postId + "#comments";
+    }
 }

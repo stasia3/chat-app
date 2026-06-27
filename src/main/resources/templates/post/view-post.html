@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title th:text="${title}">View Post · DevPortal</title>
+
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/posts.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div th:replace="~{fragments/navbar :: menu}"></div>
+
+    <main class="posts-card">
+
+        <div class="posts-header">
+            <div class="logo-big">&lt;|&gt;</div>
+            <h1>Post</h1>
+            <p class="auth-subtitle">
+                Read the full post and join the discussion.
+            </p>
+        </div>
+
+        <div th:replace="~{fragments/post-card :: card(postItem=${postItem})}"></div>
+
+        <form class="comment-form"
+              th:action="@{/posts/{postId}/comments(postId=${postItem.post.id})}"
+              method="post">
+
+            <textarea name="content"
+                  placeholder="Write a comment..."
+                required></textarea>
+
+            <button type="submit" class="cta-btn">
+                Comment
+            </button>
+        </form>
+
+        <section id="comments" class="comments-section">
+
+            <div class="section-title">
+                <h2>Comments</h2>
+            </div>
+
+            <div th:if="${#lists.isEmpty(comments)}" class="empty-box">
+                <p>No comments yet. Be the first to comment.</p>
+            </div>
+
+            <div class="comments-list">
+                <article th:each="comment : ${comments}" class="comment-card">
+                    <strong th:text="${comment.user.username}">username</strong>
+
+                    <small th:text="${comment.createdAt}">date</small>
+
+                    <p th:text="${comment.content}">
+                        Comment text
+                    </p>
+
+                    <form th:if="${comment.user.username == username or postItem.post.user.username == username}"
+                          th:action="@{/posts/{postId}/comments/{commentId}/delete(
+                                  postId=${postItem.post.id},
+                                  commentId=${comment.id}
+                              )}"
+                          method="post"
+                          class="comment-delete-form">
+
+                        <button type="submit" class="comment-delete-btn">
+                            Delete
+                        </button>
+                    </form>
+                </article>
+            </div>
+
+        </section>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+<div id="likesModal" class="likes-modal-overlay hidden">
+    <div class="likes-modal">
+        <div class="likes-modal-header">
+            <h3>Liked by</h3>
+            <button type="button" id="closeLikesModal" class="likes-modal-close">×</button>
+        </div>
+
+        <div id="likesModalBody" class="likes-modal-body"></div>
+    </div>
+</div>
+
+<script th:src="@{/js/likes.js}"></script>
+<script th:src="@{/js/liked-users.js}"></script>
+
+</body>
+</html>

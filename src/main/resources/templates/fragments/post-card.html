@@ -45,6 +45,11 @@
         </p>
     </div>
 
+    <a class="view-post-link"
+       th:href="@{/posts/{postId}(postId=${postItem.post.id})}">
+        View post
+    </a>
+
     <div class="post-card-actions">
 
         <form class="like-form"
@@ -64,6 +69,13 @@
             <span class="like-count" th:text="${postItem.likeCount}">0</span>
             <span th:text="${postItem.likeCount == 1 ? 'like' : 'likes'}">likes</span>
         </button>
+
+        <a class="comments-count-btn"
+           th:href="@{/posts/{postId}(postId=${postItem.post.id})} + '#comments'">
+
+            <span th:text="${postItem.commentCount}">0</span>
+            <span th:text="${postItem.commentCount == 1 ? 'comment' : 'comments'}">comments</span>
+        </a>
 
     </div>
 

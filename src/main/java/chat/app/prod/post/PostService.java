@@ -15,12 +15,14 @@ public class PostService {
     private final UserRepository userRepository;
     private final FriendService friendService;
     private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, FriendService friendService, PostLikeRepository postLikeRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, FriendService friendService, PostLikeRepository postLikeRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.friendService = friendService;
         this.postLikeRepository = postLikeRepository;
+        this.commentRepository = commentRepository;
     }
 
     public void createPost(String username, String content,  String languageTag, PostVisibility visibility) {
@@ -102,7 +104,8 @@ public class PostService {
                 .map(post -> new PostCardDto(
                         post,
                         postLikeRepository.countByPost(post),
-                        postLikeRepository.existsByPostAndUser(post, currentUser)
+                        postLikeRepository.existsByPostAndUser(post, currentUser),
+                        commentRepository.countByPost(post)
                 ))
                 .toList();
     }
@@ -136,5 +139,62 @@ public class PostService {
                 .stream()
                 .map(like -> new LikedUserDto(like.getUser().getUsername()))
                 .toList();
+    }
+
+    public PostCardDto getPostCard(Long postId, String username) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return new PostCardDto(
+                post,
+                postLikeRepository.countByPost(post),
+                postLikeRepository.existsByPostAndUser(post, currentUser),
+                commentRepository.countByPost(post)
+        );
+    }
+
+    public List<Comment> getComments(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        return commentRepository.findByPostOrderByCreatedAtAsc(post);
+    }
+
+    public void addComment(Long postId, String username, String content) {
+        if (content == null || content.trim().isEmpty()) {
+            return;
+        }
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Comment comment = new Comment(
+                post,
+                user,
+                content.trim(),
+                LocalDateTime.now()
+        );
+
+        commentRepository.save(comment);
+    }
+
+    public void deleteComment(Long commentId, String username) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        boolean isCommentOwner = comment.getUser().getUsername().equals(username);
+        boolean isPostOwner = comment.getPost().getUser().getUsername().equals(username);
+
+        if (!isCommentOwner && !isPostOwner) {
+            return;
+        }
+
+        commentRepository.delete(comment);
     }
 }

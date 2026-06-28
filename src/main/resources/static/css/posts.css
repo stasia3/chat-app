@@ -1033,3 +1033,83 @@
 .clear-filter-btn i {
     font-size: 13px;
 }
+
+/* new post */
+
+.create-post-header {
+  margin-bottom: 30px;
+}
+
+.page-kicker {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  color: #a5b4fc;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* new post */
+
+.post-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  align-items: end;
+}
+
+.post-setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-setting-field label {
+  margin: 0;
+}
+
+.post-setting-field select,
+.post-setting-field input {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+}
+
+.post-setting-field select option {
+  background: #1d2b42;
+  color: #eef4ff;
+}
+
+.post-setting-field input::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.post-setting-field input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.post-settings-hint {
+  margin: -4px 0 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .post-settings-grid {
+    grid-template-columns: 1fr;
+  }
+}

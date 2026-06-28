@@ -19,47 +19,63 @@
 
     <main class="post-card">
 
-        <div class="post-header">
-            <div class="logo-big">&lt;|&gt;</div>
+        <div class="post-header create-post-header">
+            <span class="page-kicker">
+                Developer update
+            </span>
 
-            <h1>Create Post</h1>
+            <h1>Create a post</h1>
 
             <p class="auth-subtitle">
-                Share an idea, progress update, project, or anything from your developer journey.
+                Share code, progress, ideas, or a question with other developers.
             </p>
         </div>
 
         <form th:action="@{/posts/new}" method="post" class="post-form">
+            <div class="post-settings-grid">
+
+                <div class="post-setting-field">
+                    <label for="visibility">Visibility</label>
+                    <select id="visibility" name="visibility" required>
+                        <option value="PUBLIC">Public — everyone can see it</option>
+                        <option value="PRIVATE">Friends — only friends can see it</option>
+                    </select>
+                </div>
+
+                <div class="post-setting-field">
+                    <label for="languageTag">Language or technology</label>
+                    <select id="languageTag" name="languageTag">
+                        <option value="">No specific language</option>
+                        <option value="Java">Java</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Python">Python</option>
+                        <option value="HTML">HTML</option>
+                        <option value="CSS">CSS</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="post-setting-field">
+                    <label for="customLanguageTag">Other language</label>
+                    <input
+                            id="customLanguageTag"
+                            type="text"
+                            name="customLanguageTag"
+                            placeholder="Example: Kotlin, Docker, Angular, C++"
+                            disabled>
+                </div>
+
+            </div>
+
+            <p class="post-settings-hint">
+                Choose a language only if your post is about a specific technology.
+            </p>
 
             <label for="content">Post content</label>
             <textarea
                     id="content"
                     name="content"
                     placeholder="Write something..."></textarea>
-
-            <label for="languageTag">Language or technology</label>
-            <select id="languageTag" name="languageTag">
-                <option value="">No specific language</option>
-                <option value="Java">Java</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="Python">Python</option>
-                <option value="HTML">HTML</option>
-                <option value="CSS">CSS</option>
-                <option value="Other">Other</option>
-            </select>
-
-            <label for="customLanguageTag">Custom language / technology</label>
-            <input
-                    id="customLanguageTag"
-                    type="text"
-                    name="customLanguageTag"
-                    placeholder="Example: Kotlin, Docker, Angular, C++">
-
-            <label for="visibility">Visibility</label>
-            <select id="visibility" name="visibility" required>
-                <option value="PUBLIC">Public — everyone can see it</option>
-                <option value="PRIVATE">Private — only friends can see it</option>
-            </select>
 
             <div class="post-actions">
                 <button type="submit" class="cta-btn">
@@ -71,7 +87,6 @@
                     Cancel
                 </a>
             </div>
-
         </form>
 
     </main>
@@ -79,6 +94,23 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 
 </div>
+<script>
+    const languageSelect = document.querySelector("#languageTag");
+    const customLanguageInput = document.querySelector("#customLanguageTag");
+
+    function updateCustomLanguageState() {
+        const isOtherSelected = languageSelect.value === "Other";
+
+        customLanguageInput.disabled = !isOtherSelected;
+
+        if (!isOtherSelected) {
+            customLanguageInput.value = "";
+        }
+    }
+
+    languageSelect.addEventListener("change", updateCustomLanguageState);
+    updateCustomLanguageState();
+</script>
 
 <script>
     tinymce.init({

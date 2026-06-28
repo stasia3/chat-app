@@ -45,36 +45,46 @@
         </div>
     </div>
 
-    <a class="view-post-link"
-       th:href="@{/posts/{postId}(postId=${postItem.post.id})}">
-        View post
-    </a>
+    <div class="post-card-footer">
 
-    <div class="post-card-actions">
+        <div class="post-card-actions">
 
-        <form class="like-form"
-              th:action="@{/posts/{postId}/like(postId=${postItem.post.id})}"
-              method="post">
+            <div class="action-pill like-pill">
+                <form class="like-form"
+                      th:action="@{/posts/{postId}/like(postId=${postItem.post.id})}"
+                      method="post">
 
-            <button type="submit"
-                    class="like-btn"
-                    th:classappend="${postItem.likedByCurrentUser} ? ' liked' : ''">
-                <span class="like-icon">♡</span>
-            </button>
-        </form>
+                    <button type="submit"
+                            class="action-icon-btn like-btn"
+                            th:classappend="${postItem.likedByCurrentUser} ? ' liked' : ''"
+                            aria-label="Like post">
+                        <i th:class="${postItem.likedByCurrentUser}
+                             ? 'fa-solid fa-heart like-icon'
+                             : 'fa-regular fa-heart like-icon'">
+                        </i>
+                    </button>
+                </form>
 
-        <button type="button"
-                class="likes-list-btn"
-                th:data-url="@{/posts/{postId}/likes(postId=${postItem.post.id})}">
-            <span class="like-count" th:text="${postItem.likeCount}">0</span>
-            <span th:text="${postItem.likeCount == 1 ? 'like' : 'likes'}">likes</span>
-        </button>
+                <button type="button"
+                        class="action-count-btn likes-list-btn"
+                        th:data-url="@{/posts/{postId}/likes(postId=${postItem.post.id})}">
+                    <span class="like-count" th:text="${postItem.likeCount}">0</span>
+                </button>
+            </div>
 
-        <a class="comments-count-btn"
-           th:href="@{/posts/{postId}(postId=${postItem.post.id})} + '#comments'">
+            <a class="action-pill comment-pill"
+               th:href="@{/posts/{postId}(postId=${postItem.post.id})} + '#comments'">
 
-            <span th:text="${postItem.commentCount}">0</span>
-            <span th:text="${postItem.commentCount == 1 ? 'comment' : 'comments'}">comments</span>
+                <i class="fa-solid fa-comment action-icon"></i>
+                <span class="comment-count" th:text="${postItem.commentCount}">0</span>
+            </a>
+
+        </div>
+
+        <a class="view-post-link"
+           th:href="@{/posts/{postId}(postId=${postItem.post.id})}">
+            View full post
+            <i class="fa-solid fa-arrow-right-long"></i>
         </a>
 
     </div>

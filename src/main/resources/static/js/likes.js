@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
 
             const button = form.querySelector(".like-btn");
+            const icon = button.querySelector(".like-icon");
 
             fetch(form.action, {
                 method: "POST",
@@ -29,13 +30,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     count.textContent = data.likeCount;
 
-                    const text = actions.querySelector(".likes-list-btn span:last-child");
-                    text.textContent = data.likeCount === 1 ? "like" : "likes";
-
                     if (data.likedByCurrentUser) {
                         button.classList.add("liked");
+                        icon.classList.remove("fa-regular");
+                        icon.classList.add("fa-solid");
                     } else {
                         button.classList.remove("liked");
+                        icon.classList.remove("fa-solid");
+                        icon.classList.add("fa-regular");
                     }
                 })
                 .catch(error => {

@@ -208,4 +208,35 @@ public class PostService {
 
         postRepository.delete(post);
     }
+
+    public List<PostCardDto> getFilteredFeedPostCards(String username,
+                                                      String keyword,
+                                                      String visibility,
+                                                      String language) {
+        List<PostCardDto> posts = getFeedPostCards(username);
+
+        return posts.stream()
+                .filter(postCard -> {
+                    Post post = postCard.getPost();
+
+                    boolean matchesKeyword =
+                            keyword == null ||
+                                    keyword.trim().isEmpty() ||
+                                    post.getContent().toLowerCase().contains(keyword.trim().toLowerCase());
+
+                    boolean matchesVisibility =
+                            visibility == null ||
+                                    visibility.equals("ALL") ||
+                                    post.getVisibility().name().equals(visibility);
+
+                    boolean matchesLanguage =
+                            language == null ||
+                                    language.equals("ALL") ||
+                                    (post.getLanguageTag() != null &&
+                                            post.getLanguageTag().equalsIgnoreCase(language));
+
+                    return matchesKeyword && matchesVisibility && matchesLanguage;
+                })
+                .toList();
+    }
 }

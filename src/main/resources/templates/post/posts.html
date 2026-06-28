@@ -24,21 +24,52 @@
 
     <main class="posts-card">
 
-        <div class="posts-header">
-            <div class="logo-big">&lt;|&gt;</div>
 
-            <h1>All Posts</h1>
 
-            <p class="auth-subtitle">
-                Explore updates, ideas, and progress shared by developers.
-            </p>
-        </div>
+        <div class="posts-toolbar">
 
-        <div class="posts-actions">
-            <a class="cta-btn"
-               th:href="@{/posts/new}">
+            <form th:action="@{/posts}" method="get" class="posts-filter-form">
+
+                <div class="posts-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input type="text"
+                           name="keyword"
+                           placeholder="Search posts..."
+                           th:value="${keyword}">
+                </div>
+
+                <select name="visibility">
+                    <option value="ALL" th:selected="${visibility == 'ALL'}">All posts</option>
+                    <option value="PUBLIC" th:selected="${visibility == 'PUBLIC'}">Public</option>
+                    <option value="PRIVATE" th:selected="${visibility == 'PRIVATE'}">Friends</option>
+                </select>
+
+                <select name="language">
+                    <option value="ALL" th:selected="${language == 'ALL'}">All languages</option>
+                    <option value="Java" th:selected="${language == 'Java'}">Java</option>
+                    <option value="JavaScript" th:selected="${language == 'JavaScript'}">JavaScript</option>
+                    <option value="Python" th:selected="${language == 'Python'}">Python</option>
+                    <option value="HTML" th:selected="${language == 'HTML'}">HTML</option>
+                    <option value="CSS" th:selected="${language == 'CSS'}">CSS</option>
+                </select>
+
+                <button type="submit" class="secondary">
+                    <i class="fa-solid fa-filter"></i>
+                    Filter
+                </button>
+
+                <a th:href="@{/posts}" class="secondary clear-filter-btn">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Clear
+                </a>
+
+            </form>
+
+            <a class="cta-btn" th:href="@{/posts/new}">
                 Create post
             </a>
+
         </div>
 
         <div th:if="${#lists.isEmpty(posts)}"

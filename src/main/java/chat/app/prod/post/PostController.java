@@ -17,12 +17,26 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public String postsPage(Model model, Authentication authentication) {
+    public String postsPage(@RequestParam(required = false) String keyword,
+                            @RequestParam(defaultValue = "ALL") String visibility,
+                            @RequestParam(defaultValue = "ALL") String language,
+                            Model model,
+                            Authentication authentication) {
+
         String username = authentication.getName();
 
         model.addAttribute("title", "Posts");
-        model.addAttribute("username" ,username);
-        model.addAttribute("posts", postService.getFeedPostCards(username));
+        model.addAttribute("posts", postService.getFilteredFeedPostCards(
+                username,
+                keyword,
+                visibility,
+                language
+        ));
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("visibility", visibility);
+        model.addAttribute("language", language);
+
         return "post/posts";
     }
 

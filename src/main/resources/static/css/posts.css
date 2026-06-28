@@ -938,3 +938,98 @@
 .post-delete-btn:hover {
   background: rgba(239,68,68,0.18);
 }
+
+/* post page */
+
+.posts-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.posts-filter-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.posts-search {
+  min-width: 260px;
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 14px;
+  height: 46px;
+
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.07);
+}
+
+.posts-search i {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.posts-search input,
+.posts-filter-form select {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.posts-search input {
+  width: 100%;
+}
+
+.posts-search input::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.posts-filter-form select {
+  height: 46px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.07);
+}
+
+.posts-filter-form select option {
+  background: #1d2b42;
+}
+
+@media (max-width: 700px) {
+  .posts-filter-form,
+  .posts-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .posts-search {
+    min-width: 100%;
+  }
+}
+
+.clear-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.clear-filter-btn i {
+    font-size: 13px;
+}

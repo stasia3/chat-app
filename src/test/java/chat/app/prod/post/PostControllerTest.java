@@ -26,16 +26,31 @@ public class PostControllerTest {
 
     @Test
     void shouldShowPostsPage() throws Exception {
-        Mockito.when(postService.getAllPosts())
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken("eva", "password");
+
+        Mockito.when(postService.getFilteredFeedPostCards(
+                        "eva",
+                        null,
+                        "ALL",
+                        "ALL"
+                ))
                 .thenReturn(List.of());
 
-        mockMvc.perform(get("/posts"))
+        mockMvc.perform(get("/posts")
+                        .principal(authentication)
+                        .requestAttr("_csrf", new org.springframework.security.web.csrf.DefaultCsrfToken(
+                                "X-CSRF-TOKEN",
+                                "_csrf",
+                                "test-token"
+                        )))
                 .andExpect(status().isOk())
                 .andExpect(view().name("post/posts"))
                 .andExpect(model().attribute("title", "Posts"))
-                .andExpect(model().attributeExists("posts"));
+                .andExpect(model().attributeExists("posts"))
+                .andExpect(model().attribute("visibility", "ALL"))
+                .andExpect(model().attribute("language", "ALL"));
     }
-
     @Test
     void shouldShowNewPostPage() throws Exception {
         mockMvc.perform(get("/posts/new"))
@@ -51,10 +66,17 @@ public class PostControllerTest {
 
         mockMvc.perform(post("/posts/new")
                         .principal(authentication)
-                        .param("content", "My first post"))
+                        .param("content", "My first post")
+                        .param("languageTag", "Java")
+                        .param("visibility", "PUBLIC"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/profile"));
 
-        Mockito.verify(postService).createPost("eva", "My first post");
+        Mockito.verify(postService).createPost(
+                "eva",
+                "My first post",
+                "Java",
+                PostVisibility.PUBLIC
+        );
     }
 }

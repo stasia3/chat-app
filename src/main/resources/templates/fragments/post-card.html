@@ -58,6 +58,22 @@
 
     </div>
 
+    <div class="post-menu" th:if="${postItem.post.user.username == username}">
+        <button type="button" class="post-menu-btn">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <form class="post-menu-dropdown"
+              th:action="@{/posts/{postId}/delete(postId=${postItem.post.id})}"
+              method="post">
+
+            <button type="submit" class="post-delete-btn">
+                <i class="fa-solid fa-trash"></i>
+                Delete post
+            </button>
+        </form>
+    </div>
+
     <div class="feed-content">
 
         <div class="feed-content-preview">

@@ -21,6 +21,7 @@ public class PostController {
         String username = authentication.getName();
 
         model.addAttribute("title", "Posts");
+        model.addAttribute("username" ,username);
         model.addAttribute("posts", postService.getFeedPostCards(username));
         return "post/posts";
     }
@@ -106,5 +107,15 @@ public class PostController {
         postService.deleteComment(commentId, username);
 
         return "redirect:/posts/" + postId + "#comments";
+    }
+
+    @PostMapping("/posts/{postId}/delete")
+    public String deletePost(@PathVariable Long postId,
+                             Authentication authentication) {
+        String username = authentication.getName();
+
+        postService.deletePost(postId, username);
+
+        return "redirect:/profile";
     }
 }

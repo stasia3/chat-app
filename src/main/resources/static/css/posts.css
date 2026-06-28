@@ -218,7 +218,7 @@
   }
 
   .secondary,
-  .cta-btn {
+   {
     text-align: center;
   }
 }
@@ -399,76 +399,13 @@
     transform:translateX(5px);
 }
 
-.comments-section {
-  margin-top: 28px;
-}
 
-.comments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
 
-.comment-card {
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.12);
-}
 
-.comment-card strong {
-  display: block;
-  font-size: 15px;
-}
 
-.comment-card small {
-  display: block;
-  margin-top: 4px;
-  margin-bottom: 10px;
-  color: var(--muted);
-}
-
-.comment-card p {
-  margin: 0;
-  color: var(--text);
-  line-height: 1.6;
-}
 /* comments */
 
-.comment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 22px;
-}
 
-.comment-form textarea {
-  width: 100%;
-  min-height: 90px;
-  resize: vertical;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.08);
-  color: var(--text);
-  outline: none;
-  font-family: inherit;
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.comment-form textarea::placeholder {
-  color: rgba(238,244,255,0.45);
-}
-
-.comment-form textarea:focus {
-  border-color: rgba(255,255,255,0.28);
-  background: rgba(255,255,255,0.10);
-}
-
-.comment-form .cta-btn {
-  align-self: flex-start;
-}
 
 /* comment btn */
 /*
@@ -491,24 +428,10 @@
 
 
 /* comment- delete */
-.comment-delete-form {
-  margin-top: 10px;
-}
 
-.comment-delete-btn {
-  padding: 7px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(239,68,68,0.35);
-  background: rgba(239,68,68,0.10);
-  color: #fecaca;
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
 
-.comment-delete-btn:hover {
-  background: rgba(239,68,68,0.18);
-}
+
+
 /* TinyMCE */
 
 .post-content-html {
@@ -736,4 +659,282 @@
   );
 
   pointer-events: none;
+}
+
+.post-detail-card {
+  padding: 28px;
+  border-radius: 26px;
+
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.13);
+
+  margin-bottom: 28px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 24px;
+
+  color: #a5b4fc;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  transform: translateX(-4px);
+}
+
+.post-detail-content {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.post-detail-content .post-content-html {
+  max-height: none;
+  overflow: visible;
+}
+
+.post-detail-content .post-content-html pre {
+  max-height: none;
+}
+
+.post-detail-actions {
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* comments */
+
+.comments-section {
+  margin-top: 34px;
+}
+
+.comments-header h2 {
+  margin: 0 0 18px;
+  font-size: 24px;
+}
+
+.comments-header span {
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.comment-input-card {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.comment-avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(59,130,246,0.20);
+  border: 1px solid rgba(59,130,246,0.45);
+
+  color: var(--text);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.comment-input-card textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+
+  padding: 12px 14px;
+  border-radius: 16px;
+
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+
+  color: var(--text);
+  outline: none;
+
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.comment-input-card textarea::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.comment-input-card textarea:focus {
+  border-color: rgba(255,255,255,0.26);
+  background: rgba(255,255,255,0.09);
+}
+
+.comment-form-footer .cta-btn {
+    margin-left: auto;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.comment-card {
+  display: flex;
+  gap: 14px;
+
+  padding: 16px;
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.comment-body {
+  flex: 1;
+}
+
+.comment-top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.comment-top strong {
+  font-size: 15px;
+}
+
+.comment-top small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.comment-body p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.comment-delete-form {
+  margin-top: 12px;
+}
+
+.comment-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 12px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(239,68,68,0.35);
+  background: rgba(239,68,68,0.10);
+
+  color: #fecaca;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.comment-delete-btn:hover {
+  background: rgba(239,68,68,0.18);
+}
+
+/* */
+
+.comment-input-area {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.comment-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.comments-list-title {
+    margin-top: 34px;
+    margin-bottom: 18px;
+}
+
+/* deleting btn */
+
+.feed-post {
+  position: relative;
+}
+
+.post-menu {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.post-menu-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.07);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.post-menu-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 34px;
+
+  margin: 0;
+  padding-top: 8px;
+}
+
+.post-menu:hover .post-menu-dropdown,
+.post-menu-dropdown:hover {
+  display: block;
+}
+.post-delete-btn {
+  min-width: 140px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(239,68,68,0.35);
+  background: rgba(20,25,40,0.96);
+  color: #fecaca;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.post-delete-btn:hover {
+  background: rgba(239,68,68,0.18);
 }

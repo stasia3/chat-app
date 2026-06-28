@@ -27,32 +27,151 @@
     <main class="posts-card">
 
         <div class="posts-header">
-            <div class="logo-big">&lt;|&gt;</div>
-            <h1>Post</h1>
-            <p class="auth-subtitle">
-                Read the full post and join the discussion.
-            </p>
+            <a class="back-link" th:href="@{/posts}">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to feed
+            </a>
         </div>
 
-        <div th:replace="~{fragments/post-card :: card(postItem=${postItem})}"></div>
+        <article class="post-detail-card">
 
-        <form class="comment-form"
-              th:action="@{/posts/{postId}/comments(postId=${postItem.post.id})}"
-              method="post">
 
-            <textarea name="content"
-                  placeholder="Write a comment..."
-                required></textarea>
 
-            <button type="submit" class="cta-btn">
-                Comment
-            </button>
-        </form>
+            <div class="feed-post-header">
+
+                <div class="post-author-avatar">
+                    <span th:text="${#strings.substring(postItem.post.user.username,0,1)}">U</span>
+                </div>
+
+                <div class="post-author-info">
+
+                    <div class="post-author-row">
+                        <strong class="post-author-name"
+                                th:text="${postItem.post.user.username}">
+                            username
+                        </strong>
+
+                        <span th:if="${postItem.post.languageTag != null and !postItem.post.languageTag.isEmpty()}"
+                              class="tag-badge">
+                    <i class="fa-solid fa-code"></i>
+                    <span th:text="${postItem.post.languageTag}">Java</span>
+                </span>
+
+                        <span class="visibility-badge">
+                    <i th:class="${postItem.post.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC}
+                                 ? 'fa-solid fa-globe'
+                                 : 'fa-solid fa-lock'">
+                    </i>
+
+                    <span th:text="${postItem.post.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC
+                                    ? 'Public'
+                                    : 'Friends'}">
+                        Public
+                    </span>
+                </span>
+                    </div>
+
+                    <div class="post-date-row">
+                        <small th:text="${#temporals.format(postItem.post.createdAt, 'dd MMM yyyy • HH:mm')}">
+                            date
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="post-detail-content">
+                <div class="post-content-html"
+                     th:utext="${postItem.post.content}">
+                </div>
+            </div>
+
+            <div class="post-detail-actions">
+
+                <div class="post-card-actions">
+
+                    <div class="action-pill like-pill">
+                        <form class="like-form"
+                              th:action="@{/posts/{postId}/like(postId=${postItem.post.id})}"
+                              method="post">
+
+                            <button type="submit"
+                                    class="action-icon-btn like-btn"
+                                    th:classappend="${postItem.likedByCurrentUser} ? ' liked' : ''"
+                                    aria-label="Like post">
+
+                                <i th:class="${postItem.likedByCurrentUser}
+                             ? 'fa-solid fa-heart like-icon'
+                             : 'fa-regular fa-heart like-icon'">
+                                </i>
+                            </button>
+                        </form>
+
+                        <button type="button"
+                                class="action-count-btn likes-list-btn"
+                                th:data-url="@{/posts/{postId}/likes(postId=${postItem.post.id})}">
+                            <span class="like-count" th:text="${postItem.likeCount}">0</span>
+                        </button>
+                    </div>
+
+                    <a class="action-pill comment-pill"
+                       href="#comments">
+                        <i class="fa-solid fa-comment action-icon"></i>
+                        <span class="comment-count" th:text="${postItem.commentCount}">0</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </article>
 
         <section id="comments" class="comments-section">
 
-            <div class="section-title">
-                <h2>Comments</h2>
+            <div class="comments-header">
+                <h2>Write a comment</h2>
+            </div>
+
+            <form class="comment-form"
+                  th:action="@{/posts/{postId}/comments(postId=${postItem.post.id})}"
+                  method="post">
+
+                <div class="comment-input-card">
+
+                    <div class="comment-avatar">
+                        <span th:text="${#strings.substring(username,0,1)}">U</span>
+                    </div>
+
+                    <div class="comment-input-area">
+
+            <textarea name="content"
+                      placeholder="Write your comment..."
+                      required></textarea>
+
+                        <div class="comment-form-footer">
+
+
+
+                            <button type="submit" class="cta-btn">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Post comment
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+<!--        <section id="comments" class="comments-section">-->
+
+            <div class="comments-header comments-list-title">
+                <h2>
+                    Comments
+                    <span th:text="${postItem.commentCount}">0</span>
+                </h2>
             </div>
 
             <div th:if="${#lists.isEmpty(comments)}" class="empty-box">
@@ -61,26 +180,39 @@
 
             <div class="comments-list">
                 <article th:each="comment : ${comments}" class="comment-card">
-                    <strong th:text="${comment.user.username}">username</strong>
 
-                    <small th:text="${comment.createdAt}">date</small>
+                    <div class="comment-avatar">
+                        <span th:text="${#strings.substring(comment.user.username,0,1)}">U</span>
+                    </div>
 
-                    <p th:text="${comment.content}">
-                        Comment text
-                    </p>
+                    <div class="comment-body">
+                        <div class="comment-top">
+                            <strong th:text="${comment.user.username}">username</strong>
 
-                    <form th:if="${comment.user.username == username or postItem.post.user.username == username}"
-                          th:action="@{/posts/{postId}/comments/{commentId}/delete(
-                                  postId=${postItem.post.id},
-                                  commentId=${comment.id}
-                              )}"
-                          method="post"
-                          class="comment-delete-form">
+                            <small th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy • HH:mm')}">
+                                date
+                            </small>
+                        </div>
 
-                        <button type="submit" class="comment-delete-btn">
-                            Delete
-                        </button>
-                    </form>
+                        <p th:text="${comment.content}">
+                            Comment text
+                        </p>
+
+                        <form th:if="${comment.user.username == username or postItem.post.user.username == username}"
+                              th:action="@{/posts/{postId}/comments/{commentId}/delete(
+                  postId=${postItem.post.id},
+                  commentId=${comment.id}
+              )}"
+                              method="post"
+                              class="comment-delete-form">
+
+                            <button type="submit" class="comment-delete-btn">
+                                <i class="fa-solid fa-trash"></i>
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+
                 </article>
             </div>
 

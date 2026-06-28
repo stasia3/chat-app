@@ -197,4 +197,15 @@ public class PostService {
 
         commentRepository.delete(comment);
     }
+
+    public void deletePost(Long postId, String username) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        if (!post.getUser().getUsername().equals(username)) {
+            return;
+        }
+
+        postRepository.delete(post);
+    }
 }

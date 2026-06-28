@@ -71,7 +71,7 @@ CREATE TABLE posts (
     CONSTRAINT fk_posts_user
         FOREIGN KEY (user_id)
         REFERENCES users(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
 
     CONSTRAINT chk_posts_visibility
             CHECK (visibility IN ('PUBLIC', 'PRIVATE'))

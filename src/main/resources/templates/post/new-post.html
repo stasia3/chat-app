@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/posts.css}">
+
+    <script th:src="@{/vendor/tinymce/tinymce.min.js}"></script>
 </head>
 
 <body>
@@ -33,8 +35,7 @@
             <textarea
                     id="content"
                     name="content"
-                    placeholder="Write something..."
-                    required></textarea>
+                    placeholder="Write something..."></textarea>
 
             <label for="languageTag">Language or technology</label>
             <select id="languageTag" name="languageTag">
@@ -78,6 +79,29 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 
 </div>
+
+<script>
+    tinymce.init({
+        selector: '#content',
+        license_key: 'gpl',
+        height: 320,
+        menubar: false,
+        plugins: 'lists link code codesample',
+        toolbar: 'undo redo | bold italic | bullist numlist | link | codesample | code',
+        branding: false
+    });
+
+    document.querySelector(".post-form").addEventListener("submit", function (event) {
+        tinymce.triggerSave();
+
+        const content = document.querySelector("#content").value.trim();
+
+        if (!content) {
+            event.preventDefault();
+            alert("Please write something before publishing.");
+        }
+    });
+</script>
 
 </body>
 </html>

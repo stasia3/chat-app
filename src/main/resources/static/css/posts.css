@@ -488,4 +488,47 @@
 .comment-delete-btn:hover {
   background: rgba(239,68,68,0.18);
 }
+/* TinyMCE */
 
+.post-content-html {
+  color: var(--text);
+  line-height: 1.8;
+  word-break: break-word;
+}
+
+.post-content-html p {
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+.post-content-html ul,
+.post-content-html ol {
+  margin-top: 8px;
+  margin-bottom: 12px;
+  padding-left: 24px;
+}
+
+.post-content-html a {
+  color: #bfdbfe;
+}
+
+/* code blocks */
+
+.post-content-html pre {
+  padding: 16px;
+  border-radius: 16px;
+  overflow-x: auto;
+  background: rgba(5,10,20,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.post-content-html code {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 14px;
+}
+
+.post-content-html pre {
+  padding: 16px;
+  border-radius: 16px;
+  overflow-x: auto;
+}

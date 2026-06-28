@@ -40,9 +40,9 @@
     </div>
 
     <div class="feed-content">
-        <p th:text="${postItem.post.content}">
-            Post content
-        </p>
+        <div class="post-content-html"
+             th:utext="${postItem.post.content}">
+        </div>
     </div>
 
     <a class="view-post-link"

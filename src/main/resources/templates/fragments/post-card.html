@@ -8,31 +8,50 @@
 
     <div class="feed-post-header">
 
-        <div class="feed-user">
+        <div class="post-author-avatar">
+            <span th:text="${#strings.substring(postItem.post.user.username,0,1)}">U</span>
+        </div>
 
-            <div>
-                <strong th:text="${postItem.post.user.username}">
+        <div class="post-author-info">
+
+            <div class="post-author-row">
+                <strong class="post-author-name"
+                        th:text="${postItem.post.user.username}">
                     username
                 </strong>
 
-                <div class="feed-meta">
+                <span th:if="${postItem.post.languageTag != null and !postItem.post.languageTag.isEmpty()}"
+                      class="tag-badge">
 
-                    <span th:if="${postItem.post.languageTag != null and !postItem.post.languageTag.isEmpty()}"
-                          class="tag-badge"
-                          th:text="${postItem.post.languageTag}">
+                    <i class="fa-solid fa-code"></i>
+
+                    <span th:text="${postItem.post.languageTag}">
                         Java
                     </span>
 
-                    <span class="visibility-badge"
-                          th:text="${postItem.post.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC ? 'Public' : 'Friends'}">
+                </span>
+
+                <span class="visibility-badge">
+
+                    <i th:class="${postItem.post.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC}
+                                 ? 'fa-solid fa-globe'
+                                 : 'fa-solid fa-lock'">
+                    </i>
+
+                    <span th:text="${postItem.post.visibility == T(chat.app.prod.post.PostVisibility).PUBLIC
+                                    ? 'Public'
+                                    : 'Friends'}">
                         Public
                     </span>
 
-                </div>
+                </span>
+            </div>
 
-                <small th:text="${postItem.post.createdAt}">
+            <div class="post-date-row">
+                <small th:text="${#temporals.format(postItem.post.createdAt, 'dd MMM yyyy • HH:mm')}">
                     date
                 </small>
+
             </div>
 
         </div>
@@ -40,9 +59,17 @@
     </div>
 
     <div class="feed-content">
-        <div class="post-content-html"
-             th:utext="${postItem.post.content}">
+
+        <div class="feed-content-preview">
+
+            <div class="post-content-html"
+                 th:utext="${postItem.post.content}">
+            </div>
+
+            <div class="feed-content-fade"></div>
+
         </div>
+
     </div>
 
     <div class="post-card-footer">
@@ -83,13 +110,12 @@
 
         <a class="view-post-link"
            th:href="@{/posts/{postId}(postId=${postItem.post.id})}">
-            View full post
+            Read more
             <i class="fa-solid fa-arrow-right-long"></i>
         </a>
 
     </div>
 
 </article>
-
 </body>
 </html>

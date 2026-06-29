@@ -9,6 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Controller
 public class ProfileController {
@@ -47,13 +55,16 @@ public class ProfileController {
 
         model.addAttribute("title", "Edit Profile");
         model.addAttribute("profile", profile);
+        model.addAttribute("username", username);
 
         return "profile/edit-profile";
     }
 
     @PostMapping("/profile/edit")
     public String editProfile(@ModelAttribute Profile profileForm,
-                              Authentication authentication) {
+                              @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+                              Authentication authentication) throws IOException {
+
         String username = authentication.getName();
 
         Profile profile = profileRepository.findByUserUsername(username)
@@ -66,6 +77,26 @@ public class ProfileController {
         profile.setProgrammingLanguages(profileForm.getProgrammingLanguages());
         profile.setGithubLink(profileForm.getGithubLink());
         profile.setLinkedinLink(profileForm.getLinkedinLink());
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String uploadDir = "uploads/profile-images/";
+
+            Files.createDirectories(Paths.get(uploadDir));
+
+            String originalFilename = profileImage.getOriginalFilename();
+            String extension = "";
+
+            if (originalFilename != null && originalFilename.contains(".")) {
+                extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            }
+
+            String filename = username + "-" + UUID.randomUUID() + extension;
+
+            Path filePath = Paths.get(uploadDir, filename);
+            Files.write(filePath, profileImage.getBytes());
+
+            profile.setProfileImageUrl("/uploads/profile-images/" + filename);
+        }
 
         profileRepository.save(profile);
 

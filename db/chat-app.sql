@@ -18,6 +18,7 @@ CREATE TABLE profiles (
     programming_languages VARCHAR(255),
     github_link VARCHAR(255),
     linkedin_link VARCHAR(255),
+    profile_image_url VARCHAR(500),
 
     CONSTRAINT fk_profile_user
         FOREIGN KEY (user_id)

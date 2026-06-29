@@ -1,6 +1,7 @@
 package chat.app.prod.post;
 
 import chat.app.prod.friend.FriendService;
+import chat.app.prod.profile.ProfileRepository;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,15 @@ public class PostService {
     private final FriendService friendService;
     private final PostLikeRepository postLikeRepository;
     private final CommentRepository commentRepository;
+    private final ProfileRepository profileRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, FriendService friendService, PostLikeRepository postLikeRepository, CommentRepository commentRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, FriendService friendService, PostLikeRepository postLikeRepository, CommentRepository commentRepository, ProfileRepository profileRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.friendService = friendService;
         this.postLikeRepository = postLikeRepository;
         this.commentRepository = commentRepository;
+        this.profileRepository = profileRepository;
     }
 
     public void createPost(String username, String content,  String languageTag, PostVisibility visibility) {
@@ -105,7 +108,8 @@ public class PostService {
                         post,
                         postLikeRepository.countByPost(post),
                         postLikeRepository.existsByPostAndUser(post, currentUser),
-                        commentRepository.countByPost(post)
+                        commentRepository.countByPost(post),
+                        getAuthorProfileImageUrl(post)
                 ))
                 .toList();
     }
@@ -152,7 +156,8 @@ public class PostService {
                 post,
                 postLikeRepository.countByPost(post),
                 postLikeRepository.existsByPostAndUser(post, currentUser),
-                commentRepository.countByPost(post)
+                commentRepository.countByPost(post),
+                getAuthorProfileImageUrl(post)
         );
     }
 
@@ -238,5 +243,11 @@ public class PostService {
                     return matchesKeyword && matchesVisibility && matchesLanguage;
                 })
                 .toList();
+    }
+
+    private String getAuthorProfileImageUrl(Post post) {
+        return profileRepository.findByUserUsername(post.getUser().getUsername())
+                .map(profile -> profile.getProfileImageUrl())
+                .orElse(null);
     }
 }

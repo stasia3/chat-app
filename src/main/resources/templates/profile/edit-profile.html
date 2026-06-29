@@ -1,75 +1,254 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title th:text="${title}">Edit Profile · DevPortal</title>
-        <link rel="stylesheet" th:href="@{/css/basics.css}">
-        <link rel="stylesheet" th:href="@{/css/base.css}">
-        <link rel="stylesheet" th:href="@{/css/profile.css}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    </head>
-    <body>
-        <div class="page-shell">
-            <div th:replace="~{fragments/navbar :: menu}"></div>
-            <main class="profile-edit-card">
-                <section class="profile-edit-header">
-                    <div>
-                        <div class="logo-big">&lt;|&gt;</div>
-                        <h1>Edit profile</h1>
-                        <p class="auth-subtitle">Update your public developer information.</p>
+    <title th:text="${title}">Edit Profile · DevPortal</title>
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+
+<body>
+<div class="page-shell">
+
+    <div th:replace="~{fragments/navbar :: menu}"></div>
+
+    <main class="profile-edit-card">
+
+        <a class="secondary profile-back-link" th:href="@{/profile}">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to profile
+        </a>
+
+        <form class="profile-edit-form"
+              th:action="@{/profile/edit}"
+              th:object="${profile}"
+              method="post"
+              enctype="multipart/form-data">
+
+        <section class="profile-edit-hero">
+
+            <div class="profile-avatar-editor">
+
+                <div class="profile-avatar-frame">
+
+                    <div class="profile-avatar-large">
+            <span id="avatarInitial"
+                  th:style="${profile.profileImageUrl != null and !profile.profileImageUrl.isBlank()} ? 'display:none' : ''"
+                  th:text="${#strings.substring(username,0,1).toUpperCase()}">
+                T
+            </span>
+
+                        <img id="avatarPreview"
+                             th:src="${profile.profileImageUrl != null and !profile.profileImageUrl.isBlank()} ? ${profile.profileImageUrl} : ''"
+                             th:style="${profile.profileImageUrl != null and !profile.profileImageUrl.isBlank()} ? '' : 'display:none'"
+                             alt="Profile photo">
                     </div>
 
-                    <div class="profile-actions">
-                        <a class="secondary" th:href="@{/profile}">Back to profile</a>
-                    </div>
-                </section>
+                    <input id="profileImage"
+                           type="file"
+                           name="profileImage"
+                           accept="image/*"
+                           hidden>
 
-                <form class="auth-form" th:action="@{/profile/edit}" th:object="${profile}" method="post">
+                    <button type="button"
+                            class="avatar-upload-btn"
+                            onclick="document.getElementById('profileImage').click()">
+                        <i class="fa-solid fa-camera"></i>
+                    </button>
+
+                </div>
+
+            </div>
+            <div class="profile-edit-title">
+                <h1>Edit profile</h1>
+
+                <p class="auth-subtitle">
+                    Update your public developer information.
+                </p>
+
+                <div class="profile-tip">
+                    <i class="fa-regular fa-lightbulb"></i>
+                    <span>
+                        A complete profile helps other developers discover and connect with you.
+                    </span>
+                </div>
+            </div>
+
+        </section>
+
+                <h3>
+                    <i class="fa-regular fa-user"></i>
+                    Personal information
+                </h3>
+
+                <div class="profile-edit-grid two-columns">
 
                     <div class="field">
                         <label for="firstName">First name</label>
-                        <input id="firstName" type="text" th:field="*{firstName}" placeholder="Your first name">
+
+                        <div class="input-with-icon">
+                            <i class="fa-regular fa-user"></i>
+                            <input id="firstName"
+                                   type="text"
+                                   th:field="*{firstName}"
+                                   placeholder="Your first name">
+                        </div>
                     </div>
 
                     <div class="field">
                         <label for="lastName">Last name</label>
-                        <input id="lastName" type="text" th:field="*{lastName}" placeholder="Your last name">
+
+                        <div class="input-with-icon">
+                            <i class="fa-regular fa-user"></i>
+                            <input id="lastName"
+                                   type="text"
+                                   th:field="*{lastName}"
+                                   placeholder="Your last name">
+                        </div>
                     </div>
 
-                    <div class="field">
-                        <label for="headline">Headline</label>
-                        <input id="headline" type="text" th:field="*{headline}" placeholder="Junior Java Developer">
+                </div>
+
+                <div class="field">
+                    <label for="headline">Headline</label>
+
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <input id="headline"
+                               type="text"
+                               th:field="*{headline}"
+                               placeholder="Junior Java Developer">
                     </div>
 
-                    <div class="field">
-                        <label for="bio">Bio</label>
-                        <textarea id="bio" th:field="*{bio}" placeholder="Write something about yourself"></textarea>
+                    <small>A short description that appears under your name.</small>
+                </div>
+
+            </section>
+
+            <section class="profile-edit-section">
+
+                <h3>
+                    <i class="fa-regular fa-pen-to-square"></i>
+                    About you
+                </h3>
+
+                <div class="field">
+                    <label for="bio">Bio</label>
+
+                    <div class="textarea-with-icon">
+                        <i class="fa-solid fa-pencil"></i>
+                        <textarea id="bio"
+                                  th:field="*{bio}"
+                                  placeholder="Write something about yourself"></textarea>
                     </div>
 
-                    <div class="field">
-                        <label for="programmingLanguages">Programming languages</label>
-                        <input id="programmingLanguages" type="text" th:field="*{programmingLanguages}" placeholder="Java, Spring Boot, SQL">
+                    <small>Tell other developers about yourself, your experience and interests.</small>
+                </div>
+
+            </section>
+
+            <section class="profile-edit-section">
+
+                <h3>
+                    <i class="fa-solid fa-code"></i>
+                    Developer information
+                </h3>
+
+                <div class="field">
+                    <label for="programmingLanguages">Programming languages</label>
+
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-tags"></i>
+                        <input id="programmingLanguages"
+                               type="text"
+                               th:field="*{programmingLanguages}"
+                               placeholder="Java, Spring Boot, SQL">
                     </div>
 
-                    <div class="field">
-                        <label for="githubLink">GitHub link</label>
-                        <input id="githubLink" type="text" th:field="*{githubLink}" placeholder="https://github.com/username">
+                    <small>Add your main programming languages, separated by commas.</small>
+                </div>
+
+                <div class="field">
+                    <label for="githubLink">GitHub link</label>
+
+                    <div class="input-with-icon">
+                        <i class="fa-brands fa-github"></i>
+                        <input id="githubLink"
+                               type="text"
+                               th:field="*{githubLink}"
+                               placeholder="https://github.com/username">
                     </div>
 
-                    <div class="field">
-                        <label for="linkedinLink">LinkedIn link</label>
-                        <input id="linkedinLink" type="text" th:field="*{linkedinLink}" placeholder="htpps://linkedin.com/in/username">
+                    <small>Your GitHub profile URL.</small>
+                </div>
+
+                <div class="field">
+                    <label for="linkedinLink">LinkedIn link</label>
+
+                    <div class="input-with-icon">
+                        <i class="fa-brands fa-linkedin"></i>
+                        <input id="linkedinLink"
+                               type="text"
+                               th:field="*{linkedinLink}"
+                               placeholder="https://linkedin.com/in/username">
                     </div>
 
-                    <div class="actions">
-                        <button class="cta-btn" type="submit">Save profile</button>
-                        <a class="secondary" th:href="@{/profile}">Cancel</a>
-                    </div>
-                </form>
-            </main>
+                    <small>Your LinkedIn profile URL.</small>
+                </div>
 
-        <div th:replace="~{fragments/footer :: footer}"></div>
-    </div>
-    </body>
+            </section>
+
+            <div class="profile-edit-footer">
+
+                <div class="profile-edit-actions">
+                    <button class="cta-btn" type="submit">
+
+                        Save profile
+                    </button>
+
+                    <a class="secondary" th:href="@{/profile}">
+                        Cancel
+                    </a>
+                </div>
+
+                <p class="profile-edit-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Your profile information will be visible to other developers.
+                </p>
+
+            </div>
+
+        </form>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+<script>
+    const profileImageInput = document.getElementById("profileImage");
+const avatarPreview = document.getElementById("avatarPreview");
+const avatarInitial = document.getElementById("avatarInitial");
+
+profileImageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    avatarPreview.src = URL.createObjectURL(file);
+    avatarPreview.style.display = "block";
+
+    avatarInitial.style.display = "none";
+});
+</script>
+</body>
 </html>

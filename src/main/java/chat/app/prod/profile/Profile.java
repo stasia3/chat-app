@@ -22,6 +22,9 @@ public class Profile {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     private String programmingLanguages;
     private String githubLink;
     private String linkedinLink;
@@ -98,5 +101,13 @@ public class Profile {
 
     public void setLinkedinLink(String linkedinLink) {
          this.linkedinLink = linkedinLink;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

@@ -30,7 +30,16 @@
                     <div class="profile-main-info">
 
                         <div class="profile-avatar">
-                            <span th:text="${#strings.substring(username,0,1).toUpperCase()}">U</span>
+
+                            <img th:if="${profile.profileImageUrl != null and !profile.profileImageUrl.isBlank()}"
+                                 th:src="@{${profile.profileImageUrl}}"
+                                 alt="Profile photo">
+
+                            <span th:if="${profile.profileImageUrl == null or profile.profileImageUrl.isBlank()}"
+                                  th:text="${#strings.substring(username,0,1).toUpperCase()}">
+                                U
+                            </span>
+
                         </div>
 
                         <div class="profile-identity">

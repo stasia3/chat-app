@@ -6,12 +6,18 @@ public class PostCardDto {
     private final long likeCount;
     private final boolean likedByCurrentUser;
     private final long commentCount;
+    private final String authorProfileImageUrl;
 
-    public PostCardDto(Post post, long likeCount, boolean likedByCurrentUser, long commentCount) {
+    public PostCardDto(Post post,
+                       long likeCount,
+                       boolean likedByCurrentUser,
+                       long commentCount,
+                       String authorProfileImageUrl) {
         this.post = post;
         this.likeCount = likeCount;
         this.likedByCurrentUser = likedByCurrentUser;
         this.commentCount = commentCount;
+        this.authorProfileImageUrl = authorProfileImageUrl;
     }
 
     public Post getPost() {
@@ -28,5 +34,9 @@ public class PostCardDto {
 
     public long getCommentCount() {
         return commentCount;
+    }
+
+    public String getAuthorProfileImageUrl() {
+        return authorProfileImageUrl;
     }
 }

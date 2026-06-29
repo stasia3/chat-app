@@ -9,7 +9,16 @@
     <div class="feed-post-header">
 
         <div class="post-author-avatar">
-            <span th:text="${#strings.substring(postItem.post.user.username,0,1)}">U</span>
+
+            <img th:if="${postItem.authorProfileImageUrl != null and !postItem.authorProfileImageUrl.isBlank()}"
+                 th:src="@{${postItem.authorProfileImageUrl}}"
+                 alt="Profile photo">
+
+            <span th:if="${postItem.authorProfileImageUrl == null or postItem.authorProfileImageUrl.isBlank()}"
+                  th:text="${#strings.substring(postItem.post.user.username,0,1).toUpperCase()}">
+        U
+    </span>
+
         </div>
 
         <div class="post-author-info">

@@ -4,6 +4,9 @@
     <title>Chat · DevPortal</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 
 <body>
@@ -12,72 +15,240 @@
 
     <div th:replace="~{fragments/navbar :: menu}"></div>
 
-    <main class="chat-card">
+    <main class="chat-layout">
 
-        <div class="chat-header">
+        <aside class="chat-sidebar">
 
-            <div>
-                <h1>
-                    Chat with
-                    <span th:text="${selectedUsername}">username</span>
-                </h1>
+            <div class="chat-search-box">
+                <input id="friendSearch"
+                       type="text"
+                       placeholder="Search friends...">
 
-                <p class="auth-subtitle">
-                    Simple private conversation between DevPortal friends.
-                </p>
+                <button type="button" id="friendSearchBtn" aria-label="Search friends">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
             </div>
 
-            <a class="secondary" th:href="@{/users}">
-                Back to users
-            </a>
-
-        </div>
-
-        <div class="messages-box">
-
-            <div th:if="${#lists.isEmpty(messages)}" class="empty-box">
-                <p>No messages yet. Start the conversation.</p>
+            <div th:if="${#lists.isEmpty(users)}" class="empty-box">
+                <p>No friends available.</p>
             </div>
 
-            <div th:each="message : ${messages}"
-                 class="message-row"
-                 th:classappend="${message.sender.username == currentUsername} ? ' mine' : ' theirs'">
+            <div th:unless="${#lists.isEmpty(users)}"
+                 class="chat-friends-list">
 
-                <div class="message-bubble">
+                <a th:each="user : ${users}"
+                   class="chat-friend-item"
+                   th:attr="data-username=${user.username}"
+                   th:classappend="${selectedUsername != null and user.username == selectedUsername} ? ' active' : ''"
+                   th:href="@{/chat/{username}(username=${user.username})}">
 
-                    <div class="message-meta">
-                        <strong th:text="${message.sender.username}">username</strong>
-                        <small th:text="${message.timestamp}">time</small>
+                    <div class="friend-avatar">
+                    <span th:text="${#strings.substring(user.username,0,1).toUpperCase()}">
+                        U
+                    </span>
                     </div>
 
-                    <p th:text="${message.content}">Message content</p>
+                    <div class="friend-preview">
+                        <strong th:text="${user.username}">
+                            username
+                        </strong>
+
+                        <span>Open conversation</span>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+        <section class="chat-panel">
+
+            <div th:if="${selectedUsername == null}"
+                 class="chat-empty-state">
+
+                <div class="logo-big">&lt;|&gt;</div>
+
+                <h1>Welcome to DevPortal Chat</h1>
+
+                <p class="auth-subtitle">
+                    Select a friend from the left to start chatting.
+                </p>
+
+            </div>
+
+            <div th:if="${selectedUsername != null}"
+                 class="chat-conversation">
+
+                <div class="chat-header">
+
+                    <div class="chat-selected-user">
+
+                        <div class="friend-avatar small-avatar">
+                            <span th:text="${#strings.substring(selectedUsername,0,1).toUpperCase()}">U</span>
+                        </div>
+
+                        <strong th:text="${selectedUsername}">username</strong>
+
+                    </div>
 
                 </div>
 
+                <div class="messages-box"
+                     id="messagesBox"
+                     th:data-selected-username="${selectedUsername}"
+                     th:data-current-username="${currentUsername}">
+
+                    <div th:if="${#lists.isEmpty(messages)}"
+                         class="empty-box">
+
+                        <p>No messages yet. Start the conversation.</p>
+
+                    </div>
+
+                    <div th:each="message : ${messages}"
+                         class="message-row"
+                         th:attr="data-message-id=${message.id}"
+                         th:classappend="${message.senderUsername == currentUsername} ? ' mine' : ' theirs'">
+
+                        <div class="message-bubble">
+
+                            <div class="message-meta">
+                                <strong th:text="${message.senderUsername}">
+                                    username
+                                </strong>
+
+                                <small th:text="${#temporals.format(message.timestamp, 'dd MMM yyyy • HH:mm')}">
+                                    time
+                                </small>
+                            </div>
+
+                            <p th:text="${message.content}">
+                                Message
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <form th:action="@{/chat/{username}(username=${selectedUsername})}"
+                      method="post"
+                      class="chat-form">
+
+                    <input type="text"
+                           name="content"
+                           placeholder="Write a message..."
+                           required>
+
+                    <button class="cta-btn" type="submit">
+                        Send
+                    </button>
+
+                </form>
+
             </div>
 
-        </div>
-
-        <form th:action="@{/chat/{username}(username=${selectedUsername})}"
-              method="post"
-              class="chat-form">
-
-            <input type="text"
-                   name="content"
-                   placeholder="Write a message..."
-                   required>
-
-            <button type="submit" class="cta-btn">
-                Send
-            </button>
-
-        </form>
+        </section>
 
     </main>
-
     <div th:replace="~{fragments/footer :: footer}"></div>
 
 </div>
+<script>
+        const messagesBox = document.getElementById("messagesBox");
 
+        if (messagesBox) {
+            const selectedUsername = messagesBox.dataset.selectedUsername;
+            const currentUsername = messagesBox.dataset.currentUsername;
+
+            let lastMessageId = 0;
+
+            document.querySelectorAll(".message-row").forEach(row => {
+                const messageId = Number(row.dataset.messageId);
+                if (messageId > lastMessageId) {
+                    lastMessageId = messageId;
+                }
+            });
+
+            function scrollToBottom() {
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+            }
+
+            scrollToBottom();
+
+            function appendMessage(message) {
+                const row = document.createElement("div");
+
+                row.classList.add("message-row");
+                row.classList.add(message.senderUsername === currentUsername ? "mine" : "theirs");
+                row.dataset.messageId = message.id;
+
+                row.innerHTML = `
+                    <div class="message-bubble">
+                        <div class="message-meta">
+                            <strong>${message.senderUsername}</strong>
+                            <small>${message.timestamp}</small>
+                        </div>
+                        <p>${message.content}</p>
+                    </div>
+                `;
+
+                messagesBox.appendChild(row);
+                scrollToBottom();
+            }
+
+            async function loadNewMessages() {
+                const response = await fetch(`/chat/${selectedUsername}/messages?lastId=${lastMessageId}`);
+
+                if (!response.ok) {
+                    console.log("Could not load messages");
+                    return;
+                }
+
+                const messages = await response.json();
+
+                messages.forEach(message => {
+                    appendMessage(message);
+                    lastMessageId = message.id;
+                });
+            }
+
+            setInterval(loadNewMessages, 2000);
+        }
+
+    const friendSearch = document.getElementById("friendSearch");
+const friendSearchBtn = document.getElementById("friendSearchBtn");
+const friendItems = document.querySelectorAll(".chat-friend-item");
+
+function filterFriends() {
+    const searchValue = friendSearch.value.toLowerCase().trim();
+
+    friendItems.forEach(item => {
+        const username = item.dataset.username.toLowerCase();
+
+        if (username.includes(searchValue)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+if (friendSearch && friendSearchBtn) {
+    friendSearchBtn.addEventListener("click", filterFriends);
+
+    friendSearch.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            filterFriends();
+        }
+    });
+
+    friendSearch.addEventListener("input", filterFriends);
+}
+
+</script>
 </body>
 </html>

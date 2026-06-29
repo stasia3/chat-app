@@ -27,8 +27,24 @@ public class ChatController {
 
         model.addAttribute("users", users);
         model.addAttribute("currentUsername", currentUsername);
+//        @GetMapping("/users")
+//        public String users() {
+//            return "redirect:/chat";
+//        }
+//        return "friend/users";
+        return "redirect:/chat";
+    }
 
-        return "friend/users";
+    @GetMapping("/chat")
+    public String chatHome(Model model, Authentication authentication) {
+        String currentUsername = authentication.getName();
+
+        model.addAttribute("currentUsername", currentUsername);
+        model.addAttribute("users", friendService.getFriends(currentUsername));
+        model.addAttribute("selectedUsername", null);
+        model.addAttribute("messages", List.of());
+
+        return "chat/chat";
     }
 
     @GetMapping("/chat/{username}")
@@ -37,9 +53,14 @@ public class ChatController {
                            Authentication authentication) {
         String currentUsername = authentication.getName();
 
+        if (currentUsername.equals(username) || !friendService.areFriends(currentUsername, username)) {
+            return "redirect:/users";
+        }
+
         model.addAttribute("currentUsername", currentUsername);
         model.addAttribute("selectedUsername", username);
-        model.addAttribute("messages", chatService.getConversation(currentUsername, username));
+        model.addAttribute("users", friendService.getFriends(currentUsername));
+        model.addAttribute("messages", chatService.getConversationDtos(currentUsername, username));
 
         return "chat/chat";
     }
@@ -50,10 +71,31 @@ public class ChatController {
                               Authentication authentication) {
         String currentUsername = authentication.getName();
 
+        if (currentUsername.equals(username) || !friendService.areFriends(currentUsername, username)) {
+            return "redirect:/users";
+        }
+
         if (content != null && !content.trim().isEmpty()) {
             chatService.sendMessage(currentUsername, username, content.trim());
         }
 
         return "redirect:/chat/" + username;
+    }
+
+    @GetMapping("/chat/{username}/messages")
+    @ResponseBody
+    public List<MessageDto> getNewMessages(@PathVariable String username,
+                                           @RequestParam(defaultValue = "0") Long lastId,
+                                           Authentication authentication) {
+        String currentUsername = authentication.getName();
+
+        if (currentUsername.equals(username)) {
+            return List.of();
+        }
+
+        return chatService.getNewMessages(currentUsername, username, lastId)
+                .stream()
+                .map(chatService::toDto)
+                .toList();
     }
 }

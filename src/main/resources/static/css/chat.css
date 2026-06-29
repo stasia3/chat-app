@@ -1,0 +1,348 @@
+.chat-layout {
+  width: min(900px, 90%);
+  height: 540px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  overflow: hidden;
+
+  border-radius: 26px;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,.12),
+    rgba(255,255,255,.04)
+  );
+  border: 1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: var(--shadow);
+}
+
+/* LEFT */
+
+.chat-sidebar {
+  padding: 24px;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  background: rgba(5, 12, 28, 0.24);
+}
+
+.chat-search-box {
+  height: 52px;
+  margin-bottom: 18px;
+  padding: 0 8px 0 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.07);
+}
+
+.chat-search-box input {
+  flex: 1;
+  min-width: 0;
+
+  border: none;
+  outline: none;
+  background: transparent;
+
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.chat-search-box input::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.chat-search-box button {
+  width: 36px;
+  height: 36px;
+
+  border-radius: 12px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chat-search-box button:hover {
+  background: rgba(59,130,246,0.18);
+  color: var(--text);
+}
+
+.chat-search-box i {
+  font-size: 13px;
+}
+
+.chat-friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-friend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 17px;
+  text-decoration: none;
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.chat-friend-item:hover,
+.chat-friend-item.active {
+  background: rgba(99, 102, 241, 0.22);
+  border-color: rgba(129, 140, 248, 0.55);
+}
+.friend-avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(59,130,246,0.20);
+  border: 1px solid rgba(59,130,246,0.45);
+  color: var(--text);
+
+  font-weight: 800;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.small-avatar {
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
+  font-size: 15px;
+}
+.friend-preview strong {
+  display: block;
+  font-size: 15px;
+}
+
+.friend-preview span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* RIGHT */
+
+.chat-panel,
+.chat-conversation {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  flex: 0 0 auto;
+  padding: 16px 30px;
+  margin: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.chat-selected-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-selected-user strong {
+  font-size: 18px;
+}
+
+/* EMPTY STATE */
+
+.chat-empty-state {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 40px;
+}
+
+/* MESSAGES */
+
+.messages-box {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  padding: 24px 34px;
+  margin: 0;
+
+  border: none;
+  border-radius: 0;
+  background: rgba(5, 12, 28, 0.10);
+}
+
+.message-row {
+  display: flex;
+}
+
+.message-row.mine {
+  justify-content: flex-end;
+}
+
+.message-row.theirs {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 360px;
+  padding: 12px 15px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.message-row.mine .message-bubble {
+  background: rgba(99, 102, 241, 0.34);
+  border-color: rgba(129, 140, 248, 0.42);
+}
+
+.message-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.message-meta strong {
+  font-size: 13px;
+}
+
+.message-meta small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.message-bubble p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* FORM */
+
+.chat-form {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 12px;
+  padding: 16px 34px 18px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+  background: rgba(5, 12, 28, 0.18);
+}
+
+.chat-form input {
+  flex: 1;
+  padding: 13px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  outline: none;
+}
+
+.chat-form input::placeholder,
+.chat-search::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.chat-form input:focus,
+.chat-search:focus {
+  border-color: rgba(129, 140, 248, 0.45);
+  background: rgba(255,255,255,0.10);
+}
+
+@media (max-width: 850px) {
+  .chat-layout {
+    width: min(94%, 720px);
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .chat-sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .messages-box {
+    min-height: 340px;
+  }
+
+  .message-bubble {
+    max-width: 82%;
+  }
+}
+
+.chat-sidebar {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-search-box {
+  flex: 0 0 auto;
+}
+
+.chat-friends-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* ---------- Custom Scrollbars ---------- */
+
+.chat-friends-list,
+.messages-box {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.28) transparent;
+}
+
+.chat-friends-list::-webkit-scrollbar,
+.messages-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-friends-list::-webkit-scrollbar-track,
+.messages-box::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-friends-list::-webkit-scrollbar-thumb,
+.messages-box::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.chat-friends-list::-webkit-scrollbar-thumb:hover,
+.messages-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.40);
+    background-clip: padding-box;
+}

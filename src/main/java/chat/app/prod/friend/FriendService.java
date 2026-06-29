@@ -261,4 +261,17 @@ public class FriendService {
                 .toList();
     }
 
+    public boolean areFriends(String username1, String username2) {
+        User user1 = userRepository.findByUsername(username1)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username1));
+
+        User user2 = userRepository.findByUsername(username2)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username2));
+
+        return friendRequestRepository
+                .findBySenderAndReceiverOrSenderAndReceiver(user1, user2, user2, user1)
+                .filter(request -> request.getStatus() == FriendRequestStatus.ACCEPTED)
+                .isPresent();
+    }
+
 }

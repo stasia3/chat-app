@@ -10,4 +10,12 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             User sender1, User receiver1,
             User sender2, User receiver2
     );
+    List<Message> findByIdGreaterThanAndSenderAndReceiverOrIdGreaterThanAndSenderAndReceiverOrderByTimestampAsc(
+            Long lastId1,
+            User sender1,
+            User receiver1,
+            Long lastId2,
+            User sender2,
+            User receiver2
+    );
 }

@@ -4,13 +4,16 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title th:text="${title}">Edit Profile · DevPortal</title>
-        <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
+        <link rel="stylesheet" th:href="@{/css/basics.css}">
+        <link rel="stylesheet" th:href="@{/css/base.css}">
+        <link rel="stylesheet" th:href="@{/css/profile.css}">
+
     </head>
     <body>
         <div class="page-shell">
             <div th:replace="~{fragments/navbar :: menu}"></div>
-            <main class="profile-card">
-                <section class="profile-header">
+            <main class="profile-edit-card">
+                <section class="profile-edit-header">
                     <div>
                         <div class="logo-big">&lt;|&gt;</div>
                         <h1>Edit profile</h1>

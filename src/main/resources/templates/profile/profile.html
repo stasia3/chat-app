@@ -21,93 +21,188 @@
         <div th:replace="~{fragments/navbar :: menu}"></div>
 
 
-        <main class="profile-card">
-            <section class="profile-header">
-                <div>
-                    <div class="logo-big">&lt;|&gt;</div>
-                    <h1>Welcome, <span th:text="${username}">User</span></h1>
-                    <p class="auth-subtitle">You are logged in to your DevPortal space.</p>
+        <main class="profile-page">
+
+            <section class="profile-hero">
+
+                <div class="profile-hero-top">
+
+                    <div class="profile-main-info">
+
+                        <div class="profile-avatar">
+                            <span th:text="${#strings.substring(username,0,1).toUpperCase()}">U</span>
+                        </div>
+
+                        <div class="profile-identity">
+
+                            <h1 th:text="${username}">username</h1>
+
+                            <p class="profile-headline"
+                               th:if="${profile.headline != null and !profile.headline.isBlank()}"
+                               th:text="${profile.headline}">
+                                Junior Java Developer
+                            </p>
+
+                            <p class="profile-headline muted"
+                               th:if="${profile.headline == null or profile.headline.isBlank()}">
+                                Developer profile
+                            </p>
+
+                            <p class="profile-bio-preview"
+                               th:if="${profile.bio != null and !profile.bio.isBlank()}"
+                               th:text="${profile.bio}">
+                                Bio preview
+                            </p>
+
+                            <p class="profile-bio-preview muted"
+                               th:if="${profile.bio == null or profile.bio.isBlank()}">
+                                Complete your profile to help other developers know you better.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <a class="secondary profile-edit-btn" th:href="@{/profile/edit}">
+                        <i class="fa-solid fa-pen"></i>
+                        Edit profile
+                    </a>
+
                 </div>
 
-                <div class="profile-actions">
-                    <a class="cta-btn" th:href="@{/posts/new}">Add a post</a>
-                    <a class="secondary" th:href="@{/friends/list}">View friends</a>
+                <div class="profile-stats-row">
+
+                    <div class="profile-stat">
+                        <div class="profile-stat-icon">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+
+                        <div>
+                            <span>Total friends</span>
+                            <strong th:text="${friendCount}">0</strong>
+                        </div>
+                    </div>
+
+                    <div class="profile-stat">
+                        <div class="profile-stat-icon">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+
+                        <div>
+                            <span>Posts</span>
+                            <strong th:text="${#lists.size(posts)}">0</strong>
+                        </div>
+                    </div>
+
                 </div>
+
+                <div class="profile-action-row">
+                    <a class="cta-btn" th:href="@{/posts/new}">
+                        <i class="fa-solid fa-plus"></i>
+                        Add a post
+                    </a>
+
+                    <a class="secondary" th:href="@{/friends/list}">
+                        <i class="fa-solid fa-user-group"></i>
+                        View friends
+                    </a>
+
+                    <a class="secondary" th:href="@{/chat}">
+                        <i class="fa-regular fa-comment"></i>
+                        Open chats
+                    </a>
+                </div>
+
             </section>
 
-            <section class="profile-info">
-                <div class="empty-box"
+            <section class="profile-about-card">
+
+                <div class="section-title inline-title">
+                    <h2>About</h2>
+                </div>
+
+                <div class="profile-empty-notice"
                      th:if="${profile.firstName == null and
-                              profile.lastName == null and
-                              profile.headline == null and
-                              profile.bio == null and
-                              profile.programmingLanguages == null and
-                              profile.githubLink == null and
-                              profile.linkedinLink == null}"
-                >
+                      profile.lastName == null and
+                      profile.headline == null and
+                      profile.bio == null and
+                      profile.programmingLanguages == null and
+                      profile.githubLink == null and
+                      profile.linkedinLink == null}">
                     <p>Your profile is still empty. Complete it to help other developers know you better.</p>
                 </div>
 
-                <div class="info-box"
-                    th:if="${(profile.firstName != null and !profile.firstName.isBlank()) or
-                             (profile.lastName != null and !profile.lastName.isBlank())}">
-                    <span>Name</span>
-                    <strong >
-                        <span th:text="${profile.firstName}"></span>
-                        <span th:text="${profile.lastName}"></span>
-                    </strong>
+                <div class="about-grid">
+
+                    <div class="about-left">
+
+                        <div class="about-item"
+                             th:if="${(profile.firstName != null and !profile.firstName.isBlank()) or
+                              (profile.lastName != null and !profile.lastName.isBlank())}">
+                            <span>Name</span>
+                            <strong>
+                                <strong
+                                        th:text="${profile.firstName + ' ' + profile.lastName}">
+                                </strong>
+                            </strong>
+                        </div>
+
+                        <div class="about-item"
+                             th:if="${profile.headline != null and !profile.headline.isBlank()}">
+                            <span>Headline</span>
+                            <strong th:text="${profile.headline}">Headline</strong>
+                        </div>
+
+                        <div class="about-item"
+                             th:if="${profile.bio != null and !profile.bio.isBlank()}">
+                            <span>Bio</span>
+                            <p th:text="${profile.bio}">Bio</p>
+                        </div>
+
+                        <div class="about-item"
+                             th:if="${profile.programmingLanguages != null and !profile.programmingLanguages.isBlank()}">
+                            <span>Programming languages</span>
+
+                            <div class="language-pills">
+                        <span class="language-pill"
+                              th:each="lang : ${#strings.arraySplit(profile.programmingLanguages, ',')}"
+                              th:text="${#strings.trim(lang)}">
+                            Java
+                        </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="about-right"
+                         th:if="${(profile.githubLink != null and !profile.githubLink.isBlank()) or
+                          (profile.linkedinLink != null and !profile.linkedinLink.isBlank())}">
+
+                        <a class="profile-social-link"
+                           th:if="${profile.githubLink != null and !profile.githubLink.isBlank()}"
+                           th:href="${profile.githubLink}"
+                           target="_blank">
+                            <i class="fa-brands fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+
+                        <a class="profile-social-link"
+                           th:if="${profile.linkedinLink != null and !profile.linkedinLink.isBlank()}"
+                           th:href="${profile.linkedinLink}"
+                           target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+
+                    </div>
+
                 </div>
 
-                <div class="info-box"
-                    th:if="${profile.headline != null and !profile.headline.isBlank()}">
-                    <span>Headline</span>
-                    <strong th:text="${profile.headline}"></strong>
-                </div>
-
-                <div class="info-box full"
-                    th:if="${profile.bio != null and !profile.bio.isBlank()}">
-                    <span>Bio</span>
-                    <p th:text="${profile.bio}"></p>
-                </div>
-
-                <div class="info-box full"
-                    th:if="${profile.programmingLanguages != null and !profile.programmingLanguages.isBlank()}">
-                    <span>Programming languages</span>
-                    <p th:text="${profile.programmingLanguages}"></p>
-                </div>
-
-                <div class="profile-links"
-                    th:if="${(profile.githubLink != null and !profile.githubLink.isBlank()) or
-                             (profile.linkedinLink != null and !profile.linkedinLink.isBlank())}">
-
-                    <a class="secondary"
-                       th:if="${profile.githubLink != null and !profile.githubLink.isEmpty()}"
-                       th:href="${profile.githubLink}"
-                       target="_blank">
-                        GitHub
-                    </a>
-
-                    <a class="secondary"
-                       th:if="${profile.linkedinLink != null and !profile.linkedinLink.isEmpty()}"
-                       th:href="${profile.linkedinLink}"
-                       target="_blank">
-                        LinkedIn
-                    </a>
-
-
-                </div>
-                <a class="cta-btn" th:href="@{/profile/edit}">Edit profile</a>
             </section>
 
-            <section class="profile-stats">
-                <div class="stat-box">
-                    <span>Total frinds</span>
-                    <strong th:text="${friendCount}">0</strong>
-                </div>
-            </section>
+            <section class="profile-posts-card">
 
-            <section class="posts-section">
-                <div class="section-title">
+                <div class="section-title inline-title">
                     <h2>My posts</h2>
                 </div>
 
@@ -120,9 +215,10 @@
                         <article th:replace="~{fragments/post-card :: card(postItem=${postItem})}"></article>
                     </th:block>
                 </div>
-            </section>
-        </main>
 
+            </section>
+
+        </main>
         <div th:replace="~{fragments/footer :: footer}"></div>
     </div>
 

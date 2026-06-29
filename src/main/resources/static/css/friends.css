@@ -1,0 +1,374 @@
+.friends-search-card {
+  width: min(900px, 90%);
+  padding: 42px;
+  border-radius: 30px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.12),
+    rgba(255,255,255,0.04)
+  );
+
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+}
+
+.friends-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+.friends-eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #a5b4fc;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.friends-hero h1 {
+  margin: 0 0 12px;
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.friends-hero p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+
+/* SEARCH */
+
+.friends-search-card .search-form {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+
+  padding: 0;
+  margin-bottom: 28px;
+
+  width: 100%;
+  background: transparent;
+  border: none;
+}
+
+.friends-search-card .search-form input {
+  flex: 1;
+  width: 100%;
+
+  padding: 14px 16px;
+  border-radius: 14px;
+
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+
+  color: var(--text);
+  outline: none;
+  font: inherit;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.friends-search-card .search-form input::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.friends-search-card .search-form input:focus {
+  border-color: rgba(165,180,252,0.55);
+  background: rgba(255,255,255,0.10);
+}
+
+.friends-search-card .search-form .cta-btn {
+  flex-shrink: 0;
+  min-width: 120px;
+}
+/* TABS + PANEL */
+
+.friends-tabs-shell {
+  overflow: hidden;
+  border-radius: 20px;
+
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.friends-tabs {
+  display: flex;
+  margin: 0;
+
+  background: rgba(255,255,255,0.045);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+.friends-tab {
+  flex: 1;
+  padding: 16px 18px;
+
+  text-decoration: none;
+  color: var(--muted);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border-right: 1px solid rgba(255,255,255,0.10);
+  position: relative;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.friends-tab:last-child {
+  border-right: none;
+}
+
+.friends-tab.active {
+  color: var(--text);
+  background: rgba(255,255,255,0.08);
+}
+
+.friends-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 0;
+
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, #6366f1);
+}
+
+.tab-badge {
+  min-width: 26px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+
+  background: rgba(99,102,241,0.85);
+  color: white;
+
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.friends-tab-panel {
+  padding: 28px;
+}
+
+.tab-section-header {
+  margin-bottom: 20px;
+}
+
+.tab-section-header h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.tab-section-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* LISTS */
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.user-card,
+.request-card,
+.friend-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+
+  padding: 16px;
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.user-info,
+.request-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.user-info strong,
+.request-info strong,
+.friend-item strong {
+  display: block;
+  font-size: 15px;
+}
+
+.user-info span,
+.request-info span,
+.friend-item span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.friend-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.16);
+
+  font-weight: 700;
+}
+
+/* FRIEND ACTIONS */
+
+.friend-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.friend-actions form {
+  margin: 0;
+}
+
+.danger-secondary {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 14px;
+
+  text-decoration: none;
+  color: #ffe2e2;
+  background: rgba(239,68,68,0.10);
+  border: 1px solid rgba(239,68,68,0.30);
+
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* REQUESTS */
+
+.request-section {
+  margin-top: 28px;
+}
+
+.request-section:first-of-type {
+  margin-top: 0;
+}
+
+.request-section h3 {
+  margin: 0 0 14px;
+  font-size: 17px;
+  color: var(--text);
+}
+
+.request-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.request-actions form {
+  margin: 0;
+}
+
+/* EMPTY STATE */
+
+.friends-tab-panel .empty-box {
+  min-height: 170px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  padding: 28px;
+  margin: 0;
+
+  border-radius: 22px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+  .friends-search-card {
+    padding: 34px;
+  }
+
+  .friends-hero {
+    grid-template-columns: 1fr;
+  }
+
+
+}
+
+@media (max-width: 700px) {
+  .friends-search-card {
+    padding: 28px;
+  }
+
+  .friends-search-card .search-form {
+    flex-direction: column;
+  }
+
+  .friends-tabs {
+    flex-direction: column;
+  }
+
+  .friends-tab {
+    justify-content: space-between;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+  }
+
+  .friends-tab:last-child {
+    border-bottom: none;
+  }
+
+  .user-card,
+  .request-card,
+  .friend-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .friend-actions,
+  .request-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .friend-actions .secondary,
+  .friend-actions form,
+  .friend-actions button,
+  .request-actions form,
+  .request-actions button {
+    width: 100%;
+    text-align: center;
+  }
+}

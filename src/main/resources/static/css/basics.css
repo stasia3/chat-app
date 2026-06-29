@@ -470,184 +470,23 @@ p {
 
 }
 
-.friends-card {
-  width: min(900px, 90%);
-  padding: 42px;
-  border-radius: 30px;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.12),
-    rgba(255,255,255,0.04)
-  );
-  border: 1px solid rgba(255,255,255,0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: var(--shadow);
-}
 
-.friends-header {
-  margin-bottom: 28px;
-}
 
-.friends-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
 
-.friend-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
 
-  padding: 16px;
-  border-radius: 18px;
 
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.12);
-}
 
-.friend-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.16);
 
-  font-weight: 700;
-}
 
-.friend-item strong {
-  display: block;
-  font-size: 15px;
-}
 
-.friend-item span {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 13px;
-}
 
-@media (max-width: 700px) {
-  .friends-card {
-    padding: 30px;
-  }
-}
 
-.friends-search-card {
-  width: min(900px, 90%);
-  padding: 42px;
-  border-radius: 30px;
 
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.12),
-    rgba(255,255,255,0.04)
-  );
 
-  border: 1px solid rgba(255,255,255,0.15);
 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
 
-  box-shadow: var(--shadow);
-}
-
-.search-form {
-  display: flex;
-  gap: 14px;
-  margin-bottom: 28px;
-}
-
-.search-form input {
-  flex: 1;
-
-  padding: 14px 16px;
-
-  border-radius: 14px;
-
-  border: 1px solid rgba(255,255,255,0.14);
-
-  background: rgba(255,255,255,0.08);
-
-  color: var(--text);
-
-  outline: none;
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.search-form input::placeholder {
-  color: rgba(238,244,255,0.45);
-}
-
-.search-form input:focus {
-  border-color: rgba(255,255,255,0.28);
-  background: rgba(255,255,255,0.10);
-}
-
-.search-results {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.user-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-
-  padding: 16px;
-
-  border-radius: 18px;
-
-  background: rgba(255,255,255,0.07);
-
-  border: 1px solid rgba(255,255,255,0.12);
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.user-info strong {
-  display: block;
-  font-size: 15px;
-}
-
-.user-info span {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-@media (max-width: 700px) {
-
-  .friends-search-card {
-    padding: 30px;
-  }
-
-  .search-form {
-    flex-direction: column;
-  }
-
-  .user-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-}
 
 .notifications-card {
   width: min(900px, 90%);

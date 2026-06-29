@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">Find Friends · DevPortal</title>
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/friends.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div th:replace="~{fragments/navbar :: menu}"></div>
+
+    <main class="friends-search-card">
+
+        <section class="friends-hero">
+            <div class="friends-hero-content">
+                <span class="friends-eyebrow">Developer network</span>
+
+                <h1>Find friends</h1>
+
+                <p>
+                    Search, connect, and manage your DevPortal connections.
+                </p>
+            </div>
+
+        </section>
+
+        <form method="get"
+              th:action="@{/friends}"
+              class="search-form">
+
+            <input type="hidden"
+                   name="tab"
+                   th:value="${activeTab}">
+
+            <input
+                    type="text"
+                    name="search"
+                    th:placeholder="${activeTab == 'friends' ? 'Search your friends...' :
+                             activeTab == 'requests' ? 'Search your requests...' :
+                             'Search developers by username...'}"
+                    th:value="${search}">
+
+            <button type="submit" class="cta-btn">
+                Search
+            </button>
+
+        </form>
+
+
+        <div class="friends-tabs-shell">
+            <nav class="friends-tabs">
+
+                <a th:href="@{/friends(tab='discover')}"
+                   class="friends-tab"
+                   th:classappend="${activeTab == 'discover'} ? ' active'">
+                    <span>Discover</span>
+                </a>
+
+                <a th:href="@{/friends(tab='friends')}"
+                   class="friends-tab"
+                   th:classappend="${activeTab == 'friends'} ? ' active'">
+                    <span>My friends</span>
+                    <strong class="tab-badge" th:text="${friendCount}">0</strong>
+                </a>
+
+                <a th:href="@{/friends(tab='requests')}"
+                   class="friends-tab"
+                   th:classappend="${activeTab == 'requests'} ? ' active'">
+                    <span>Requests</span>
+                    <strong class="tab-badge" th:text="${requestCount}">0</strong>
+                </a>
+
+            </nav>
+            <section class="friends-tab-panel">
+
+                <div th:if="${activeTab == null or activeTab == 'discover'}">
+
+                    <div class="tab-section-header">
+                        <h2>Discover new people</h2>
+                        <p>Search for developers and send friend requests.</p>
+                    </div>
+
+                    <div class="search-results">
+
+                        <div th:if="${users != null and #lists.isEmpty(users)}"
+                             class="empty-box">
+                            <p>No users found.</p>
+                        </div>
+
+                        <div th:if="${users != null}"
+                             th:each="user : ${users}"
+                             class="user-card">
+
+                            <div class="user-info">
+
+                                <div class="friend-avatar">
+                                    <span th:text="${#strings.substring(user.username,0,1)}">U</span>
+                                </div>
+
+                                <div>
+                                    <strong th:text="${user.username}">username</strong>
+                                    <span>DevPortal developer</span>
+                                </div>
+
+                            </div>
+
+                            <form th:action="@{/friends/request/{username}(username=${user.username})}"
+                                  method="post">
+
+                                <button type="submit" class="secondary">
+                                    Send request
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div th:if="${activeTab == 'friends'}">
+
+                    <div class="tab-section-header">
+                        <h2>My friends</h2>
+                        <p>Your accepted DevPortal connections.</p>
+                    </div>
+
+                    <div th:if="${friends != null and #lists.isEmpty(friends)}"
+                         class="empty-box">
+                        <p>No friends found.</p>
+                    </div>
+
+                    <div th:if="${friends != null}"
+                         class="search-results">
+
+                        <div th:each="friend : ${friends}"
+                             class="user-card">
+
+                            <div class="user-info">
+
+                                <div class="friend-avatar">
+                                    <span th:text="${#strings.substring(friend.username,0,1)}">U</span>
+                                </div>
+
+                                <div>
+                                    <strong th:text="${friend.username}">username</strong>
+                                    <span>DevPortal friend</span>
+                                </div>
+
+                            </div>
+
+                            <div class="friend-actions">
+                                <a th:href="@{/chat/{username}(username=${friend.username})}"
+                                   class="secondary">
+                                    Message
+                                </a>
+
+                                <form th:action="@{/friends/remove/{username}(username=${friend.username})}"
+                                      method="post">
+                                    <button type="submit" class="danger-secondary">
+                                        Remove
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div th:if="${activeTab == 'requests'}">
+
+                    <div class="tab-section-header">
+                        <h2>Requests</h2>
+                        <p>Manage received, pending, and rejected friend requests.</p>
+                    </div>
+
+                    <section class="request-section">
+                        <h3>New requests</h3>
+
+                        <div th:if="${newRequests != null and #lists.isEmpty(newRequests)}"
+                             class="empty-box">
+                            <p>No new requests.</p>
+                        </div>
+
+                        <div th:each="request : ${newRequests}"
+                             class="request-card">
+
+                            <div class="request-info">
+                                <div class="friend-avatar">
+                                    <span th:text="${#strings.substring(request.sender.username,0,1)}">U</span>
+                                </div>
+
+                                <div>
+                                    <strong th:text="${request.sender.username}">username</strong>
+                                    <span>Wants to connect with you</span>
+                                </div>
+                            </div>
+
+                            <div class="request-actions">
+                                <form th:action="@{/notifications/accept/{id}(id=${request.id})}"
+                                      method="post">
+                                    <button type="submit" class="accept-btn">Accept</button>
+                                </form>
+
+                                <form th:action="@{/notifications/reject/{id}(id=${request.id})}"
+                                      method="post">
+                                    <button type="submit" class="reject-btn">Reject</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="request-section">
+                        <h3>Pending sent</h3>
+
+                        <div th:if="${pendingRequests != null and #lists.isEmpty(pendingRequests)}"
+                             class="empty-box">
+                            <p>No pending sent requests.</p>
+                        </div>
+
+                        <div th:each="request : ${pendingRequests}"
+                             class="request-card">
+
+                            <div class="request-info">
+                                <div class="friend-avatar">
+                                    <span th:text="${#strings.substring(request.receiver.username,0,1)}">U</span>
+                                </div>
+
+                                <div>
+                                    <strong th:text="${request.receiver.username}">username</strong>
+                                    <span>Request is waiting for response</span>
+                                </div>
+                            </div>
+
+                            <div class="request-actions">
+                                <form th:action="@{/friends/request/{id}/cancel(id=${request.id})}"
+                                      method="post">
+                                    <button type="submit" class="danger-secondary">Cancel</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="request-section">
+                        <h3>Rejected sent</h3>
+
+                        <div th:if="${rejectedRequests != null and #lists.isEmpty(rejectedRequests)}"
+                             class="empty-box">
+                            <p>No rejected requests.</p>
+                        </div>
+
+                        <div th:each="request : ${rejectedRequests}"
+                             class="request-card">
+
+                            <div class="request-info">
+                                <div class="friend-avatar">
+                                    <span th:text="${#strings.substring(request.receiver.username,0,1)}">U</span>
+                                </div>
+
+                                <div>
+                                    <strong th:text="${request.receiver.username}">username</strong>
+                                    <span>Request was rejected</span>
+                                </div>
+                            </div>
+
+                            <div class="request-actions">
+                                <form th:action="@{/friends/request/{id}/delete(id=${request.id})}"
+                                      method="post">
+                                    <button type="submit" class="danger-secondary">Remove</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+</body>
+</html>

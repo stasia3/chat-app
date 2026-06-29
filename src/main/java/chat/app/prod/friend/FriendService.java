@@ -119,4 +119,146 @@ public class FriendService {
                 })
                 .toList();
     }
+
+    public int countSentRequests(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return friendRequestRepository
+                .findBySenderAndStatus(user, FriendRequestStatus.PENDING)
+                .size();
+    }
+
+    public List<User> searchUsersForFriendRequest(String currentUsername, String search) {
+        if (search == null || search.trim().isEmpty()) {
+            return List.of();
+        }
+
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return userRepository.findByUsernameContainingIgnoreCase(search.trim())
+                .stream()
+                .filter(user -> !user.getUsername().equals(currentUsername))
+                .filter(user -> friendRequestRepository
+                        .findBySenderAndReceiverOrSenderAndReceiver(
+                                currentUser, user,
+                                user, currentUser
+                        )
+                        .isEmpty())
+                .toList();
+    }
+
+    public List<User> searchFriends(String currentUsername, String search) {
+        List<User> friends = getFriends(currentUsername);
+
+        if (search == null || search.trim().isEmpty()) {
+            return friends;
+        }
+
+        String normalizedSearch = search.trim().toLowerCase();
+
+        return friends.stream()
+                .filter(friend -> friend.getUsername().toLowerCase().contains(normalizedSearch))
+                .toList();
+    }
+
+    public List<FriendRequest> getPendingSentRequests(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return friendRequestRepository.findBySenderAndStatus(user, FriendRequestStatus.PENDING);
+    }
+
+    public List<FriendRequest> getRejectedSentRequests(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return friendRequestRepository.findBySenderAndStatus(user, FriendRequestStatus.REJECTED);
+    }
+
+    public void removeFriend(String currentUsername, String friendUsername) {
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new RuntimeException("Current user not found"));
+
+        User friend = userRepository.findByUsername(friendUsername)
+                .orElseThrow(() -> new RuntimeException("Friend not found"));
+
+        FriendRequest request = friendRequestRepository
+                .findBySenderAndReceiverAndStatus(currentUser, friend, FriendRequestStatus.ACCEPTED)
+                .or(() -> friendRequestRepository
+                        .findBySenderAndReceiverAndStatus(friend, currentUser, FriendRequestStatus.ACCEPTED))
+                .orElseThrow(() -> new RuntimeException("Friendship not found"));
+
+        friendRequestRepository.delete(request);
+    }
+
+    public void cancelSentRequest(Long requestId, String currentUsername) {
+        FriendRequest request = friendRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
+        if (!request.getSender().getUsername().equals(currentUsername)) {
+            return;
+        }
+
+        if (request.getStatus() != FriendRequestStatus.PENDING) {
+            return;
+        }
+
+        friendRequestRepository.delete(request);
+    }
+
+    public void deleteRejectedSentRequest(Long requestId, String currentUsername) {
+        FriendRequest request = friendRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
+        if (!request.getSender().getUsername().equals(currentUsername)) {
+            return;
+        }
+
+        if (request.getStatus() != FriendRequestStatus.REJECTED) {
+            return;
+        }
+
+        friendRequestRepository.delete(request);
+    }
+
+    public int countAllRequests(String username) {
+        return getPendingRequests(username).size();
+//                + getPendingSentRequests(username).size()
+//                + getRejectedSentRequests(username).size();
+    }
+
+    public List<FriendRequest> searchPendingReceivedRequests(String username, String search) {
+        return filterRequestsByUser(getPendingRequests(username), search, true);
+    }
+
+    public List<FriendRequest> searchPendingSentRequests(String username, String search) {
+        return filterRequestsByUser(getPendingSentRequests(username), search, false);
+    }
+
+    public List<FriendRequest> searchRejectedSentRequests(String username, String search) {
+        return filterRequestsByUser(getRejectedSentRequests(username), search, false);
+    }
+
+    private List<FriendRequest> filterRequestsByUser(List<FriendRequest> requests,
+                                                     String search,
+                                                     boolean searchSender) {
+        if (search == null || search.trim().isEmpty()) {
+            return requests;
+        }
+
+        String normalizedSearch = search.trim().toLowerCase();
+
+        return requests.stream()
+                .filter(request -> {
+                    String username = searchSender
+                            ? request.getSender().getUsername()
+                            : request.getReceiver().getUsername();
+
+                    return username.toLowerCase().contains(normalizedSearch);
+                })
+                .toList();
+    }
+
 }

@@ -18,18 +18,42 @@ public class FriendController {
     }
 
     @GetMapping("/friends")
-    public String friendsPage(@RequestParam(required = false) String username,
+    public String friendsPage(@RequestParam(defaultValue = "discover") String tab,
+                              @RequestParam(required = false) String search,
                               Model model,
                               Authentication authentication) {
+
         String currentUsername = authentication.getName();
 
-        List<User> users = friendService.searchUsers(username, currentUsername);
+        model.addAttribute("title", "Find Friends · DevPortal");
+        model.addAttribute("activeTab", tab);
+        model.addAttribute("search", search);
 
-        model.addAttribute("title", "Friends");
-        model.addAttribute("search", username);
-        model.addAttribute("users", users);
+        model.addAttribute("friendCount", friendService.countFriends(currentUsername));
+        model.addAttribute("requestCount", friendService.countAllRequests(currentUsername));
 
-        return "friend/friends";
+        if ("discover".equals(tab)) {
+            model.addAttribute("users",
+                    friendService.searchUsersForFriendRequest(currentUsername, search));
+        }
+
+        if ("friends".equals(tab)) {
+            model.addAttribute("friends",
+                    friendService.searchFriends(currentUsername, search));
+        }
+
+        if ("requests".equals(tab)) {
+            model.addAttribute("newRequests",
+                    friendService.searchPendingReceivedRequests(currentUsername, search));
+
+            model.addAttribute("pendingRequests",
+                    friendService.searchPendingSentRequests(currentUsername, search));
+
+            model.addAttribute("rejectedRequests",
+                    friendService.searchRejectedSentRequests(currentUsername, search));
+        }
+
+        return "friend/find";
     }
 
     @PostMapping("/friends/request/{username}")
@@ -39,7 +63,7 @@ public class FriendController {
 
         friendService.sendFriendRequest(currentUsername, username);
 
-        return "redirect:/friends";
+        return "redirect:/friends?tab=discover";
     }
 
     @GetMapping("/notifications")
@@ -57,13 +81,13 @@ public class FriendController {
     @PostMapping("/notifications/accept/{id}")
     public String acceptRequest(@PathVariable Long id, Authentication authentication) {
         friendService.acceptRequest(id, authentication.getName());
-        return "redirect:/notifications";
+        return "redirect:/friends?tab=requests";
     }
 
     @PostMapping("/notifications/reject/{id}")
     public String rejectRequest(@PathVariable Long id, Authentication authentication) {
         friendService.rejectRequest(id, authentication.getName());
-        return "redirect:/notifications";
+        return "redirect:/friends?tab=requests";
     }
 
     @GetMapping("/friends/list")
@@ -73,6 +97,33 @@ public class FriendController {
         model.addAttribute("title", "My Friends");
         model.addAttribute("friends", friendService.getFriends(currentUsername));
 
-        return "friend/friends-list";
+        return "redirect:/friends?tab=friends";
+    }
+
+    @PostMapping("/friends/remove/{username}")
+    public String removeFriend(@PathVariable String username,
+                               Authentication authentication) {
+
+        friendService.removeFriend(authentication.getName(), username);
+
+        return "redirect:/friends?tab=friends";
+    }
+
+    @PostMapping("/friends/request/{id}/cancel")
+    public String cancelSentRequest(@PathVariable Long id,
+                                    Authentication authentication) {
+
+        friendService.cancelSentRequest(id, authentication.getName());
+
+        return "redirect:/friends?tab=requests";
+    }
+
+    @PostMapping("/friends/request/{id}/delete")
+    public String deleteRejectedSentRequest(@PathVariable Long id,
+                                            Authentication authentication) {
+
+        friendService.deleteRejectedSentRequest(id, authentication.getName());
+
+        return "redirect:/friends?tab=requests";
     }
 }

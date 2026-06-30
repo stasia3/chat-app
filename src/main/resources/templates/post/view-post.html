@@ -40,7 +40,16 @@
             <div class="feed-post-header">
 
                 <div class="post-author-avatar">
-                    <span th:text="${#strings.substring(postItem.post.user.username,0,1)}">U</span>
+
+                    <img th:if="${postItem.authorProfileImageUrl != null and !postItem.authorProfileImageUrl.isBlank()}"
+                         th:src="@{${postItem.authorProfileImageUrl}}"
+                         alt="Profile photo">
+
+                    <span th:if="${postItem.authorProfileImageUrl == null or postItem.authorProfileImageUrl.isBlank()}"
+                          th:text="${#strings.toUpperCase(#strings.substring(postItem.post.user.username,0,1))}">
+        U
+    </span>
+
                 </div>
 
                 <div class="post-author-info">
@@ -140,7 +149,16 @@
                 <div class="comment-input-card">
 
                     <div class="comment-avatar">
-                        <span th:text="${#strings.substring(username,0,1)}">U</span>
+
+                        <img th:if="${currentUserImageUrl != null and !currentUserImageUrl.isBlank()}"
+                             th:src="@{${currentUserImageUrl}}"
+                             alt="Profile photo">
+
+                        <span th:if="${currentUserImageUrl == null or currentUserImageUrl.isBlank()}"
+                              th:text="${#strings.toUpperCase(#strings.substring(username,0,1))}">
+                            U
+                        </span>
+
                     </div>
 
                     <div class="comment-input-area">
@@ -179,29 +197,38 @@
             </div>
 
             <div class="comments-list">
-                <article th:each="comment : ${comments}" class="comment-card">
+                <article th:each="commentItem : ${comments}" class="comment-card">
 
                     <div class="comment-avatar">
-                        <span th:text="${#strings.substring(comment.user.username,0,1)}">U</span>
+
+                        <img th:if="${commentItem.authorProfileImageUrl != null and !commentItem.authorProfileImageUrl.isBlank()}"
+                             th:src="@{${commentItem.authorProfileImageUrl}}"
+                             alt="Profile photo">
+
+                        <span th:if="${commentItem.authorProfileImageUrl == null or commentItem.authorProfileImageUrl.isBlank()}"
+                              th:text="${#strings.toUpperCase(#strings.substring(commentItem.comment.user.username,0,1))}">
+                            U
+                        </span>
+
                     </div>
 
                     <div class="comment-body">
                         <div class="comment-top">
-                            <strong th:text="${comment.user.username}">username</strong>
+                            <strong th:text="${commentItem.comment.user.username}">username</strong>
 
-                            <small th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy • HH:mm')}">
+                            <small th:text="${#temporals.format(commentItem.comment.createdAt, 'dd MMM yyyy • HH:mm')}">
                                 date
                             </small>
                         </div>
 
-                        <p th:text="${comment.content}">
+                        <p th:text="${commentItem.comment.content}">
                             Comment text
                         </p>
 
-                        <form th:if="${comment.user.username == username or postItem.post.user.username == username}"
+                        <form th:if="${commentItem.comment.user.username == username or postItem.post.user.username == username}"
                               th:action="@{/posts/{postId}/comments/{commentId}/delete(
                   postId=${postItem.post.id},
-                  commentId=${comment.id}
+                  commentId=${commentItem.comment.id}
               )}"
                               method="post"
                               class="comment-delete-form">

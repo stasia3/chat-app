@@ -1,5 +1,6 @@
 package chat.app.prod.post;
 
+import chat.app.prod.profile.ProfileRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +12,11 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final ProfileRepository profileRepository;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, ProfileRepository profileRepository) {
         this.postService = postService;
+        this.profileRepository = profileRepository;
     }
 
     @GetMapping("/posts")
@@ -93,10 +96,15 @@ public class PostController {
                            Authentication authentication) {
         String username = authentication.getName();
 
+        String currentUserImageUrl = profileRepository.findByUserUsername(username)
+                .map(profile -> profile.getProfileImageUrl())
+                .orElse(null);
+
+        model.addAttribute("currentUserImageUrl", currentUserImageUrl);
         model.addAttribute("title", "View Post");
         model.addAttribute("username", username);
         model.addAttribute("postItem", postService.getPostCard(postId, username));
-        model.addAttribute("comments", postService.getComments(postId));
+        model.addAttribute("comments", postService.getCommentDtos(postId));
 
         return "post/view-post";
     }

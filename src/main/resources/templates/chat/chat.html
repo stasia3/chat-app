@@ -38,18 +38,27 @@
 
                 <a th:each="user : ${users}"
                    class="chat-friend-item"
-                   th:attr="data-username=${user.username}"
-                   th:classappend="${selectedUsername != null and user.username == selectedUsername} ? ' active' : ''"
-                   th:href="@{/chat/{username}(username=${user.username})}">
+                   th:attr="data-username=${user.user.username}"
+                   th:classappend="${selectedUsername != null and user.user.username == selectedUsername} ? ' active' : ''"
+                   th:href="@{/chat/{username}(username=${user.user.username})}">
 
                     <div class="friend-avatar">
-                    <span th:text="${#strings.substring(user.username,0,1).toUpperCase()}">
-                        U
-                    </span>
+
+                        <img th:if="${user.profileImageUrl != null and !user.profileImageUrl.isBlank()}"
+                             th:src="@{${user.profileImageUrl}}"
+                             alt="Profile photo">
+
+                        <span th:if="${user.profileImageUrl == null or user.profileImageUrl.isBlank()}"
+                              th:text="${#strings.substring(user.user.username,0,1).toUpperCase()}">
+        U
+    </span>
+
                     </div>
 
+
+
                     <div class="friend-preview">
-                        <strong th:text="${user.username}">
+                        <strong th:text="${user.user.username}">
                             username
                         </strong>
 
@@ -85,7 +94,16 @@
                     <div class="chat-selected-user">
 
                         <div class="friend-avatar small-avatar">
-                            <span th:text="${#strings.substring(selectedUsername,0,1).toUpperCase()}">U</span>
+
+                            <img th:if="${selectedUserImageUrl != null and !selectedUserImageUrl.isBlank()}"
+                                 th:src="@{${selectedUserImageUrl}}"
+                                 alt="Profile photo">
+
+                            <span th:if="${selectedUserImageUrl == null or selectedUserImageUrl.isBlank()}"
+                                  th:text="${#strings.toUpperCase(#strings.substring(selectedUsername,0,1))}">
+        U
+    </span>
+
                         </div>
 
                         <strong th:text="${selectedUsername}">username</strong>

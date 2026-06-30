@@ -250,4 +250,18 @@ public class PostService {
                 .map(profile -> profile.getProfileImageUrl())
                 .orElse(null);
     }
+
+    public List<CommentDto> getCommentDtos(Long postId) {
+        return getComments(postId)
+                .stream()
+                .map(comment -> {
+                    String imageUrl = profileRepository
+                            .findByUserUsername(comment.getUser().getUsername())
+                            .map(profile -> profile.getProfileImageUrl())
+                            .orElse(null);
+
+                    return new CommentDto(comment, imageUrl);
+                })
+                .toList();
+    }
 }

@@ -1,5 +1,6 @@
 package chat.app.prod.friend;
 
+import chat.app.prod.profile.ProfileRepository;
 import chat.app.prod.user.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -12,9 +13,11 @@ import java.util.List;
 public class FriendController {
 
     private final FriendService friendService;
+    private final ProfileRepository profileRepository;
 
-    public FriendController(FriendService friendService) {
+    public FriendController(FriendService friendService, ProfileRepository profileRepository) {
         this.friendService = friendService;
+        this.profileRepository = profileRepository;
     }
 
     @GetMapping("/friends")
@@ -34,23 +37,38 @@ public class FriendController {
 
         if ("discover".equals(tab)) {
             model.addAttribute("users",
-                    friendService.searchUsersForFriendRequest(currentUsername, search));
+                    friendService.searchUsersForFriendRequest(currentUsername, search)
+                            .stream()
+                            .map(this::toFriendUserDto)
+                            .toList());
         }
 
         if ("friends".equals(tab)) {
             model.addAttribute("friends",
-                    friendService.searchFriends(currentUsername, search));
+                    friendService.searchFriends(currentUsername, search)
+                            .stream()
+                            .map(this::toFriendUserDto)
+                            .toList());
         }
 
         if ("requests".equals(tab)) {
             model.addAttribute("newRequests",
-                    friendService.searchPendingReceivedRequests(currentUsername, search));
+                    friendService.searchPendingReceivedRequests(currentUsername, search)
+                            .stream()
+                            .map(request -> toFriendRequestDto(request, true))
+                            .toList());
 
             model.addAttribute("pendingRequests",
-                    friendService.searchPendingSentRequests(currentUsername, search));
+                    friendService.searchPendingSentRequests(currentUsername, search)
+                            .stream()
+                            .map(request -> toFriendRequestDto(request, false))
+                            .toList());
 
             model.addAttribute("rejectedRequests",
-                    friendService.searchRejectedSentRequests(currentUsername, search));
+                    friendService.searchRejectedSentRequests(currentUsername, search)
+                            .stream()
+                            .map(request -> toFriendRequestDto(request, false))
+                            .toList());
         }
 
         return "friend/find";
@@ -126,4 +144,25 @@ public class FriendController {
 
         return "redirect:/friends?tab=requests";
     }
+
+    private FriendUserDto toFriendUserDto(User user) {
+        String imageUrl = profileRepository.findByUserUsername(user.getUsername())
+                .map(profile -> profile.getProfileImageUrl())
+                .orElse(null);
+
+        return new FriendUserDto(user, imageUrl);
+    }
+    private FriendRequestDto toFriendRequestDto(FriendRequest request, boolean senderAvatar) {
+
+        String username = senderAvatar
+                ? request.getSender().getUsername()
+                : request.getReceiver().getUsername();
+
+        String imageUrl = profileRepository.findByUserUsername(username)
+                .map(profile -> profile.getProfileImageUrl())
+                .orElse(null);
+
+        return new FriendRequestDto(request, imageUrl);
+    }
+
 }

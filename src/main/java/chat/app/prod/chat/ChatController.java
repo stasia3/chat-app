@@ -1,5 +1,8 @@
 package chat.app.prod.chat;
 
+import chat.app.prod.friend.FriendUserDto;
+import chat.app.prod.profile.Profile;
+import chat.app.prod.profile.ProfileRepository;
 import chat.app.prod.user.User;
 import chat.app.prod.friend.FriendService;
 import org.springframework.security.core.Authentication;
@@ -13,10 +16,13 @@ import java.util.List;
 public class ChatController {
     private final FriendService friendService;
     private final ChatService chatService;
+    private final ProfileRepository profileRepository;
 
-    public ChatController(FriendService friendService, ChatService chatService) {
+
+    public ChatController(FriendService friendService, ChatService chatService, ProfileRepository profileRepository) {
         this.friendService = friendService;
         this.chatService = chatService;
+        this.profileRepository = profileRepository;
     }
 
     @GetMapping("/users")
@@ -40,7 +46,11 @@ public class ChatController {
         String currentUsername = authentication.getName();
 
         model.addAttribute("currentUsername", currentUsername);
-        model.addAttribute("users", friendService.getFriends(currentUsername));
+        model.addAttribute("users",
+                friendService.getFriends(currentUsername)
+                        .stream()
+                        .map(this::toFriendUserDto)
+                        .toList());
         model.addAttribute("selectedUsername", null);
         model.addAttribute("messages", List.of());
 
@@ -57,9 +67,18 @@ public class ChatController {
             return "redirect:/users";
         }
 
+        String selectedUserImageUrl = profileRepository.findByUserUsername(username)
+                .map(profile -> profile.getProfileImageUrl())
+                .orElse(null);
+
+        model.addAttribute("selectedUserImageUrl", selectedUserImageUrl);
         model.addAttribute("currentUsername", currentUsername);
         model.addAttribute("selectedUsername", username);
-        model.addAttribute("users", friendService.getFriends(currentUsername));
+        model.addAttribute("users",
+                friendService.getFriends(currentUsername)
+                        .stream()
+                        .map(this::toFriendUserDto)
+                        .toList());
         model.addAttribute("messages", chatService.getConversationDtos(currentUsername, username));
 
         return "chat/chat";
@@ -97,5 +116,13 @@ public class ChatController {
                 .stream()
                 .map(chatService::toDto)
                 .toList();
+    }
+
+    private FriendUserDto toFriendUserDto(User user) {
+        String imageUrl = profileRepository.findByUserUsername(user.getUsername())
+                .map(profile -> profile.getProfileImageUrl())
+                .orElse(null);
+
+        return new FriendUserDto(user, imageUrl);
     }
 }

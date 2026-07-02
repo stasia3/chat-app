@@ -9,6 +9,8 @@
 
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/report.css}">
+
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -110,7 +112,28 @@
         document.addEventListener("DOMContentLoaded", function () {
             hljs.highlightAll();
         });
-    </script>
+
+    document.addEventListener("click", function (event) {
+        const menuBtn = event.target.closest(".post-menu-btn");
+
+        document.querySelectorAll(".post-menu.open").forEach(menu => {
+            if (!menu.contains(event.target)) {
+                menu.classList.remove("open");
+            }
+        });
+
+        if (menuBtn) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const menu = menuBtn.closest(".post-menu");
+            menu.classList.toggle("open");
+        }
+    });
+</script>
 <script th:src="@{/js/post-preview.js}"></script>
+
+<div th:replace="~{fragments/report-modal :: reportModal}"></div>
+<script th:src="@{/js/report-modal.js}"></script>
 </body>
 </html>

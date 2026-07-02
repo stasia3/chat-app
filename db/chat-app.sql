@@ -148,3 +148,58 @@ ON comments (user_id);
 
 CREATE INDEX idx_comments_created_at
 ON comments (created_at);
+
+-- REPORTS table
+
+CREATE TABLE reports (
+    id BIGSERIAL PRIMARY KEY,
+
+    reporter_id BIGINT NOT NULL,
+
+    reported_user_id BIGINT,
+    reported_post_id BIGINT,
+    reported_comment_id BIGINT,
+
+    target_type VARCHAR(20) NOT NULL,
+    reason VARCHAR(100) NOT NULL,
+    details TEXT,
+
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+
+    created_at TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_reports_reporter
+        FOREIGN KEY (reporter_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_reports_reported_user
+        FOREIGN KEY (reported_user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_reports_reported_post
+        FOREIGN KEY (reported_post_id)
+        REFERENCES posts(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_reports_reported_comment
+        FOREIGN KEY (reported_comment_id)
+        REFERENCES comments(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_reports_target_type
+        CHECK (target_type IN ('USER', 'POST', 'COMMENT')),
+
+    CONSTRAINT chk_reports_status
+        CHECK (status IN ('PENDING', 'REVIEWED', 'DISMISSED', 'ACTION_TAKEN')),
+
+    CONSTRAINT chk_reports_target_exists
+        CHECK (
+            (target_type = 'USER' AND reported_user_id IS NOT NULL AND reported_post_id IS NULL AND reported_comment_id IS NULL)
+            OR
+            (target_type = 'POST' AND reported_post_id IS NOT NULL AND reported_user_id IS NULL AND reported_comment_id IS NULL)
+            OR
+            (target_type = 'COMMENT' AND reported_comment_id IS NOT NULL AND reported_user_id IS NULL AND reported_post_id IS NULL)
+        )
+);

@@ -176,6 +176,8 @@
   border-radius: 22px;
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.12);
+
+  position: relative;
 }
 
 .feed-post-header {
@@ -889,19 +891,19 @@
 
 /* deleting btn */
 
-.feed-post {
-  position: relative;
-}
-
 .post-menu {
   position: absolute;
   top: 18px;
   right: 18px;
 }
 
+
 .post-menu-btn {
   width: 34px;
   height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.07);
@@ -913,16 +915,22 @@
   display: none;
   position: absolute;
   right: 0;
-  top: 34px;
+  top: 42px;
 
   margin: 0;
-  padding-top: 8px;
+  min-width: 160px;
+  padding: 8px;
+
+   border-radius: 14px;
+    background: rgba(15, 23, 42, .96);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: var(--shadow);
+
+    z-index: 30;
 }
 
-.post-menu:hover .post-menu-dropdown,
-.post-menu-dropdown:hover {
-  display: block;
-}
+
+
 .post-delete-btn {
   min-width: 140px;
   padding: 10px 14px;
@@ -1293,4 +1301,41 @@
 
   background: rgba(255,255,255,0.05);
   border: 1px dashed rgba(255,255,255,0.14);
+}
+
+
+
+.post-report-btn,
+.post-delete-btn {
+  width: 100%;
+  padding: 11px 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+
+  cursor: pointer;
+  font-weight: 600;
+  text-align: left;
+}
+
+.post-report-btn {
+  color: #fecaca;
+}
+
+.post-delete-btn {
+  color: #fca5a5;
+}
+
+.post-report-btn:hover,
+.post-delete-btn:hover {
+  background: rgba(239,68,68,.14);
+}
+
+.post-menu.open .post-menu-dropdown {
+  display: block;
 }

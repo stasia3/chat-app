@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/profile.css}">
     <link rel="stylesheet" th:href="@{/css/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/report.css}">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -119,6 +120,13 @@
                         Add friend
                     </button>
                 </form>
+
+                <button type="button"
+                        class="secondary report-trigger"
+                        th:data-report-url="@{/reports/users/{username}(username=${username})}">
+                    <i class="fa-solid fa-flag"></i>
+                    Report user
+                </button>
 
             </div>
 
@@ -262,6 +270,8 @@
     });
 </script>
 <script th:src="@{/js/post-preview.js}"></script>
+<div th:replace="~{fragments/report-modal :: reportModal}"></div>
+<script th:src="@{/js/report-modal.js}"></script>
 </body>
 
 </html>

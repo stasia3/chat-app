@@ -1,0 +1,67 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="reportModal" id="reportModal" class="report-modal-overlay hidden">
+
+    <div class="report-modal">
+
+        <div class="report-modal-header">
+            <div>
+                <h3>Report content</h3>
+                <p>Tell us why this should be reviewed.</p>
+            </div>
+
+            <button type="button" id="closeReportModal" class="report-modal-close">
+                ×
+            </button>
+        </div>
+
+        <form id="reportForm" method="post">
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <input type="hidden" name="postId" id="reportPostId">
+
+            <div class="field">
+                <label for="reportReason">Reason</label>
+
+                <select id="reportReason" name="reason" required>
+                    <option value="">Choose a reason</option>
+                    <option value="Spam">Spam</option>
+                    <option value="Harassment">Harassment</option>
+                    <option value="Hate speech">Hate speech</option>
+                    <option value="Inappropriate content">Inappropriate content</option>
+                    <option value="Misinformation">Misinformation</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="reportDetails">Details</label>
+
+                <textarea id="reportDetails"
+                          name="details"
+                          placeholder="Add details if needed..."></textarea>
+            </div>
+
+            <div class="report-modal-actions">
+                <button type="button" class="secondary" id="cancelReportModal">
+                    Cancel
+                </button>
+
+                <button type="submit" class="cta-btn">
+                    Submit report
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

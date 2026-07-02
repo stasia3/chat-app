@@ -209,9 +209,15 @@ public class PostService {
             return;
         }
 
+        if (isPostOwner && !isCommentOwner) {
+            comment.setDeleted(true);
+            comment.setDeletedByPostAuthor(true);
+            commentRepository.save(comment);
+            return;
+        }
+
         commentRepository.delete(comment);
     }
-
     public void deletePost(Long postId, String username) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));

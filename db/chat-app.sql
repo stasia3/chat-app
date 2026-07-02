@@ -126,6 +126,8 @@ CREATE TABLE comments (
     user_id BIGINT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL,
+    deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    deleted_by_post_author BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT fk_comments_post
         FOREIGN KEY (post_id)

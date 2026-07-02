@@ -241,11 +241,18 @@
                             </small>
                         </div>
 
-                        <div class="comment-content-html"
+                        <div th:if="${!commentItem.comment.deleted}"
+                             class="comment-content-html"
                              th:utext="${commentItem.comment.content}">
                         </div>
 
-                        <form th:if="${commentItem.comment.user.username == username or postItem.post.user.username == username}"
+                        <div th:if="${commentItem.comment.deleted and commentItem.comment.deletedByPostAuthor}"
+                             class="deleted-comment-notice">
+                            This comment was deleted by the author of the post.
+                        </div>
+
+                        <form th:if="${!commentItem.comment.deleted and
+              (commentItem.comment.user.username == username or postItem.post.user.username == username)}"
                               th:action="@{/posts/{postId}/comments/{commentId}/delete(
           postId=${postItem.post.id},
           commentId=${commentItem.comment.id}

@@ -27,6 +27,10 @@ public class Comment {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    private boolean deleted = false;
+
+    private boolean deletedByPostAuthor = false;
+
     public Comment() {
     }
 
@@ -55,5 +59,21 @@ public class Comment {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isDeletedByPostAuthor() {
+        return deletedByPostAuthor;
+    }
+
+    public void setDeletedByPostAuthor(boolean deletedByPostAuthor) {
+        this.deletedByPostAuthor = deletedByPostAuthor;
     }
 }

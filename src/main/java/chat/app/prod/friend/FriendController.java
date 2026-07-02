@@ -84,29 +84,6 @@ public class FriendController {
         return "redirect:/friends?tab=discover";
     }
 
-    @GetMapping("/notifications")
-    public String notificatioinsPage(Model model, Authentication authentication) {
-        String currentUsername = authentication.getName();
-
-        List<FriendRequest> requests = friendService.getPendingRequests(currentUsername);
-
-        model.addAttribute("title", "Notifications");
-        model.addAttribute("requests", requests);
-
-        return "friend/notifications";
-    }
-
-    @PostMapping("/notifications/accept/{id}")
-    public String acceptRequest(@PathVariable Long id, Authentication authentication) {
-        friendService.acceptRequest(id, authentication.getName());
-        return "redirect:/friends?tab=requests";
-    }
-
-    @PostMapping("/notifications/reject/{id}")
-    public String rejectRequest(@PathVariable Long id, Authentication authentication) {
-        friendService.rejectRequest(id, authentication.getName());
-        return "redirect:/friends?tab=requests";
-    }
 
     @GetMapping("/friends/list")
     public String friendsList(Model model, Authentication authentication) {

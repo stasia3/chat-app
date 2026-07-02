@@ -203,3 +203,62 @@ CREATE TABLE reports (
             (target_type = 'COMMENT' AND reported_comment_id IS NOT NULL AND reported_user_id IS NULL AND reported_post_id IS NULL)
         )
 );
+
+-- NOTIFICATIONS table
+
+CREATE TABLE notifications (
+    id BIGSERIAL PRIMARY KEY,
+
+    receiver_id BIGINT NOT NULL,
+    actor_id BIGINT,
+
+    type VARCHAR(40) NOT NULL,
+    message TEXT NOT NULL,
+
+    post_id BIGINT,
+    comment_id BIGINT,
+    friend_request_id BIGINT,
+
+    hidden BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_notifications_receiver
+        FOREIGN KEY (receiver_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_notifications_actor
+        FOREIGN KEY (actor_id)
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    CONSTRAINT fk_notifications_post
+        FOREIGN KEY (post_id)
+        REFERENCES posts(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_notifications_comment
+        FOREIGN KEY (comment_id)
+        REFERENCES comments(id)
+        ON DELETE SET NULL,
+
+    CONSTRAINT fk_notifications_friend_request
+        FOREIGN KEY (friend_request_id)
+        REFERENCES friend_request(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_notifications_type
+        CHECK (type IN (
+            'FRIEND_REQUEST',
+            'FRIEND_POST',
+            'POST_COMMENT',
+            'POST_LIKE',
+            'COMMENT_DELETED'
+        ))
+);
+
+CREATE INDEX idx_notifications_receiver_hidden_created
+ON notifications (receiver_id, hidden, created_at DESC);
+
+CREATE INDEX idx_notifications_type
+ON notifications (type);

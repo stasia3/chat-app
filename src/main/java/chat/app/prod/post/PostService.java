@@ -1,6 +1,8 @@
 package chat.app.prod.post;
 
 import chat.app.prod.friend.FriendService;
+import chat.app.prod.notification.NotificationService;
+import chat.app.prod.notification.NotificationType;
 import chat.app.prod.profile.ProfileRepository;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
@@ -18,14 +20,16 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final CommentRepository commentRepository;
     private final ProfileRepository profileRepository;
+    private final NotificationService notificationService;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, FriendService friendService, PostLikeRepository postLikeRepository, CommentRepository commentRepository, ProfileRepository profileRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, FriendService friendService, PostLikeRepository postLikeRepository, CommentRepository commentRepository, ProfileRepository profileRepository, NotificationService notificationService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.friendService = friendService;
         this.postLikeRepository = postLikeRepository;
         this.commentRepository = commentRepository;
         this.profileRepository = profileRepository;
+        this.notificationService = notificationService;
     }
 
     public void createPost(String username, String content,  String languageTag, PostVisibility visibility) {
@@ -42,7 +46,20 @@ public class PostService {
                 languageTag,
                 visibility,
                 LocalDateTime.now());
+
         postRepository.save(post);
+
+        friendService.getFriends(username).forEach(friend ->
+                notificationService.createNotification(
+                        friend,
+                        user,
+                        NotificationType.FRIEND_POST,
+                        user.getUsername() + " published a new post.",
+                        post,
+                        null,
+                        null
+                )
+        );
     }
 
     public List<Post> getAllPosts() {
@@ -82,9 +99,20 @@ public class PostService {
         postLikeRepository.findByPostAndUser(post, user)
                 .ifPresentOrElse(
                         postLikeRepository::delete,
-                        () -> postLikeRepository.save(
-                                new PostLike(post, user, LocalDateTime.now())
-                        )
+                        () -> {
+                            PostLike like = new PostLike(post, user, LocalDateTime.now());
+                            postLikeRepository.save(like);
+
+                            notificationService.createNotification(
+                                    post.getUser(),
+                                    user,
+                                    NotificationType.POST_LIKE,
+                                    user.getUsername() + " liked your post.",
+                                    post,
+                                    null,
+                                    null
+                            );
+                        }
                 );
     }
 
@@ -196,6 +224,16 @@ public class PostService {
         );
 
         commentRepository.save(comment);
+
+        notificationService.createNotification(
+                post.getUser(),
+                user,
+                NotificationType.POST_COMMENT,
+                user.getUsername() + " commented on your post.",
+                post,
+                comment,
+                null
+        );
     }
 
     public void deleteComment(Long commentId, String username) {
@@ -213,6 +251,17 @@ public class PostService {
             comment.setDeleted(true);
             comment.setDeletedByPostAuthor(true);
             commentRepository.save(comment);
+
+
+            notificationService.createNotification(
+                    comment.getUser(),
+                    comment.getPost().getUser(),
+                    NotificationType.COMMENT_DELETED,
+                    comment.getPost().getUser().getUsername() + " deleted your comment.",
+                    comment.getPost(),
+                    comment,
+                    null
+            );
             return;
         }
 

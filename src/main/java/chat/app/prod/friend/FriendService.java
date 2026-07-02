@@ -1,5 +1,7 @@
 package chat.app.prod.friend;
 
+import chat.app.prod.notification.NotificationService;
+import chat.app.prod.notification.NotificationType;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ public class FriendService {
 
     private final UserRepository userRepository;
     private final FriendRequestRepository friendRequestRepository;
+    private final NotificationService notificationService;
 
-    public FriendService(UserRepository userRepository, FriendRequestRepository friendRequestRepository) {
+    public FriendService(UserRepository userRepository, FriendRequestRepository friendRequestRepository, NotificationService notificationservice) {
         this.userRepository = userRepository;
         this.friendRequestRepository = friendRequestRepository;
+        this.notificationService = notificationservice;
     }
 
     public List<User> searchUsers(String username, String currentUsername) {
@@ -56,6 +60,16 @@ public class FriendService {
         );
 
         friendRequestRepository.save(request);
+
+        notificationService.createNotification(
+                receiver,
+                sender,
+                NotificationType.FRIEND_REQUEST,
+                sender.getUsername() + " sent you a friend request.",
+                null,
+                null,
+                request
+        );
     }
 
     public List<FriendRequest> getPendingRequests(String username) {

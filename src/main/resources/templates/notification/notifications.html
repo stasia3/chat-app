@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title th:text="${title}">Notifications · DevPortal</title>
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/notifications.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+
+<body>
+<div class="page-shell">
+
+    <div th:replace="~{fragments/navbar :: menu}"></div>
+
+    <main class="notifications-page">
+
+        <section class="notifications-header">
+
+            <div>
+                <span class="friends-eyebrow">Activity center</span>
+
+                <h1>Notifications</h1>
+
+                <p class="auth-subtitle">
+                    Stay updated about requests, posts, comments and likes.
+                </p>
+            </div>
+
+            <form th:if="${!#lists.isEmpty(notifications)}"
+                  th:action="@{/notifications/hide-all}"
+                  method="post"
+                  onsubmit="return confirm('Are you sure you want to hide all notifications?');">
+
+                <button type="submit" class="secondary">
+                    <i class="fa-solid fa-eye-slash"></i>
+                    Hide all
+                </button>
+
+            </form>
+
+        </section>
+
+        <nav class="notification-tabs">
+
+            <a th:href="@{/notifications(type='ALL')}"
+               th:classappend="${activeType == 'ALL'} ? ' active'">
+                All
+            </a>
+
+            <a th:href="@{/notifications(type='FRIEND_REQUEST')}"
+               th:classappend="${activeType == 'FRIEND_REQUEST'} ? ' active'">
+                Requests
+            </a>
+
+            <a th:href="@{/notifications(type='FRIEND_POST')}"
+               th:classappend="${activeType == 'FRIEND_POST'} ? ' active'">
+                Friend posts
+            </a>
+
+            <a th:href="@{/notifications(type='POST_COMMENT')}"
+               th:classappend="${activeType == 'POST_COMMENT'} ? ' active'">
+                Comments
+            </a>
+
+            <a th:href="@{/notifications(type='POST_LIKE')}"
+               th:classappend="${activeType == 'POST_LIKE'} ? ' active'">
+                Likes
+            </a>
+
+            <a th:href="@{/notifications(type='COMMENT_DELETED')}"
+               th:classappend="${activeType == 'COMMENT_DELETED'} ? ' active'">
+                Removed
+            </a>
+
+        </nav>
+
+        <div th:if="${#lists.isEmpty(notifications)}" class="empty-box">
+            <p>No notifications found.</p>
+        </div>
+
+        <section th:if="${!#lists.isEmpty(notifications)}"
+                 class="notifications-list">
+
+            <article th:each="notification : ${notifications}"
+                     class="notification-card">
+
+                <div class="notification-type-slot">
+                    <span th:switch="${notification.type.name()}">
+                        <i th:case="'FRIEND_REQUEST'" class="notification-small-icon fa-solid fa-user-plus friend-request"></i>
+                        <i th:case="'FRIEND_POST'" class="notification-small-icon fa-solid fa-pen-nib friend-post"></i>
+                        <i th:case="'POST_COMMENT'" class="notification-small-icon fa-solid fa-comment post-comment"></i>
+                        <i th:case="'POST_LIKE'" class="notification-small-icon fa-solid fa-heart post-like"></i>
+                        <i th:case="'COMMENT_DELETED'" class="notification-small-icon fa-solid fa-trash comment-deleted"></i>
+                    </span>
+                </div>
+
+                <a class="notification-avatar"
+                   th:if="${notification.actor != null}"
+                   th:href="@{/profile/{username}(username=${notification.actor.username})}">
+
+                    <img th:if="${notification.actorProfileImageUrl != null
+                                and !notification.actorProfileImageUrl.isBlank()}"
+                         th:src="@{${notification.actorProfileImageUrl}}"
+                         alt="Profile photo">
+
+                    <span th:if="${notification.actorProfileImageUrl == null
+                                or notification.actorProfileImageUrl.isBlank()}"
+                          th:text="${#strings.toUpperCase(#strings.substring(notification.actor.username,0,1))}">
+                        U
+                    </span>
+
+                </a>
+
+                <div th:if="${notification.actor == null}"
+                     class="notification-avatar">
+                    <span>D</span>
+                </div>
+
+                <div class="notification-content">
+
+                        <p th:text="${notification.message}"></p>
+
+
+                    <small th:text="${#temporals.format(notification.createdAt, 'dd MMM yyyy • HH:mm')}">
+                        date
+                    </small>
+
+                </div>
+
+                <div class="notification-actions">
+
+                    <a class="secondary"
+                       th:if="${notification.type.name() == 'FRIEND_REQUEST'}"
+                       th:href="@{/friends(tab='requests')}">
+                        Review
+                    </a>
+
+                    <a class="secondary"
+                       th:if="${notification.post != null}"
+                       th:href="@{/posts/{postId}(postId=${notification.post.id})}">
+                        Open post
+                    </a>
+
+                    <div class="notification-menu">
+
+                        <button type="button" class="notification-menu-btn">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+
+                        <div class="notification-menu-dropdown">
+
+                            <form th:action="@{/notifications/{id}/hide(id=${notification.id})}"
+                                  method="post">
+
+                                <button type="submit" class="notification-hide-btn">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                    Hide
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+<script>
+    document.addEventListener("click", function (event) {
+        const menuBtn = event.target.closest(".notification-menu-btn");
+
+        document.querySelectorAll(".notification-menu.open").forEach(menu => {
+            if (!menu.contains(event.target)) {
+                menu.classList.remove("open");
+            }
+        });
+
+        if (menuBtn) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            menuBtn.closest(".notification-menu").classList.toggle("open");
+        }
+    });
+</script>
+
+</body>
+</html>

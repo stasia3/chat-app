@@ -74,10 +74,21 @@
 
                     </div>
 
-                    <a class="secondary profile-edit-btn" th:href="@{/profile/edit}">
-                        <i class="fa-solid fa-pen"></i>
-                        Edit profile
-                    </a>
+                    <div class="profile-header-actions">
+
+                        <button type="button"
+                                class="secondary profile-settings-btn"
+                                id="openNotificationSettings">
+                            <i class="fa-solid fa-gear"></i>
+                            Settings
+                        </button>
+
+                        <a class="secondary profile-edit-btn" th:href="@{/profile/edit}">
+                            <i class="fa-solid fa-pen"></i>
+                            Edit profile
+                        </a>
+
+                    </div>
 
                 </div>
 
@@ -284,6 +295,116 @@
     <script th:src="@{/js/post-preview.js}"></script>
     <div th:replace="~{fragments/report-modal :: reportModal}"></div>
     <script th:src="@{/js/report-modal.js}"></script>
+
+    <div id="notificationSettingsModal" class="settings-modal-overlay hidden">
+
+        <div class="settings-modal">
+
+            <div class="settings-modal-header">
+                <div>
+                    <h3>Notification settings</h3>
+                    <p>Choose what you want to be notified about.</p>
+                </div>
+
+                <button type="button" id="closeNotificationSettings" class="settings-modal-close">
+                    ×
+                </button>
+            </div>
+
+            <form th:action="@{/notifications/settings}" method="post">
+
+                <label class="settings-option">
+                    <input type="checkbox"
+                           name="notifyFriendPosts"
+                           th:checked="${notificationSettings.notifyFriendPosts}">
+                    <span>Friend posts</span>
+                </label>
+
+                <label class="settings-option">
+                    <input type="checkbox"
+                           name="notifyPostComments"
+                           th:checked="${notificationSettings.notifyPostComments}">
+                    <span>Comments on my posts</span>
+                </label>
+
+                <label class="settings-option">
+                    <input type="checkbox"
+                           name="notifyPostLikes"
+                           th:checked="${notificationSettings.notifyPostLikes}">
+                    <span>Likes on my posts</span>
+                </label>
+
+                <label class="settings-option">
+                    <input type="checkbox"
+                           name="notifyCommentDeleted"
+                           th:checked="${notificationSettings.notifyCommentDeleted}">
+                    <span>When someone deleted my comment</span>
+                </label>
+
+                <label class="settings-option">
+                    <input type="checkbox"
+                           name="notifyFriendRequests"
+                           th:checked="${notificationSettings.notifyFriendRequests}">
+                    <span>Friend requests</span>
+                </label>
+
+                <div class="settings-modal-actions">
+                    <button type="button"
+                            class="secondary"
+                            id="cancelNotificationSettings">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="cta-btn">
+                        Save changes
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        const settingsModal = document.getElementById("notificationSettingsModal");
+        const openSettingsBtn = document.getElementById("openNotificationSettings");
+        const closeSettingsBtn = document.getElementById("closeNotificationSettings");
+        const cancelSettingsBtn = document.getElementById("cancelNotificationSettings");
+
+        const saveSettingsBtn = document.getElementById("saveNotificationSettings");
+
+        if (saveSettingsBtn) {
+            saveSettingsBtn.addEventListener("click", closeSettingsModal);
+        }
+
+        function openSettingsModal() {
+            settingsModal.classList.remove("hidden");
+        }
+
+        function closeSettingsModal() {
+            settingsModal.classList.add("hidden");
+        }
+
+        if (openSettingsBtn) {
+            openSettingsBtn.addEventListener("click", openSettingsModal);
+        }
+
+        if (closeSettingsBtn) {
+            closeSettingsBtn.addEventListener("click", closeSettingsModal);
+        }
+
+        if (cancelSettingsBtn) {
+            cancelSettingsBtn.addEventListener("click", closeSettingsModal);
+        }
+
+        if (settingsModal) {
+            settingsModal.addEventListener("click", function (event) {
+                if (event.target === settingsModal) {
+                    closeSettingsModal();
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -60,4 +60,25 @@ public class NotificationController {
         friendService.rejectRequest(id, authentication.getName());
         return "redirect:/friends?tab=requests";
     }
+
+    @PostMapping("/notifications/settings")
+    public String updateNotificationSettings(
+            @RequestParam(required = false) boolean notifyFriendPosts,
+            @RequestParam(required = false) boolean notifyPostComments,
+            @RequestParam(required = false) boolean notifyPostLikes,
+            @RequestParam(required = false) boolean notifyCommentDeleted,
+            @RequestParam(required = false) boolean notifyFriendRequests,
+            Authentication authentication) {
+
+        notificationService.updateSettings(
+                authentication.getName(),
+                notifyFriendPosts,
+                notifyPostComments,
+                notifyPostLikes,
+                notifyCommentDeleted,
+                notifyFriendRequests
+        );
+
+        return "redirect:/profile";
+    }
 }

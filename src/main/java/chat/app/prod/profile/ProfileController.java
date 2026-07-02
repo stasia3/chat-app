@@ -1,6 +1,8 @@
 package chat.app.prod.profile;
 
 import chat.app.prod.friend.FriendService;
+import chat.app.prod.notification.NotificationService;
+import chat.app.prod.notification.NotificationSettings;
 import chat.app.prod.post.PostService;
 import chat.app.prod.user.User;
 import org.springframework.stereotype.Controller;
@@ -21,11 +23,13 @@ public class ProfileController {
     private final FriendService friendService;
     private final PostService postService;
     private final ProfileRepository profileRepository;
+    private final NotificationService notificationService;
 
-    public ProfileController(FriendService friendService, PostService postService, ProfileRepository profileRepository) {
+    public ProfileController(FriendService friendService, PostService postService, ProfileRepository profileRepository, NotificationService notificationService) {
         this.friendService = friendService;
         this.postService = postService;
         this.profileRepository = profileRepository;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/profile")
@@ -40,6 +44,8 @@ public class ProfileController {
         model.addAttribute("username", username);
         model.addAttribute("friendCount", friendService.countFriends(username));
         model.addAttribute("posts", postService.getMyPostCards(username));
+        model.addAttribute("notificationSettings",
+                notificationService.getSettings(username));
         return "profile/profile";
     }
 

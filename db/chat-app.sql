@@ -262,3 +262,21 @@ ON notifications (receiver_id, hidden, created_at DESC);
 
 CREATE INDEX idx_notifications_type
 ON notifications (type);
+
+-- NOTIFICATION_SETTINGS table
+
+CREATE TABLE notification_settings (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE,
+
+    notify_friend_posts BOOLEAN NOT NULL DEFAULT TRUE,
+    notify_post_comments BOOLEAN NOT NULL DEFAULT TRUE,
+    notify_post_likes BOOLEAN NOT NULL DEFAULT TRUE,
+    notify_comment_deleted BOOLEAN NOT NULL DEFAULT TRUE,
+    notify_friend_requests BOOLEAN NOT NULL DEFAULT TRUE,
+
+    CONSTRAINT fk_notification_settings_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);

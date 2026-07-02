@@ -125,3 +125,23 @@ p {
     justify-content: center;
   }
 }
+
+.post-author-avatar,
+.comment-avatar,
+.friend-avatar,
+.profile-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .18s ease;
+}
+
+.post-author-avatar:hover,
+.comment-avatar:hover,
+.friend-avatar:hover,
+.profile-avatar:hover {
+    transform: scale(1.06);
+}

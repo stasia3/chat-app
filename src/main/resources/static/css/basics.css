@@ -669,3 +669,19 @@ p {
     border-color: rgba(255, 255, 255, 0.28);
     background: rgba(255, 255, 255, 0.10);
 }
+.post-author-avatar,
+.comment-avatar,
+.friend-avatar,
+.profile-avatar {
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .18s ease;
+}
+
+.post-author-avatar:hover,
+.comment-avatar:hover,
+.friend-avatar:hover,
+.profile-avatar:hover {
+  transform: scale(1.06);
+}

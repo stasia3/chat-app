@@ -22,12 +22,12 @@
             <form method="post" th:action="@{/login}" class="auth-form">
                 <div class="field">
                     <label for="username">Username</label>
-                    <input id="username" name="username" placeholder="e.g. stasia" autocomplete="username" />
+                    <input id="username" name="username" placeholder="e.g. stasia" autocomplete="username"  required/>
                 </div>
 
                 <div class="field">
                     <label for="password">Password</label>
-                    <input id="password" type="password" name="password" placeholder="••••••••" autocomplete="current-password" />
+                    <input id="password" type="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
                 </div>
 
                 <div class="actions">
@@ -35,9 +35,9 @@
                     <a class="secondary" th:href="@{/register}">Register</a>
                 </div>
 
-                <div th:if="${perror}" class="message error-box">
+                <div th:if="${param.error}" class="message error-box">
                     <strong class="hl-red">Error:</strong>
-                    <span th:text="${error}"></span>
+                    Invalid username or password.
                 </div>
 
                 <div th:if="${param.logout}" class="message success-box">

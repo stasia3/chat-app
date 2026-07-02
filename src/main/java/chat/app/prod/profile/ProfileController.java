@@ -5,11 +5,8 @@ import chat.app.prod.post.PostService;
 import chat.app.prod.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -101,5 +98,31 @@ public class ProfileController {
         profileRepository.save(profile);
 
         return "redirect:/profile";
+    }
+
+    @GetMapping("/profile/{username}")
+    public String viewUserProfile(@PathVariable String username,
+                                  Model model,
+                                  Authentication authentication) {
+        String currentUsername = authentication.getName();
+
+        if (currentUsername.equals(username)) {
+            return "redirect:/profile";
+        }
+
+        Profile profile = profileRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        model.addAttribute("title", username + " · Profile");
+        model.addAttribute("profile", profile);
+        model.addAttribute("username", username);
+        model.addAttribute("currentUsername", currentUsername);
+
+        model.addAttribute("friendCount", friendService.countFriends(username));
+        model.addAttribute("posts", postService.getMyPostCards(username));
+
+        model.addAttribute("areFriends", friendService.areFriends(currentUsername, username));
+
+        return "profile/public-profile";
     }
 }

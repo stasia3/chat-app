@@ -359,3 +359,46 @@
   object-position: center;
   border-radius: 50%;
 }
+
+.chat-friend-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 17px;
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.chat-friend-item:hover,
+.chat-friend-item.active {
+  background: rgba(99, 102, 241, 0.22);
+  border-color: rgba(129, 140, 248, 0.55);
+}
+
+.chat-friend-item .friend-avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+}
+
+.friend-preview {
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.friend-preview strong {
+  display: block;
+  font-size: 15px;
+}
+
+.friend-preview span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}

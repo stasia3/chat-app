@@ -8,18 +8,19 @@
 
     <div class="feed-post-header">
 
-        <div class="post-author-avatar">
+        <a class="post-author-avatar"
+           th:href="@{/profile/{username}(username=${postItem.post.user.username})}">
 
             <img th:if="${postItem.authorProfileImageUrl != null and !postItem.authorProfileImageUrl.isBlank()}"
                  th:src="@{${postItem.authorProfileImageUrl}}"
                  alt="Profile photo">
 
             <span th:if="${postItem.authorProfileImageUrl == null or postItem.authorProfileImageUrl.isBlank()}"
-                  th:text="${#strings.substring(postItem.post.user.username,0,1).toUpperCase()}">
-        U
-    </span>
+                  th:text="${#strings.toUpperCase(#strings.substring(postItem.post.user.username,0,1))}">
+                U
+            </span>
 
-        </div>
+        </a>
 
         <div class="post-author-info">
 
@@ -74,7 +75,8 @@
 
         <form class="post-menu-dropdown"
               th:action="@{/posts/{postId}/delete(postId=${postItem.post.id})}"
-              method="post">
+              method="post"
+              onsubmit="return confirm('Are you sure you want to delete this post?');">
 
             <button type="submit" class="post-delete-btn">
                 <i class="fa-solid fa-trash"></i>

@@ -124,7 +124,14 @@
 
             </section>
 
-            <section class="profile-about-card">
+            <section class="profile-about-card"
+                     th:if="${(profile.firstName != null and !profile.firstName.isBlank()) or
+                 (profile.lastName != null and !profile.lastName.isBlank()) or
+                 (profile.headline != null and !profile.headline.isBlank()) or
+                 (profile.bio != null and !profile.bio.isBlank()) or
+                 (profile.programmingLanguages != null and !profile.programmingLanguages.isBlank()) or
+                 (profile.githubLink != null and !profile.githubLink.isBlank()) or
+                 (profile.linkedinLink != null and !profile.linkedinLink.isBlank())}">
 
                 <div class="section-title inline-title">
                     <h2>About</h2>

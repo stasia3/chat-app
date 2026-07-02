@@ -141,7 +141,15 @@ public class PostService {
 
         return postLikeRepository.findByPost(post)
                 .stream()
-                .map(like -> new LikedUserDto(like.getUser().getUsername()))
+                .map(like -> {
+                    String username = like.getUser().getUsername();
+
+                    String imageUrl = profileRepository.findByUserUsername(username)
+                            .map(profile -> profile.getProfileImageUrl())
+                            .orElse(null);
+
+                    return new LikedUserDto(username, imageUrl);
+                })
                 .toList();
     }
 

@@ -99,18 +99,19 @@
 
                             <div class="user-info">
 
-                                <div class="friend-avatar">
+                                <a class="friend-avatar"
+                                   th:href="@{/profile/{username}(username=${user.user.username})}">
 
                                     <img th:if="${user.profileImageUrl != null and !user.profileImageUrl.isBlank()}"
                                          th:src="@{${user.profileImageUrl}}"
                                          alt="Profile photo">
 
                                     <span th:if="${user.profileImageUrl == null or user.profileImageUrl.isBlank()}"
-                                          th:text="${#strings.substring(user.user.username,0,1).toUpperCase()}">
-                                        U
-                                    </span>
+                                          th:text="${#strings.toUpperCase(#strings.substring(user.user.username,0,1))}">
+        U
+    </span>
 
-                                </div>
+                                </a>
 
                                 <div>
                                     <strong th:text="${user.user.username}">username</strong>
@@ -154,7 +155,8 @@
 
                             <div class="user-info">
 
-                                <div class="friend-avatar">
+                                <a class="friend-avatar"
+                                   th:href="@{/profile/{username}(username=${friend.user.username})}">
 
                                     <img th:if="${friend.profileImageUrl != null and !friend.profileImageUrl.isBlank()}"
                                          th:src="@{${friend.profileImageUrl}}"
@@ -164,7 +166,7 @@
                                           th:text="${#strings.substring(friend.user.username,0,1).toUpperCase()}">
                                         U
                                     </span>
-                                </div>
+                                </a>
 
                                 <div>
                                     <strong th:text="${friend.user.username}">username</strong>
@@ -180,7 +182,8 @@
                                 </a>
 
                                 <form th:action="@{/friends/remove/{username}(username=${friend.user.username})}"
-                                      method="post">
+                                      method="post"
+                                      onsubmit="return confirm('Are you sure you want to remove this friend?');">
                                     <button type="submit" class="danger-secondary">
                                         Remove
                                     </button>
@@ -212,7 +215,8 @@
                              class="request-card">
 
                             <div class="request-info">
-                                <div class="friend-avatar">
+                                <a class="friend-avatar"
+                                   th:href="@{/profile/{username}(username=${request.request.sender.username})}">
 
                                     <img th:if="${request.profileImageUrl != null and !request.profileImageUrl.isBlank()}"
                                          th:src="@{${request.profileImageUrl}}"
@@ -222,7 +226,7 @@
                                           th:text="${#strings.substring(request.request.sender.username,0,1).toUpperCase()}">
                                         U
                                     </span>
-                                </div>
+                                </a>
 
                                 <div>
                                     <strong th:text="${request.request.sender.username}">username</strong>
@@ -257,7 +261,8 @@
                              class="request-card">
 
                             <div class="request-info">
-                                <div class="friend-avatar">
+                                <a class="friend-avatar"
+                                   th:href="@{/profile/{username}(username=${request.request.receiver.username})}">
 
                                     <img th:if="${request.profileImageUrl != null and !request.profileImageUrl.isBlank()}"
                                          th:src="@{${request.profileImageUrl}}"
@@ -268,7 +273,7 @@
         U
     </span>
 
-                                </div>
+                                </a>
 
                                 <div>
                                     <strong th:text="${request.request.receiver.username}">username</strong>
@@ -278,7 +283,8 @@
 
                             <div class="request-actions">
                                 <form th:action="@{/friends/request/{id}/cancel(id=${request.request.id})}"
-                                      method="post">
+                                      method="post"
+                                      onsubmit="return confirm('Are you sure you want to cancel this friend request?');">
                                     <button type="submit" class="danger-secondary">Cancel</button>
                                 </form>
                             </div>
@@ -298,7 +304,8 @@
                              class="request-card">
 
                             <div class="request-info">
-                                <div class="friend-avatar">
+                                <a class="friend-avatar"
+                                   th:href="@{/profile/{username}(username=${request.request.receiver.username})}">
 
                                     <img th:if="${request.profileImageUrl != null and !request.profileImageUrl.isBlank()}"
                                          th:src="@{${request.profileImageUrl}}"
@@ -309,7 +316,7 @@
                                         U
                                     </span>
 
-                                </div>
+                                </a>
 
                                 <div>
                                     <strong th:text="${request.request.receiver.username}">username</strong>
@@ -319,7 +326,8 @@
 
                             <div class="request-actions">
                                 <form th:action="@{/friends/request/{id}/delete(id=${request.request.id})}"
-                                      method="post">
+                                      method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this rejected request?');">
                                     <button type="submit" class="danger-secondary">Remove</button>
                                 </form>
                             </div>

@@ -385,3 +385,8 @@
   object-position: center;
   border-radius: 50%;
 }
+
+
+.friend-avatar {
+  flex-shrink: 0;
+}

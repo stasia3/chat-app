@@ -36,36 +36,33 @@
             <div th:unless="${#lists.isEmpty(users)}"
                  class="chat-friends-list">
 
-                <a th:each="user : ${users}"
-                   class="chat-friend-item"
-                   th:attr="data-username=${user.user.username}"
-                   th:classappend="${selectedUsername != null and user.user.username == selectedUsername} ? ' active' : ''"
-                   th:href="@{/chat/{username}(username=${user.user.username})}">
+                <div th:each="user : ${users}"
+                     class="chat-friend-item"
+                     th:attr="data-username=${user.user.username}"
+                     th:classappend="${selectedUsername != null and user.user.username == selectedUsername} ? ' active' : ''">
 
-                    <div class="friend-avatar">
+                    <a class="friend-avatar"
+                       th:href="@{/profile/{username}(username=${user.user.username})}">
 
                         <img th:if="${user.profileImageUrl != null and !user.profileImageUrl.isBlank()}"
                              th:src="@{${user.profileImageUrl}}"
                              alt="Profile photo">
 
                         <span th:if="${user.profileImageUrl == null or user.profileImageUrl.isBlank()}"
-                              th:text="${#strings.substring(user.user.username,0,1).toUpperCase()}">
-        U
-    </span>
+                              th:text="${#strings.toUpperCase(#strings.substring(user.user.username,0,1))}">
+            U
+        </span>
+                    </a>
 
-                    </div>
+                    <a class="friend-preview"
+                       th:href="@{/chat/{username}(username=${user.user.username})}">
 
-
-
-                    <div class="friend-preview">
-                        <strong th:text="${user.user.username}">
-                            username
-                        </strong>
-
+                        <strong th:text="${user.user.username}">username</strong>
                         <span>Open conversation</span>
-                    </div>
 
-                </a>
+                    </a>
+
+                </div>
 
             </div>
 
@@ -92,8 +89,8 @@
                 <div class="chat-header">
 
                     <div class="chat-selected-user">
-
-                        <div class="friend-avatar small-avatar">
+                        <a class="friend-avatar small-avatar"
+                           th:href="@{/profile/{username}(username=${selectedUsername})}">
 
                             <img th:if="${selectedUserImageUrl != null and !selectedUserImageUrl.isBlank()}"
                                  th:src="@{${selectedUserImageUrl}}"
@@ -104,7 +101,7 @@
         U
     </span>
 
-                        </div>
+                        </a>
 
                         <strong th:text="${selectedUsername}">username</strong>
 

@@ -39,7 +39,8 @@
 
             <div class="feed-post-header">
 
-                <div class="post-author-avatar">
+                <a class="post-author-avatar"
+                   th:href="@{/profile/{username}(username=${postItem.post.user.username})}">
 
                     <img th:if="${postItem.authorProfileImageUrl != null and !postItem.authorProfileImageUrl.isBlank()}"
                          th:src="@{${postItem.authorProfileImageUrl}}"
@@ -50,7 +51,7 @@
         U
     </span>
 
-                </div>
+                </a>
 
                 <div class="post-author-info">
 
@@ -148,6 +149,7 @@
 
                 <div class="comment-input-card">
 
+
                     <div class="comment-avatar">
 
                         <img th:if="${currentUserImageUrl != null and !currentUserImageUrl.isBlank()}"
@@ -199,7 +201,8 @@
             <div class="comments-list">
                 <article th:each="commentItem : ${comments}" class="comment-card">
 
-                    <div class="comment-avatar">
+                    <a class="comment-avatar"
+                       th:href="@{/profile/{username}(username=${commentItem.comment.user.username})}">
 
                         <img th:if="${commentItem.authorProfileImageUrl != null and !commentItem.authorProfileImageUrl.isBlank()}"
                              th:src="@{${commentItem.authorProfileImageUrl}}"
@@ -207,10 +210,10 @@
 
                         <span th:if="${commentItem.authorProfileImageUrl == null or commentItem.authorProfileImageUrl.isBlank()}"
                               th:text="${#strings.toUpperCase(#strings.substring(commentItem.comment.user.username,0,1))}">
-                            U
-                        </span>
+        U
+    </span>
 
-                    </div>
+                    </a>
 
                     <div class="comment-body">
                         <div class="comment-top">
@@ -227,11 +230,12 @@
 
                         <form th:if="${commentItem.comment.user.username == username or postItem.post.user.username == username}"
                               th:action="@{/posts/{postId}/comments/{commentId}/delete(
-                  postId=${postItem.post.id},
-                  commentId=${commentItem.comment.id}
-              )}"
+          postId=${postItem.post.id},
+          commentId=${commentItem.comment.id}
+      )}"
                               method="post"
-                              class="comment-delete-form">
+                              class="comment-delete-form"
+                              onsubmit="return confirm('Are you sure you want to delete this comment?');">
 
                             <button type="submit" class="comment-delete-btn">
                                 <i class="fa-solid fa-trash"></i>

@@ -1206,3 +1206,79 @@
     object-fit: cover;
     display: block;
 }
+
+.comment-code-tools {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.comment-code-tools select {
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    outline: none;
+}
+
+.comment-content-html {
+    color: var(--text);
+    line-height: 1.7;
+}
+
+.comment-content-html pre {
+    margin: 14px 0;
+    padding: 16px;
+    border-radius: 16px;
+    overflow-x: auto;
+    background: #0f172a;
+}
+
+.comment-content-html code {
+    font-family: Consolas, Monaco, monospace;
+}
+
+.comment-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.comment-code-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.comment-code-tools select {
+  height: 42px;
+  min-width: 145px;
+  padding: 0 14px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(15, 23, 42, 0.92);
+  color: var(--text);
+
+  font-family: inherit;
+  font-weight: 600;
+  outline: none;
+}
+
+.comment-code-tools select option {
+  background: #172033;
+  color: #eef4ff;
+}
+
+.insert-code-btn {
+  height: 42px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

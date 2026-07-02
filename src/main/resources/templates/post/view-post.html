@@ -165,13 +165,30 @@
 
                     <div class="comment-input-area">
 
-            <textarea name="content"
+            <textarea id="commentContent"
+                      name="content"
                       placeholder="Write your comment..."
                       required></textarea>
 
                         <div class="comment-form-footer">
 
+                            <div class="comment-code-tools">
+                                <button type="button"
+                                        class="secondary insert-code-btn"
+                                        id="insertCodeBtn">
+                                    <i class="fa-solid fa-code"></i>
+                                    Add code
+                                </button>
 
+                                <select id="commentLanguageSelect">
+                                    <option value="java">Java</option>
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="python">Python</option>
+                                    <option value="html">HTML</option>
+                                    <option value="css">CSS</option>
+                                    <option value="">Other</option>
+                                </select>
+                            </div>
 
                             <button type="submit" class="cta-btn">
                                 <i class="fa-solid fa-paper-plane"></i>
@@ -224,9 +241,9 @@
                             </small>
                         </div>
 
-                        <p th:text="${commentItem.comment.content}">
-                            Comment text
-                        </p>
+                        <div class="comment-content-html"
+                             th:utext="${commentItem.comment.content}">
+                        </div>
 
                         <form th:if="${commentItem.comment.user.username == username or postItem.post.user.username == username}"
                               th:action="@{/posts/{postId}/comments/{commentId}/delete(
@@ -277,5 +294,34 @@
         });
     </script>
     <script th:src="@{/js/post-preview.js}"></script>
+
+<script>
+    const commentContent = document.getElementById("commentContent");
+    const insertCodeBtn = document.getElementById("insertCodeBtn");
+    const commentLanguageSelect = document.getElementById("commentLanguageSelect");
+
+    if (commentContent && insertCodeBtn && commentLanguageSelect) {
+        insertCodeBtn.addEventListener("click", function () {
+            const language = commentLanguageSelect.value;
+
+            const codeBlock =
+                "\n```" + language + "\n" +
+                "\n" +
+                "```\n";
+
+            const start = commentContent.selectionStart;
+            const end = commentContent.selectionEnd;
+
+            const before = commentContent.value.substring(0, start);
+            const after = commentContent.value.substring(end);
+
+            commentContent.value = before + codeBlock + after;
+
+            const cursorPosition = before.length + language.length + 5;
+            commentContent.focus();
+            commentContent.setSelectionRange(cursorPosition, cursorPosition);
+        });
+    }
+</script>
 </body>
 </html>

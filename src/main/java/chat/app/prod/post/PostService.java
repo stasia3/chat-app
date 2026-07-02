@@ -180,6 +180,7 @@ public class PostService {
         if (content == null || content.trim().isEmpty()) {
             return;
         }
+        String formattedContent = formatCommentContent(content.trim());
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
@@ -190,7 +191,7 @@ public class PostService {
         Comment comment = new Comment(
                 post,
                 user,
-                content.trim(),
+                formattedContent,
                 LocalDateTime.now()
         );
 
@@ -271,5 +272,19 @@ public class PostService {
                     return new CommentDto(comment, imageUrl);
                 })
                 .toList();
+    }
+
+    private String formatCommentContent(String content) {
+        String escaped = content
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+
+        return escaped
+                .replaceAll(
+                        "(?s)```(java|javascript|python|html|css)?\\R(.*?)\\R```",
+                        "<pre><code class=\"language-$1\">$2</code></pre>"
+                )
+                .replace("\n", "<br>");
     }
 }

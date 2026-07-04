@@ -1,25 +1,211 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title th:text="${title}">DevPortal</title>
-    <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 </head>
-<body>
+
+<body class="landing-body">
 
 <div th:replace="~{fragments/navbar_poor :: menu-poor}"></div>
 
-<div class="main-card">
-    <div class="content">
-        <div class="logo-big">&lt;|&gt;</div>
-        <h1 th:text="${title}">DevPortal</h1>
-        <p th:text="${message}">
-            A calm and focused space for programmers to share ideas, build projects, and connect — designed without noise, just clarity.
-        </p>
-        <button class="cta-btn">Try it now</button>
-    </div>
-</div>
+<main class="landing-page">
+
+    <!-- HERO -->
+    <section class="hero-section">
+
+        <div class="hero-content">
+            <span class="landing-eyebrow">Social network for developers</span>
+
+            <h1>
+                Connect.<br>
+                Share.<br>
+                <span>Grow together.</span>
+            </h1>
+
+            <p>
+                DevPortal is a calm and focused space where developers share ideas,
+                build projects, find friends, and grow together — without noise.
+            </p>
+
+            <div class="hero-actions">
+                <a class="cta-btn" th:href="@{/register}">Join DevPortal →</a>
+                <a class="secondary" th:href="@{/login}">Login</a>
+            </div>
+
+            <div class="hero-points">
+                <span>No distractions</span>
+                <span>Real connections</span>
+                <span>Made for devs</span>
+            </div>
+        </div>
+
+        <div class="hero-preview">
+            <div class="floating-card post-preview">
+                <span>New post</span>
+                <p>Just finished my Spring Boot module — finally understood services!</p>
+                <small>❤️ 24 &nbsp;&nbsp; 💬 8</small>
+            </div>
+
+            <div class="floating-card user-preview">
+                <div class="mini-avatar">S</div>
+                <div>
+                    <strong>stasia</strong>
+                    <span>Backend Developer</span>
+                    <small>● Online</small>
+                </div>
+            </div>
+
+            <div class="floating-card chat-preview">
+                <span>Chat</span>
+                <p>Want to review each other’s projects?</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- LOGO ANIMATION SECTION -->
+    <section class="logo-showcase">
+        <div class="code-symbol">
+            &lt;<span class="typing-text">DevPortal</span><span class="cursor">|</span>&gt;
+        </div>
+
+        <p>Where developers connect.</p>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section">
+
+        <span class="landing-eyebrow">Built for developers</span>
+
+        <h2>Everything you need in one place.</h2>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+                <div class="feature-icon">✎</div>
+                <h3>Share your ideas</h3>
+                <p>Create and share posts about projects, problems, solutions, and your journey.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Find your people</h3>
+                <p>Add friends, follow developers, and build your own trusted network.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Real-time chat</h3>
+                <p>Talk in real time, discuss code, share resources, and help each other.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">&lt;/&gt;</div>
+                <h3>Developer focused</h3>
+                <p>No spam, no noise. Just a clean, focused space made for developers.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- APP PREVIEW -->
+    <section class="preview-section">
+
+        <div class="preview-text">
+            <span class="landing-eyebrow">Preview</span>
+
+            <h2>A space that feels like home.</h2>
+
+            <div class="preview-point">
+                <strong>Clean and modern UI</strong>
+                <p>Focus on what matters — your content and your connections.</p>
+            </div>
+
+            <div class="preview-point">
+                <strong>Dark theme</strong>
+                <p>Easy on the eyes, built for long coding sessions and late night chats.</p>
+            </div>
+
+            <div class="preview-point">
+                <strong>Cross device</strong>
+                <p>Works smoothly on desktop, tablet, and mobile.</p>
+            </div>
+        </div>
+
+        <div class="preview-mockup">
+
+            <img class="preview-img" th:src="@{/images/img1.png}" alt="DevPortal preview">
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+    <section class="final-section compact-final">
+
+        <div class="final-left">
+            <span class="landing-eyebrow">Join our community</span>
+
+            <h2>Be part of DevPortal.</h2>
+
+            <p>
+                Share your projects, meet developers, and grow in a focused space made for programmers.
+            </p>
+
+            <div class="community-stats">
+                <div>
+                    <strong>1,250+</strong>
+                    <span>Developers</span>
+                </div>
+
+                <div>
+                    <strong>3,400+</strong>
+                    <span>Posts</span>
+                </div>
+
+                <div>
+                    <strong>820+</strong>
+                    <span>Connections</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="join-card">
+
+            <div class="floating-icon">
+                <i class="fa-brands fa-space-awesome"></i>
+            </div>
+
+            <h3>Start today.</h3>
+
+            <p>
+                Create your account and join the community.
+            </p>
+
+            <a class="cta-btn"
+               th:href="@{/register}">
+                Join DevPortal
+            </a>
+
+            <small>
+                Already have an account?
+                <a class="login-link"
+                   th:href="@{/login}">
+                    Login
+                </a>
+            </small>
+
+        </div>
+    </section>
+</main>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 

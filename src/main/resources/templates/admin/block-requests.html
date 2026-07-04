@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Block requests</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/reports.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div th:replace="~{fragments/navbar_admin :: menu}"></div>
+
+    <main class="page-container">
+
+        <div class="reports-header">
+            <div>
+                <span class="reports-eyebrow">Admin Center</span>
+                <h1>Block requests</h1>
+                <p>Review escalation requests sent by reporters.</p>
+            </div>
+
+            <div class="report-counter">
+                <span>Total</span>
+                <strong th:text="${requests.size()}">0</strong>
+            </div>
+        </div>
+
+        <form class="report-filters"
+              method="get"
+              th:action="@{/admin/block-requests}">
+
+            <select name="status">
+                <option value="">All statuses</option>
+
+                <option th:each="status : ${statuses}"
+                        th:value="${status}"
+                        th:selected="${status == selectedStatus}"
+                        th:text="${status}">
+                </option>
+            </select>
+
+            <button type="submit">Filter</button>
+        </form>
+
+        <div class="report-list">
+
+            <a class="report-card"
+               th:each="request : ${requests}"
+               th:href="@{/admin/block-requests/{id}(id=${request.id})}">
+
+                <div class="report-top">
+                    <div>
+                        <span class="report-type">BLOCK REQUEST</span>
+
+                        <h3>
+                            Request #
+                            <span th:text="${request.id}"></span>
+                        </h3>
+                    </div>
+
+                    <span class="status"
+                          th:classappend="${request.status.name().toLowerCase()}"
+                          th:text="${request.status}">
+                        PENDING
+                    </span>
+                </div>
+
+                <div class="report-info">
+                    <div>
+                        <label>User</label>
+                        <span th:text="${request.userCase.user.username}">username</span>
+                    </div>
+
+                    <div>
+                        <label>Requested by</label>
+                        <span th:text="${request.requestedBy.username}">reporter</span>
+                    </div>
+
+                    <div>
+                        <label>Date</label>
+                        <span th:text="${#temporals.format(request.createdAt,'dd MMM yyyy HH:mm')}">
+                            date
+                        </span>
+                    </div>
+                </div>
+
+            </a>
+
+            <div class="empty" th:if="${requests.isEmpty()}">
+                No block requests found.
+            </div>
+
+        </div>
+
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+</body>
+</html>

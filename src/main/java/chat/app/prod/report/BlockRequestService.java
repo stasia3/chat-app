@@ -67,4 +67,38 @@ public class BlockRequestService {
         return blockRequestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Block request not found"));
     }
+
+    public void approveBlockRequest(Long requestId,
+                                    String adminUsername,
+                                    String adminDecision) {
+
+        BlockRequest request = getById(requestId);
+
+        User admin = userRepository.findByUsername(adminUsername)
+                .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+        request.setStatus(BlockRequestStatus.APPROVED);
+        request.setAdminDecision(adminDecision);
+        request.setDecidedBy(admin);
+        request.setDecidedAt(LocalDateTime.now());
+
+        blockRequestRepository.save(request);
+    }
+
+    public void rejectBlockRequest(Long requestId,
+                                   String adminUsername,
+                                   String adminDecision) {
+
+        BlockRequest request = getById(requestId);
+
+        User admin = userRepository.findByUsername(adminUsername)
+                .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+        request.setStatus(BlockRequestStatus.REJECTED);
+        request.setAdminDecision(adminDecision);
+        request.setDecidedBy(admin);
+        request.setDecidedAt(LocalDateTime.now());
+
+        blockRequestRepository.save(request);
+    }
 }

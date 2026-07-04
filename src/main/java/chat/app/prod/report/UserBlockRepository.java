@@ -15,4 +15,8 @@ public interface UserBlockRepository extends JpaRepository<UserBlock, Long> {
     Optional<UserBlock> findByUserAndActiveTrue(User user);
 
     boolean existsByUserAndActiveTrue(User user);
+
+    List<UserBlock> findByActiveTrueAndUserUsernameContainingIgnoreCaseOrderByBlockedAtDesc(String username);
+
+
 }

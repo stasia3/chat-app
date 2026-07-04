@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,13 +8,15 @@
     <link rel="stylesheet"
           href="/css/basics.css"
           th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 
 <body>
 
 <div class="page-shell">
 
-    <div th:replace="~{fragments/navbar :: menu}"></div>
+    <div sec:authorize="hasRole('ADMIN')" th:replace="~{fragments/navbar_admin :: menu}"></div>
+    <div sec:authorize="hasRole('USER')" th:replace="~{fragments/navbar :: menu}"></div>
 
     <main class="friends-card">
 

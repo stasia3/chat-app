@@ -39,11 +39,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
 
+                        // Admin only
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
 
+                        // Reporter + Admin
                         .requestMatchers("/reports/**")
                         .hasAnyRole("REPORTER", "ADMIN")
+
+                        // Normal app pages: user + admin
+                        .requestMatchers("/profile/**", "/posts/**", "/users/**", "/chat/**", "/notifications/**")
+                        .hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

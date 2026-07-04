@@ -1,29 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>User cases</title>
     <meta charset="UTF-8">
 
     <link rel="stylesheet" th:href="@{/css/basics.css}">
     <link rel="stylesheet" th:href="@{/css/reports.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 
 <body>
 
 <div class="page-shell">
 
-    <div class="navbar">
-        <div class="logo">&lt;|&gt; DevPortal</div>
-
-        <div class="nav-links">
-            <a class="chip" th:href="@{/reports}">Reports</a>
-            <a class="chip active" th:href="@{/reports/cases}">User cases</a>
-
-            <form th:action="@{/logout}" method="post">
-                <button class="logout-btn" type="submit">Logout</button>
-            </form>
-        </div>
-    </div>
+    <div sec:authorize="hasRole('ADMIN')" th:replace="~{fragments/navbar_admin :: menu}"></div>
+    <div sec:authorize="hasAnyRole('REPORTER')" th:replace="~{fragments/navbar_reporter :: menu}"></div>
 
     <main class="page-container">
 
@@ -39,6 +30,24 @@
                 <strong th:text="${cases.size()}">0</strong>
             </div>
         </div>
+
+        <form class="case-search"
+              method="get"
+              th:action="@{/reports/cases}">
+
+            <input type="text"
+                   name="search"
+                   placeholder="Search user cases..."
+                   th:value="${search}">
+
+            <button type="submit">Search</button>
+
+            <a class="secondary"
+               th:href="@{/reports/cases}">
+                Clear
+            </a>
+
+        </form>
 
         <div class="case-list">
 

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Block request details</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/reports.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div th:replace="~{fragments/navbar_admin :: menu}"></div>
+
+    <main class="page-container">
+
+        <div class="report-details-header">
+            <div>
+                <a class="back-link" th:href="@{/admin/block-requests}">
+                    ← Back to block requests
+                </a>
+
+                <span class="reports-eyebrow">Admin Center</span>
+
+                <h1>
+                    Block request #
+                    <span th:text="${request.id}">1</span>
+                </h1>
+
+                <p>Review the reporter recommendation and make an admin decision.</p>
+            </div>
+
+            <span class="status"
+                  th:classappend="${request.status.name().toLowerCase()}"
+                  th:text="${request.status}">
+                PENDING
+            </span>
+        </div>
+
+        <section class="details-grid">
+
+            <div class="details-box">
+                <span>User</span>
+                <strong th:text="${request.userCase.user.username}">username</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Requested by</span>
+                <strong th:text="${request.requestedBy.username}">reporter</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Created at</span>
+                <strong th:text="${#temporals.format(request.createdAt,'dd MMM yyyy HH:mm')}">
+                    date
+                </strong>
+            </div>
+
+            <div class="details-box">
+                <span>Status</span>
+                <strong th:text="${request.status}">PENDING</strong>
+            </div>
+
+            <div class="details-box full">
+                <span>Reporter reason</span>
+                <p th:text="${request.reason}">Reason</p>
+            </div>
+
+        </section>
+
+        <section class="details-section">
+
+            <h2>Related user case</h2>
+
+            <div class="target-actions">
+                <a th:href="@{/reports/cases/{id}(id=${request.userCase.id})}">
+                    Open user case →
+                </a>
+
+                <a th:href="@{/profile/{username}(username=${request.userCase.user.username})}">
+                    View profile →
+                </a>
+            </div>
+
+        </section>
+
+        <section class="details-section" th:if="${request.status.name() == 'PENDING'}">
+
+            <h2>Admin decision</h2>
+
+            <form class="review-form"
+                  th:action="@{/admin/block-requests/{id}/approve(id=${request.id})}"
+                  method="post">
+
+                <div class="field">
+                    <label>Decision reason</label>
+
+                    <textarea name="adminDecision"
+                              required
+                              placeholder="Explain why the user should be blocked..."></textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="danger-btn" type="submit">Approve and block</button>
+                </div>
+
+            </form>
+
+            <form class="review-form reject-form"
+                  th:action="@{/admin/block-requests/{id}/reject(id=${request.id})}"
+                  method="post">
+
+                <div class="field">
+                    <label>Reject reason</label>
+
+                    <textarea name="adminDecision"
+                              required
+                              placeholder="Explain why this block request is rejected..."></textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="secondary" type="submit">Reject request</button>
+                </div>
+
+            </form>
+
+        </section>
+
+        <section class="details-section" th:if="${request.status.name() != 'PENDING'}">
+
+            <h2>Final decision</h2>
+
+            <div class="details-box full">
+                <span>Admin decision</span>
+                <p th:text="${request.adminDecision}">Decision</p>
+            </div>
+
+            <div class="details-grid decision-grid">
+                <div class="details-box">
+                    <span>Decided by</span>
+                    <strong th:text="${request.decidedBy != null ? request.decidedBy.username : 'Unknown'}">
+                        admin
+                    </strong>
+                </div>
+
+                <div class="details-box">
+                    <span>Decided at</span>
+                    <strong th:text="${request.decidedAt != null ? #temporals.format(request.decidedAt,'dd MMM yyyy HH:mm') : 'Not set'}">
+                        date
+                    </strong>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+</body>
+</html>

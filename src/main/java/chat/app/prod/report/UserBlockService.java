@@ -70,7 +70,22 @@ public class UserBlockService {
         return userBlockRepository.findByUserOrderByBlockedAtDesc(user);
     }
 
-    public List<UserBlock> getActiveBlocks() {
+    public List<UserBlock> getActiveBlocks(String search) {
+
+        if (search != null && !search.isBlank()) {
+            return userBlockRepository
+                    .findByActiveTrueAndUserUsernameContainingIgnoreCaseOrderByBlockedAtDesc(
+                            search.trim()
+                    );
+        }
+
         return userBlockRepository.findByActiveTrueOrderByBlockedAtDesc();
+    }
+
+    public boolean isUserBlockedByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return userBlockRepository.existsByUserAndActiveTrue(user);
     }
 }

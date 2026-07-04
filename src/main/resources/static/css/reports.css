@@ -572,3 +572,51 @@
     align-items: flex-start;
   }
 }
+
+.case-search {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.case-search input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  outline: none;
+  font-family: inherit;
+}
+
+.case-search input::placeholder {
+  color: rgba(238,244,255,0.45);
+}
+
+.case-search input:focus {
+  border-color: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.10);
+}
+
+.case-search button {
+  padding: 13px 22px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  color: #0e1930;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .case-search {
+    grid-template-columns: 1fr;
+  }
+
+  .case-search .secondary,
+  .case-search button {
+    text-align: center;
+  }
+}

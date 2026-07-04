@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Account blocked</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div class="auth-card">
+        <div class="auth-content">
+
+            <div class="logo-big">⚠️</div>
+
+            <h1>Account blocked</h1>
+
+            <p class="auth-subtitle">
+                Your account has been blocked by an administrator.
+                Please check your email to see the reason and further details.
+            </p>
+
+            <form th:action="@{/logout}" method="post">
+                <button class="cta-btn" type="submit">
+                    Back to login
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

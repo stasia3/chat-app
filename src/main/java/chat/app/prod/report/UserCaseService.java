@@ -35,4 +35,13 @@ public class UserCaseService {
         return userCaseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User case not found"));
     }
+
+    public List<UserCase> getCases(String search) {
+        if (search != null && !search.isBlank()) {
+            return userCaseRepository
+                    .findByUserUsernameContainingIgnoreCaseOrderByUpdatedAtDesc(search.trim());
+        }
+
+        return userCaseRepository.findAllByOrderByUpdatedAtDesc();
+    }
 }

@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Chats · DevPortal</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/basics.css" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 
 <body>
 
 <div class="page-shell">
 
-    <div th:replace="~{fragments/navbar :: menu}"></div>
+    <div sec:authorize="hasRole('ADMIN')" th:replace="~{fragments/navbar_admin :: menu}"></div>
+    <div sec:authorize="hasRole('USER')" th:replace="~{fragments/navbar :: menu}"></div>
 
     <main class="chat-users-card">
 

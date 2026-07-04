@@ -1,5 +1,6 @@
 package chat.app.prod.auth;
 
+import chat.app.prod.report.UserBlockService;
 import chat.app.prod.user.Role;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
@@ -16,9 +17,12 @@ import java.io.IOException;
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserRepository userRepository;
+    private final UserBlockService userBlockService;
 
-    public CustomLoginSuccessHandler(UserRepository userRepository) {
+    public CustomLoginSuccessHandler(UserRepository userRepository,
+                                     UserBlockService userBlockService) {
         this.userRepository = userRepository;
+        this.userBlockService = userBlockService;
     }
 
     @Override
@@ -30,15 +34,22 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (userBlockService.isUserBlockedByUsername(user.getUsername())) {
+            response.sendRedirect("/account-blocked");
+            return;
+        }
+
         if (user.getRole() == Role.REPORTER) {
             response.sendRedirect("/reports");
             return;
         }
 
         if (user.getRole() == Role.ADMIN) {
-            response.sendRedirect("/profile");
+            response.sendRedirect("/admin/block-requests");
             return;
         }
+
+
 
         response.sendRedirect("/profile");
     }

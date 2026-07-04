@@ -105,8 +105,11 @@ public class ReportController {
     }
 
     @GetMapping("/reports/cases")
-    public String userCases(Model model) {
-        model.addAttribute("cases", userCaseService.getAllCases());
+    public String userCases(@RequestParam(required = false) String search,
+                            Model model) {
+
+        model.addAttribute("cases", userCaseService.getCases(search));
+        model.addAttribute("search", search);
         model.addAttribute("title", "User cases");
 
         return "reports/user-cases";
@@ -146,4 +149,6 @@ public class ReportController {
 
         return "redirect:/reports/cases/" + id;
     }
+
+
 }

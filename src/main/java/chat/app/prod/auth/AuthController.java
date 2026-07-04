@@ -2,9 +2,12 @@ package chat.app.prod.auth;
 
 import chat.app.prod.profile.Profile;
 import chat.app.prod.profile.ProfileRepository;
+import chat.app.prod.report.BlockRequestService;
+import chat.app.prod.report.UserBlockService;
 import chat.app.prod.user.Role;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +19,19 @@ public class AuthController {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserBlockService userBlockService;
+    private final BlockRequestService blockRequestService;
 
     public AuthController(UserRepository userRepository,
                           PasswordEncoder passwordEncoder,
-                          ProfileRepository profileRepository) {
+                          ProfileRepository profileRepository,
+                          UserBlockService userBlockService,
+                          BlockRequestService blockRequestService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileRepository = profileRepository;
+        this.userBlockService = userBlockService;
+        this.blockRequestService = blockRequestService;
     }
 
     @GetMapping("/login")
@@ -82,5 +91,46 @@ public class AuthController {
         profileRepository.save(profile);
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/admin/block-requests/{id}")
+    public String blockRequestDetails(@PathVariable Long id, Model model) {
+        model.addAttribute("request", blockRequestService.getById(id));
+
+        return "admin/block-request-details";
+    }
+
+    @PostMapping("/admin/block-requests/{id}/approve")
+    public String approveBlockRequest(@PathVariable Long id,
+                                      @RequestParam String adminDecision,
+                                      Authentication authentication) {
+
+        blockRequestService.approveBlockRequest(
+                id,
+                authentication.getName(),
+                adminDecision
+        );
+
+        userBlockService.blockUserFromRequest(
+                id,
+                authentication.getName(),
+                adminDecision
+        );
+
+        return "redirect:/admin/block-requests/" + id;
+    }
+
+    @PostMapping("/admin/block-requests/{id}/reject")
+    public String rejectBlockRequest(@PathVariable Long id,
+                                     @RequestParam String adminDecision,
+                                     Authentication authentication) {
+
+        blockRequestService.rejectBlockRequest(
+                id,
+                authentication.getName(),
+                adminDecision
+        );
+
+        return "redirect:/admin/block-requests/" + id;
     }
 }

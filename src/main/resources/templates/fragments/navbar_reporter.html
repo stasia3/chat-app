@@ -1,0 +1,14 @@
+<div class="navbar"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="menu">
+    <div class="logo">&lt;|&gt; DevPortal</div>
+
+    <div class="nav-links">
+        <a class="chip" th:href="@{/reports}">Reports</a>
+        <a class="chip active" th:href="@{/reports/cases}">User cases</a>
+
+        <form th:action="@{/logout}" method="post">
+            <button class="logout-btn" type="submit">Logout</button>
+        </form>
+    </div>
+</div>

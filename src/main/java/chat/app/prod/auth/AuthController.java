@@ -2,6 +2,7 @@ package chat.app.prod.auth;
 
 import chat.app.prod.profile.Profile;
 import chat.app.prod.profile.ProfileRepository;
+import chat.app.prod.user.Role;
 import chat.app.prod.user.User;
 import chat.app.prod.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -72,6 +73,7 @@ public class AuthController {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         User savedUser = userRepository.save(user);
 
         Profile profile = new Profile();

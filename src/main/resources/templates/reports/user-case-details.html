@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User case</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/reports.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div class="navbar">
+        <div class="logo">&lt;|&gt; DevPortal</div>
+
+        <div class="nav-links">
+            <a class="chip" th:href="@{/reports}">Reports</a>
+            <a class="chip active" th:href="@{/reports/cases}">User cases</a>
+
+            <form th:action="@{/logout}" method="post">
+                <button class="logout-btn" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <main class="page-container">
+
+        <div class="report-details-header">
+            <div>
+                <a class="back-link" th:href="@{/reports/cases}">← Back to cases</a>
+
+                <span class="reports-eyebrow">User case</span>
+
+                <h1 th:text="${userCase.user.username}">username</h1>
+
+                <p>Review all reports connected to this user.</p>
+            </div>
+
+            <span class="status"
+                  th:classappend="${userCase.status.name().toLowerCase()}"
+                  th:text="${userCase.status}">
+                OPEN
+            </span>
+        </div>
+
+        <section class="details-grid">
+
+            <div class="details-box">
+                <span>User</span>
+                <strong th:text="${userCase.user.username}">username</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Email</span>
+                <strong th:text="${userCase.user.email}">email</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Case created</span>
+                <strong th:text="${#temporals.format(userCase.createdAt,'dd MMM yyyy HH:mm')}">
+                    date
+                </strong>
+            </div>
+
+            <div class="details-box">
+                <span>Total reports</span>
+                <strong th:text="${reports.size()}">0</strong>
+            </div>
+
+
+        </section>
+
+        <section class="details-section">
+
+            <h2>Escalation</h2>
+
+            <div class="escalation-box">
+                <div>
+                    <strong>Request account block</strong>
+
+                    <p>
+                        Send this case to an administrator if this user has serious or repeated violations.
+                    </p>
+                </div>
+
+                <a class="danger-btn"
+                   th:href="@{/reports/cases/{id}/block-request(id=${userCase.id})}">
+                    Request block
+                </a>
+            </div>
+
+        </section>
+
+
+        <section class="details-section">
+
+            <h2>Reports in this case</h2>
+
+            <div class="report-list">
+
+                <a class="report-card"
+                   th:each="report : ${reports}"
+                   th:href="@{/reports/{id}(id=${report.id})}">
+
+                    <div class="report-top">
+                        <div>
+                            <span class="report-type" th:text="${report.targetType}">
+                                POST
+                            </span>
+
+                            <h3>
+                                Report #
+                                <span th:text="${report.id}"></span>
+                            </h3>
+                        </div>
+
+                        <span class="status"
+                              th:classappend="${report.status.name().toLowerCase()}"
+                              th:text="${report.status}">
+                            PENDING
+                        </span>
+                    </div>
+
+                    <div class="report-info">
+                        <div>
+                            <label>Reporter</label>
+                            <span th:text="${report.reporter.username}">reporter</span>
+                        </div>
+
+                        <div>
+                            <label>Reason</label>
+                            <span th:text="${report.reason}">Reason</span>
+                        </div>
+
+                        <div>
+                            <label>Date</label>
+                            <span th:text="${#temporals.format(report.createdAt,'dd MMM yyyy HH:mm')}">
+                                date
+                            </span>
+                        </div>
+                    </div>
+
+                </a>
+
+                <div class="empty" th:if="${reports.isEmpty()}">
+                    No reports attached to this case.
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+
+</body>
+</html>

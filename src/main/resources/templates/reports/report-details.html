@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Report details</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/reports.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div class="navbar">
+        <div class="logo">&lt;|&gt; DevPortal</div>
+
+        <div class="nav-links">
+            <a class="chip" th:href="@{/reports}">Reports</a>
+            <a class="chip" th:href="@{/reports/cases}">User cases</a>
+
+            <form th:action="@{/logout}" method="post">
+                <button class="logout-btn" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <main class="page-container">
+
+        <div class="report-details-header">
+            <div>
+                <a class="back-link" th:href="@{/reports}">← Back to reports</a>
+
+                <span class="reports-eyebrow">Report details</span>
+
+                <h1>
+                    Report #
+                    <span th:text="${report.id}">1</span>
+                </h1>
+
+                <p>Review the report, evidence, and write a conclusion.</p>
+            </div>
+
+            <span class="status"
+                  th:classappend="${report.status.name().toLowerCase()}"
+                  th:text="${report.status}">
+                PENDING
+            </span>
+        </div>
+
+        <section class="details-grid">
+
+            <div class="details-box">
+                <span>Target type</span>
+                <strong th:text="${report.targetType}">POST</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Reporter</span>
+                <strong th:text="${report.reporter.username}">reporter</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Reason</span>
+                <strong th:text="${report.reason}">Reason</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Created at</span>
+                <strong th:text="${#temporals.format(report.createdAt,'dd MMM yyyy HH:mm')}">
+                    date
+                </strong>
+            </div>
+
+            <div class="details-box full">
+                <span>Details</span>
+                <p th:text="${report.details != null && !report.details.isBlank() ? report.details : 'No extra details provided.'}">
+                    Details
+                </p>
+            </div>
+
+        </section>
+
+        <section class="details-section">
+
+            <h2>Reported target</h2>
+
+            <!-- USER REPORT -->
+            <div class="target-preview" th:if="${report.reportedUser != null}">
+                <span>User reported</span>
+
+                <strong th:text="${report.reportedUser.username}">username</strong>
+
+                <div class="target-actions">
+                    <a th:href="@{/profile/{username}(username=${report.reportedUser.username})}">
+                        View profile →
+                    </a>
+
+                    <a th:if="${report.userCase != null}"
+                       th:href="@{/reports/cases/{id}(id=${report.userCase.id})}">
+                        Open user case →
+                    </a>
+                </div>
+            </div>
+
+            <!-- POST REPORT -->
+            <div class="target-preview" th:if="${report.reportedPost != null}">
+                <span>Post reported</span>
+
+                <strong>
+                    Post #
+                    <span th:text="${report.reportedPost.id}"></span>
+                </strong>
+
+                <p th:text="${report.reportedPost.content}">Post content</p>
+
+                <div class="target-actions">
+                    <a th:href="@{/profile/{username}(username=${report.reportedPost.user.username})}">
+                        View author profile →
+                    </a>
+
+                    <a th:if="${report.userCase != null}"
+                       th:href="@{/reports/cases/{id}(id=${report.userCase.id})}">
+                        Open user case →
+                    </a>
+
+                    <a th:href="@{/posts/{id}(id=${report.reportedPost.id})}">
+                        Open post →
+                    </a>
+                </div>
+            </div>
+
+            <!-- COMMENT REPORT -->
+            <div class="target-preview" th:if="${report.reportedComment != null}">
+                <span>Comment reported</span>
+
+                <strong>
+                    Comment #
+                    <span th:text="${report.reportedComment.id}"></span>
+                </strong>
+
+                <p th:text="${report.reportedComment.content}">Comment content</p>
+
+                <div class="target-actions">
+                    <a th:href="@{/profile/{username}(username=${report.reportedComment.user.username})}">
+                        View author profile →
+                    </a>
+
+                    <a th:if="${report.userCase != null}"
+                       th:href="@{/reports/cases/{id}(id=${report.userCase.id})}">
+                        Open user case →
+                    </a>
+                </div>
+            </div>
+
+        </section>
+        <section class="details-section">
+
+            <h2>Review decision</h2>
+
+            <form class="review-form"
+                  th:action="@{/reports/{id}/review(id=${report.id})}"
+                  method="post">
+
+                <div class="field">
+                    <label>Status</label>
+
+                    <select name="status" required>
+                        <option th:each="status : ${statuses}"
+                                th:value="${status}"
+                                th:selected="${status == report.status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Conclusion</label>
+
+                    <textarea name="conclusion"
+                              required
+                              placeholder="Write why this report was closed or what you found..."
+                              th:text="${report.conclusion}">
+                    </textarea>
+                </div>
+
+                <div class="field">
+                    <label>Action taken</label>
+
+                    <textarea name="actionTaken"
+                              placeholder="Example: warning sent, content removed, no action needed..."
+                              th:text="${report.actionTaken}">
+                    </textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="cta-btn" type="submit">Save review</button>
+                    <a class="secondary" th:href="@{/reports}">Cancel</a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+
+
+</body>
+</html>

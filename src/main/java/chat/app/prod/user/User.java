@@ -32,6 +32,10 @@ public class User {
     @OneToMany(mappedBy = "receiver")
     private List<Message> receivedMessages = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
+
     public User() {
     }
 
@@ -71,4 +75,12 @@ public class User {
     public String getPasswordCheck() { return passwordCheck; }
 
     public void setPasswordCheck(String passwordCheck) { this.passwordCheck = passwordCheck; }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

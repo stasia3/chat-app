@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reports</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/reports.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div class="navbar">
+        <div class="logo">&lt;|&gt; DevPortal</div>
+
+        <div class="nav-links">
+            <a class="chip active" th:href="@{/reports}">Reports</a>
+            <a class="chip" th:href="@{/reports/cases}">User cases</a>
+
+            <form th:action="@{/logout}" method="post">
+                <button class="logout-btn" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <main class="page-container">
+
+        <div class="reports-header">
+            <div>
+                <span class="reports-eyebrow">Moderation Center</span>
+                <h1>Reports</h1>
+                <p>Review reports submitted by the community.</p>
+            </div>
+
+            <div class="report-counter">
+                <span>Total</span>
+                <strong th:text="${reports.size()}">0</strong>
+            </div>
+        </div>
+
+        <form class="report-filters" method="get" th:action="@{/reports}">
+            <select name="status">
+                <option value="">All status</option>
+
+                <option th:each="status : ${statuses}"
+                        th:value="${status}"
+                        th:selected="${status == selectedStatus}"
+                        th:text="${status}">
+                </option>
+            </select>
+
+            <select name="targetType">
+                <option value="">All targets</option>
+
+                <option th:each="type : ${targetTypes}"
+                        th:value="${type}"
+                        th:selected="${type == selectedTargetType}"
+                        th:text="${type}">
+                </option>
+            </select>
+
+            <button type="submit">Filter</button>
+        </form>
+
+        <div class="report-list">
+
+            <a class="report-card"
+               th:each="report : ${reports}"
+               th:href="@{/reports/{id}(id=${report.id})}">
+
+                <div class="report-top">
+                    <div>
+                        <span class="report-type" th:text="${report.targetType}">POST</span>
+
+                        <h3>
+                            Report #
+                            <span th:text="${report.id}"></span>
+                        </h3>
+                    </div>
+
+                    <span class="status"
+                          th:classappend="${report.status.name().toLowerCase()}"
+                          th:text="${report.status}">
+                        PENDING
+                    </span>
+                </div>
+
+                <div class="report-info">
+                    <div>
+                        <label>Reporter</label>
+                        <span th:text="${report.reporter.username}">username</span>
+                    </div>
+
+                    <div>
+                        <label>Reason</label>
+                        <span th:text="${report.reason}">Reason</span>
+                    </div>
+
+                    <div>
+                        <label>Date</label>
+                        <span th:text="${#temporals.format(report.createdAt,'dd MMM yyyy HH:mm')}">
+                            Date
+                        </span>
+                    </div>
+                </div>
+
+            </a>
+
+            <div class="empty" th:if="${reports.isEmpty()}">
+                No reports found.
+            </div>
+
+        </div>
+
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+
+
+</body>
+</html>

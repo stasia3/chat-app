@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Block request</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{/css/basics.css}">
+    <link rel="stylesheet" th:href="@{/css/reports.css}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div class="navbar">
+        <div class="logo">&lt;|&gt; DevPortal</div>
+
+        <div class="nav-links">
+            <a class="chip" th:href="@{/reports}">Reports</a>
+            <a class="chip active" th:href="@{/reports/cases}">User cases</a>
+
+            <form th:action="@{/logout}" method="post">
+                <button class="logout-btn" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <main class="page-container">
+
+        <div class="report-details-header">
+            <div>
+                <a class="back-link"
+                   th:href="@{/reports/cases/{id}(id=${userCase.id})}">
+                    ← Back to user case
+                </a>
+
+                <span class="reports-eyebrow">Escalation</span>
+
+                <h1>Request block</h1>
+
+                <p>
+                    Explain why this user should be reviewed by an administrator.
+                </p>
+            </div>
+        </div>
+
+        <section class="details-grid">
+
+            <div class="details-box">
+                <span>User</span>
+                <strong th:text="${userCase.user.username}">username</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Email</span>
+                <strong th:text="${userCase.user.email}">email</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Case status</span>
+                <strong th:text="${userCase.status}">OPEN</strong>
+            </div>
+
+            <div class="details-box">
+                <span>Case created</span>
+                <strong th:text="${#temporals.format(userCase.createdAt,'dd MMM yyyy HH:mm')}">
+                    date
+                </strong>
+            </div>
+
+        </section>
+
+        <section class="details-section">
+
+            <h2>Reason for block request</h2>
+
+            <form class="review-form"
+                  th:action="@{/reports/cases/{id}/block-request(id=${userCase.id})}"
+                  method="post">
+
+                <div class="field">
+                    <label>Reason</label>
+
+                    <textarea name="reason"
+                              required
+                              placeholder="Example: repeated harassment, multiple confirmed reports, serious violation..."></textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="danger-btn" type="submit">Send request</button>
+
+                    <a class="secondary"
+                       th:href="@{/reports/cases/{id}(id=${userCase.id})}">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+
+
+</body>
+</html>

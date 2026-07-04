@@ -3,7 +3,12 @@ CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
+
+    CONSTRAINT chk_users_role
+        CHECK (role IN ('USER', 'REPORTER', 'ADMIN'))
 );
 
 -- PROFILES table
@@ -167,6 +172,11 @@ CREATE TABLE reports (
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
 
     created_at TIMESTAMP NOT NULL,
+    reviewed_by_id BIGINT,
+    reviewed_at TIMESTAMP,
+    conclusion TEXT,
+    action_taken TEXT,
+    case_id BIGINT,
 
     CONSTRAINT fk_reports_reporter
         FOREIGN KEY (reporter_id)
@@ -188,6 +198,16 @@ CREATE TABLE reports (
         REFERENCES comments(id)
         ON DELETE CASCADE,
 
+    CONSTRAINT fk_reports_reviewed_by
+        FOREIGN KEY (reviewed_by_id)
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    CONSTRAINT fk_reports_case
+    FOREIGN KEY (case_id)
+    REFERENCES user_cases(id)
+    ON DELETE SET NULL,
+
     CONSTRAINT chk_reports_target_type
         CHECK (target_type IN ('USER', 'POST', 'COMMENT')),
 
@@ -202,6 +222,8 @@ CREATE TABLE reports (
             OR
             (target_type = 'COMMENT' AND reported_comment_id IS NOT NULL AND reported_user_id IS NULL AND reported_post_id IS NULL)
         )
+
+
 );
 
 -- NOTIFICATIONS table
@@ -279,4 +301,90 @@ CREATE TABLE notification_settings (
         FOREIGN KEY (user_id)
         REFERENCES users(id)
         ON DELETE CASCADE
+);
+
+-- USER_CASES
+
+CREATE TABLE user_cases (
+    id BIGSERIAL PRIMARY KEY,
+
+    user_id BIGINT NOT NULL UNIQUE,
+
+    status VARCHAR(20) NOT NULL DEFAULT 'OPEN',
+
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_user_cases_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_user_cases_status
+        CHECK (status IN ('OPEN', 'CLOSED'))
+);
+
+-- BLOCK_REQUESTS
+
+CREATE TABLE block_requests (
+    id BIGSERIAL PRIMARY KEY,
+
+    user_case_id BIGINT NOT NULL,
+    requested_by_id BIGINT NOT NULL,
+
+    reason TEXT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+
+    admin_decision TEXT,
+    decided_by_id BIGINT,
+    decided_at TIMESTAMP,
+
+    created_at TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_block_requests_case
+        FOREIGN KEY (user_case_id)
+        REFERENCES user_cases(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_block_requests_requested_by
+        FOREIGN KEY (requested_by_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_block_requests_decided_by
+        FOREIGN KEY (decided_by_id)
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    CONSTRAINT chk_block_requests_status
+        CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED'))
+);
+
+-- USER_BLOCKS table
+
+CREATE TABLE user_blocks (
+    id BIGSERIAL PRIMARY KEY,
+
+    user_id BIGINT NOT NULL,
+    blocked_by_id BIGINT NOT NULL,
+    block_request_id BIGINT,
+
+    reason TEXT NOT NULL,
+    blocked_at TIMESTAMP NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    CONSTRAINT fk_user_blocks_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_user_blocks_blocked_by
+        FOREIGN KEY (blocked_by_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_user_blocks_request
+        FOREIGN KEY (block_request_id)
+        REFERENCES block_requests(id)
+        ON DELETE SET NULL
 );

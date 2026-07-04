@@ -1,5 +1,6 @@
 package chat.app.prod.security;
 
+import chat.app.prod.auth.CustomLoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,9 +13,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomLoginSuccessHandler customLoginSuccessHandler;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, CustomLoginSuccessHandler customLoginSuccessHandler) {
         this.userDetailsService = userDetailsService;
+        this.customLoginSuccessHandler = customLoginSuccessHandler;
     }
 
     @Bean
@@ -35,11 +38,18 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers("/reports/**")
+                        .hasAnyRole("REPORTER", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/profile", true)
+                        .successHandler(customLoginSuccessHandler)
                         .failureUrl("/login?error")
                         .permitAll()
                 )

@@ -9,6 +9,7 @@ import chat.app.prod.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReportService {
@@ -17,15 +18,18 @@ public class ReportService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final UserCaseService userCaseService;
 
     public ReportService(ReportRepository reportRepository,
                          UserRepository userRepository,
                          CommentRepository commentRepository,
-                         PostRepository postRepository) {
+                         PostRepository postRepository,
+                         UserCaseService userCaseService) {
         this.reportRepository = reportRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.userCaseService = userCaseService;
     }
 
     public void reportComment(Long commentId,
@@ -47,6 +51,8 @@ public class ReportService {
             details = details.trim();
         }
 
+        UserCase userCase = userCaseService.findOrCreateCaseForUser(comment.getUser());
+
         Report report = new Report(
                 reporter,
                 null,
@@ -56,7 +62,8 @@ public class ReportService {
                 reason,
                 details,
                 ReportStatus.PENDING,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                userCase
         );
 
         reportRepository.save(report);
@@ -81,6 +88,8 @@ public class ReportService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
+        UserCase userCase = userCaseService.findOrCreateCaseForUser(post.getUser());
+
         Report report = new Report(
                 reporter,
                 null,
@@ -90,7 +99,8 @@ public class ReportService {
                 reason,
                 details,
                 ReportStatus.PENDING,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                userCase
         );
 
         reportRepository.save(report);
@@ -115,6 +125,8 @@ public class ReportService {
         User reportedUser = userRepository.findByUsername(reportedUsername)
                 .orElseThrow(() -> new RuntimeException("Reported user not found"));
 
+        UserCase userCase = userCaseService.findOrCreateCaseForUser(reportedUser);
+
         Report report = new Report(
                 reporter,
                 reportedUser,
@@ -124,8 +136,50 @@ public class ReportService {
                 reason,
                 details,
                 ReportStatus.PENDING,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                userCase
         );
+
+        reportRepository.save(report);
+    }
+
+    public List<Report> getReports(ReportStatus status, ReportTargetType targetType) {
+        if (status != null && targetType != null) {
+            return reportRepository.findByStatusAndTargetTypeOrderByCreatedAtDesc(status, targetType);
+        }
+
+        if (status != null) {
+            return reportRepository.findByStatusOrderByCreatedAtDesc(status);
+        }
+
+        if (targetType != null) {
+            return reportRepository.findByTargetTypeOrderByCreatedAtDesc(targetType);
+        }
+
+        return reportRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public Report getReportById(Long id) {
+        return reportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Report not found"));
+    }
+
+    public void reviewReport(Long reportId,
+                             String reviewerUsername,
+                             ReportStatus status,
+                             String conclusion,
+                             String actionTaken) {
+
+        Report report = getReportById(reportId);
+
+        User reviewer = userRepository.findByUsername(reviewerUsername)
+                .orElseThrow(() -> new RuntimeException("Reviewer not found"));
+
+        report.setStatus(status);
+        report.setReviewedBy(reviewer);
+        report.setReviewedAt(LocalDateTime.now());
+        report.setConclusion(conclusion);
+        report.setActionTaken(actionTaken);
 
         reportRepository.save(report);
     }
